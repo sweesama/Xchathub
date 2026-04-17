@@ -4,7 +4,7 @@
  */
 import type { APIRoute } from 'astro';
 
-const SITE = 'https://xchat.wiki';
+const SITE = 'https://xchat.directory';
 
 // 页面清单：新增页面时在这里加一条即可
 const pages = [

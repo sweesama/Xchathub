@@ -4,8 +4,8 @@
 Contact: https://t.me/Xchathubcommunity
 Expires: 2027-04-17T00:00:00.000Z
 Preferred-Languages: en
-Canonical: https://xchat.wiki/.well-known/security.txt
-Policy: https://xchat.wiki/about
+Canonical: https://xchat.directory/.well-known/security.txt
+Policy: https://xchat.directory/about
 
 # If you discover a security vulnerability in this static site
 # (e.g., DNS misconfiguration, SSL issue, XSS in user-submitted

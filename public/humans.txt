@@ -2,7 +2,7 @@
 
     Project: XChat Hub
     Role: Unofficial community resource for XChat
-    Site: https://xchat.wiki
+    Site: https://xchat.directory
     Contact: https://t.me/Xchathubcommunity
     Location: Worldwide
 
@@ -26,7 +26,7 @@
     Framework: Astro 4 (static site generation)
     Styling: Hand-written CSS, zero dependencies
     Hosting: Vercel + Cloudflare DNS
-    Domain: xchat.wiki
+    Domain: xchat.directory
 
     Performance budget:
       - Zero runtime JavaScript frameworks

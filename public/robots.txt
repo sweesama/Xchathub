@@ -1,6 +1,6 @@
 # ========================================
 # XChat Hub - robots.txt
-# https://xchat.wiki
+# https://xchat.directory
 # ========================================
 
 # ---- Default: allow all compliant crawlers ----
@@ -102,4 +102,4 @@ User-agent: PetalBot
 Disallow: /
 
 # ---- Sitemap ----
-Sitemap: https://xchat.wiki/sitemap.xml
+Sitemap: https://xchat.directory/sitemap.xml
