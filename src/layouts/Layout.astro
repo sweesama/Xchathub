@@ -81,6 +81,8 @@ import Footer from '../components/Footer.astro';
   <link rel="dns-prefetch" href="https://t.me" />
   <link rel="dns-prefetch" href="https://apps.apple.com" />
   <link rel="preconnect" href="https://t.me" crossorigin />
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 
   <!-- LLM / AI 搜索引擎提示文件 -->
   <link rel="alternate" type="text/plain" title="LLMs.txt" href="/llms.txt" />
@@ -121,6 +123,15 @@ import Footer from '../components/Footer.astro';
   {breadcrumbSchema && (
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   )}
+
+  <!-- Google Analytics 4 (gtag.js) -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-3J5D4C9DPK"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3J5D4C9DPK', { anonymize_ip: true });
+  </script>
 </head>
 <body>
   <Header />
