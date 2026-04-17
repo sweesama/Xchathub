@@ -1,0 +1,198 @@
+---
+/**
+ * Layout.astro — 全站公用 HTML 骨架
+ * 包含完整的 SEO Meta 标签、Open Graph、JSON-LD 结构化数据
+ */
+interface Props {
+  title: string;
+  description: string;
+  /** JSON-LD 结构化数据对象（可选） */
+  jsonLd?: Record<string, any>;
+  /** 页面的 canonical URL 路径，如 /groups */
+  canonicalPath?: string;
+  /** 面包屑导航（可选） */
+  breadcrumbs?: { name: string; url: string }[];
+}
+
+const {
+  title,
+  description,
+  jsonLd,
+  canonicalPath = '',
+  breadcrumbs = [],
+} = Astro.props;
+
+/* 面包屑 JSON-LD */
+const breadcrumbSchema = breadcrumbs.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((b, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: b.name,
+    item: b.url,
+  })),
+} : null;
+
+const siteUrl = 'https://xchat.wiki';
+const canonicalUrl = `${siteUrl}${canonicalPath}`;
+
+/* 全站通用的 Organization JSON-LD */
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'XChat Hub',
+  url: siteUrl,
+  description: 'Unofficial community hub for XChat — track Android availability, browse the group directory, and get verified information about the app expected April 23, 2026.',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: `${siteUrl}/groups?q={search_term_string}`,
+    'query-input': 'required name=search_term_string',
+  },
+};
+
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#000000" />
+  <meta name="color-scheme" content="dark" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+  <link rel="alternate" hreflang="en" href={canonicalUrl} />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+  <!-- PWA: 可添加到主屏幕，启动画面使用 theme_color/background_color -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="XChat Hub" />
+
+  <!-- DNS Prefetch / Preconnect: 提升首屏外链性能 -->
+  <link rel="dns-prefetch" href="https://t.me" />
+  <link rel="dns-prefetch" href="https://apps.apple.com" />
+  <link rel="preconnect" href="https://t.me" crossorigin />
+
+  <!-- LLM / AI 搜索引擎提示文件 -->
+  <link rel="alternate" type="text/plain" title="LLMs.txt" href="/llms.txt" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta property="og:site_name" content="XChat Hub" />
+  <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+  <meta property="og:image:type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="XChat Hub — Unofficial community resource for XChat users" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+
+  <!-- 搜索引擎与 AI 抓取优化 -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+
+  <!-- Google AdSense（拿到审批后取消注释，替换 ca-pub-XXXXXXX 为你的 Publisher ID） -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+
+  <!-- JSON-LD: 全站 WebSite Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+
+  <!-- JSON-LD: 页面级 Schema（如 FAQPage） -->
+  {jsonLd && (
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  )}
+
+  <!-- JSON-LD: 面包屑导航 -->
+  {breadcrumbSchema && (
+    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+  )}
+</head>
+<body>
+  <Header />
+  <main>
+    <slot />
+  </main>
+  <Footer />
+
+  <!-- 返回顶部按钮（全站通用，滚动超过一屏才显示） -->
+  <button
+    id="back-to-top"
+    class="back-to-top"
+    aria-label="Back to top"
+    type="button"
+  >
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
+  <style>
+    .back-to-top {
+      position: fixed;
+      right: 1.25rem;
+      bottom: 1.25rem;
+      z-index: 50;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease, border-color 0.15s;
+    }
+
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .back-to-top:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  </style>
+
+  <script>
+    /* 返回顶部按钮：滚动超过一屏显示 */
+    const btn = document.getElementById('back-to-top');
+    if (btn) {
+      const toggle = () => {
+        if (window.scrollY > window.innerHeight) {
+          btn.classList.add('visible');
+        } else {
+          btn.classList.remove('visible');
+        }
+      };
+      window.addEventListener('scroll', toggle, { passive: true });
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+  </script>
+</body>
+</html>

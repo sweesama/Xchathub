@@ -1,0 +1,55 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 纯黑背景 -->
+  <rect width="1200" height="630" fill="#000"/>
+
+  <!-- 微妙光晕 -->
+  <defs>
+    <radialGradient id="glow" cx="600" cy="250" r="400" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1d9bf0" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- X Logo -->
+  <path d="M608.5 145l11.5-14h-2.72L607.2 143.4l-5.76-12.4h-6.64l9.56 13.68-9.56 11.32h2.72l8.36-9.72L611.2 156h6.64l-9.34-11zm-2.84 3.2l-.96-1.38-7.7-11H601l6.2 8.86.96 1.38 8.1 11.58h-3.32l-6.08-8.44z" fill="#e7e9ea"/>
+
+  <!-- 站名 -->
+  <text x="600" y="215" text-anchor="middle" fill="#e7e9ea" font-family="system-ui, -apple-system, sans-serif" font-size="60" font-weight="800" letter-spacing="-3">
+    Chat<tspan fill="#1d9bf0">Hub</tspan>
+  </text>
+
+  <!-- 副标题 -->
+  <text x="600" y="268" text-anchor="middle" fill="#8b8d90" font-family="system-ui, -apple-system, sans-serif" font-size="22" font-weight="400">
+    Android Status Tracker &amp; Groups Directory
+  </text>
+
+  <!-- 极简分隔线 -->
+  <line x1="480" y1="305" x2="720" y2="305" stroke="#222" stroke-width="1"/>
+
+  <!-- 三个关键指标 -->
+  <text x="370" y="378" text-anchor="middle" fill="#e7e9ea" font-family="ui-monospace, 'SF Mono', monospace" font-size="38" font-weight="800">481</text>
+  <text x="370" y="408" text-anchor="middle" fill="#56585c" font-family="system-ui, sans-serif" font-size="12" font-weight="500" letter-spacing="2">MAX GROUP</text>
+
+  <line x1="485" y1="355" x2="485" y2="415" stroke="#222" stroke-width="1"/>
+
+  <text x="600" y="378" text-anchor="middle" fill="#e7e9ea" font-family="ui-monospace, 'SF Mono', monospace" font-size="38" font-weight="800">E2E</text>
+  <text x="600" y="408" text-anchor="middle" fill="#56585c" font-family="system-ui, sans-serif" font-size="12" font-weight="500" letter-spacing="2">ENCRYPTED</text>
+
+  <line x1="715" y1="355" x2="715" y2="415" stroke="#222" stroke-width="1"/>
+
+  <text x="830" y="378" text-anchor="middle" fill="#e7e9ea" font-family="ui-monospace, 'SF Mono', monospace" font-size="38" font-weight="800">0</text>
+  <text x="830" y="408" text-anchor="middle" fill="#56585c" font-family="system-ui, sans-serif" font-size="12" font-weight="500" letter-spacing="2">ADS &amp; TRACKING</text>
+
+  <!-- 底部状态指示 -->
+  <rect x="420" y="470" width="160" height="30" rx="15" fill="rgba(0,186,124,0.06)" stroke="rgba(0,186,124,0.12)" stroke-width="1"/>
+  <circle cx="440" cy="485" r="4" fill="#00ba7c"/>
+  <text x="505" y="491" text-anchor="middle" fill="#00ba7c" font-family="system-ui, sans-serif" font-size="12" font-weight="600">iOS: APR 23</text>
+
+  <rect x="620" y="470" width="160" height="30" rx="15" fill="rgba(245,197,24,0.06)" stroke="rgba(245,197,24,0.12)" stroke-width="1"/>
+  <circle cx="640" cy="485" r="4" fill="#f5c518"/>
+  <text x="705" y="491" text-anchor="middle" fill="#f5c518" font-family="system-ui, sans-serif" font-size="12" font-weight="600">Android: TBD</text>
+
+  <!-- 底部域名 -->
+  <text x="600" y="550" text-anchor="middle" fill="#333" font-family="ui-monospace, monospace" font-size="15" font-weight="500" letter-spacing="1">xchat.wiki</text>
+</svg>

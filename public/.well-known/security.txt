@@ -1,0 +1,18 @@
+# XChat Hub - Security Policy (RFC 9116)
+# https://www.rfc-editor.org/rfc/rfc9116
+
+Contact: https://t.me/Xchathubcommunity
+Expires: 2027-04-17T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://xchat.wiki/.well-known/security.txt
+Policy: https://xchat.wiki/about
+
+# If you discover a security vulnerability in this static site
+# (e.g., DNS misconfiguration, SSL issue, XSS in user-submitted
+# content, or exposed metadata), please reach out via our
+# Telegram community group. We'll acknowledge within 48 hours
+# and credit you publicly (with your permission) once fixed.
+#
+# Out of scope:
+#   - Vulnerabilities in XChat itself (the app) — report those to X Corp.
+#   - Third-party services linked from this site (Telegram, App Store).

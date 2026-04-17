@@ -1,0 +1,484 @@
+---
+/**
+ * groups.astro — 群组导航页
+ * 核心目标：截获 "XChat group links" 等长尾搜索流量
+ * 三大模块：搜索 + 群组卡片 + UGC 提交表单
+ */
+import Layout from '../layouts/Layout.astro';
+
+/* ---- 分类标签 ---- */
+const categories = ['All', 'Crypto', 'Tech', 'AI', 'News', 'Sports', 'Gaming', 'Business', 'Entertainment', 'Education', 'Local', 'Other'];
+
+/* ---- 群组数据（XChat 尚未上线，暂无真实数据） ---- */
+/* tags 数组预留多标签能力：主分类 + 未来子标签（如 ['Crypto', 'DeFi']）
+   当前 UI 仍按 category（第一个 tag）筛选，规模化后可启用多标签筛选 */
+const groups: { name: string; desc: string; category: string; tags: string[]; members: number; icon: string; link: string }[] = [];
+
+/* 群组分类列表数据 JSON-LD */
+const groupsJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'XChat Groups Directory',
+  description: 'Discover and join the best public XChat groups and communities. Browse by category — Crypto, AI, Tech, Gaming, and more.',
+  url: 'https://xchat.wiki/groups',
+};
+---
+
+<Layout
+  title="XChat Groups Directory — Find & Share Group Links | XChat Hub"
+  description="The first community-powered directory for XChat group links. XChat expected April 23, 2026. Submit your group and help others find your community."
+  jsonLd={groupsJsonLd}
+  canonicalPath="/groups"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.wiki/' },
+    { name: 'Groups Directory', url: 'https://xchat.wiki/groups/' },
+  ]}
+>
+  <!-- ==================== SEARCH & FILTER ==================== -->
+  <section class="section groups-hero" id="search">
+    <div class="container">
+      <h1 class="groups-title">
+        Discover Top
+        <span class="text-gradient">XChat Groups &amp; Communities</span>
+      </h1>
+      <p class="groups-subtitle text-secondary prose-body">
+        XChat launches <strong><time datetime="2026-04-23">April 23, 2026</time></strong> without built-in group search — this directory will be the first place to discover and share public XChat invite links.
+      </p>
+
+      <!-- 搜索框 -->
+      <div class="search-box">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input
+          type="search"
+          id="group-search"
+          placeholder="Search groups by name, topic, or keyword..."
+          aria-label="Search groups"
+        />
+      </div>
+
+      <!-- 分类标签 -->
+      <div class="tags-row" role="tablist" aria-label="Filter groups by category">
+        {categories.map((cat, i) => (
+          <button
+            class={`tag ${i === 0 ? 'active' : ''}`}
+            role="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            data-category={cat}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GROUP CARDS GRID / COMING SOON ==================== -->
+  <section class="section-sm" id="groups-grid">
+    <div class="container">
+      {groups.length > 0 ? (
+        <div class="grid">
+          {groups.map((group) => (
+            <article class="card group-card" data-category={group.category}>
+              <div class="group-card-header">
+                <span class="group-icon">{group.icon}</span>
+                <div>
+                  <h3 class="group-name">{group.name}</h3>
+                  <span class="tag btn-sm" style="padding: 0.125rem 0.5rem; font-size: 0.6875rem;">{group.category}</span>
+                </div>
+              </div>
+              <p class="group-desc text-secondary">{group.desc}</p>
+              <div class="group-card-footer">
+                <div class="members-info">
+                  <div class="members-bar">
+                    <div class="members-fill" style={`width: ${(group.members / 481) * 100}%`}></div>
+                  </div>
+                  <span class="members-count text-muted">{group.members} / 481</span>
+                </div>
+                <a href={group.link} class="btn btn-primary btn-sm" rel="noopener noreferrer">
+                  Join
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </a>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div class="coming-soon-state">
+          <div class="coming-soon-icon" aria-hidden="true">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="9" opacity="0.3"/>
+              <circle cx="12" cy="12" r="5" opacity="0.6"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Directory Opens on Launch Day</h3>
+          <p class="text-secondary prose-body">
+            XChat launches <strong>April 23, 2026</strong>. Once live, community-submitted groups will populate this page — sorted by category and searchable instantly.
+          </p>
+          <p class="coming-soon-hint text-muted">
+            Want to be among the first listed? <a href="/list-your-group">Submit your group</a> and it goes live on launch day.
+          </p>
+        </div>
+      )}
+
+      <!-- 搜索空状态 -->
+      <div class="empty-state" id="empty-state" style="display: none;">
+        <p class="text-muted">No groups found. Try a different search or category.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SUBMIT / JOIN SECTION ==================== -->
+  <section class="section" id="submit">
+    <div class="container">
+      <div class="submit-section">
+        <div class="submit-header">
+          <h2>Want to List Your Group?</h2>
+          <p class="text-secondary prose-body">
+            Submit your XChat group for free, or pay once to pin it at the top of its category. Live within 24 hours.
+          </p>
+        </div>
+        <div class="submit-cta">
+          <a href="/list-your-group" class="btn btn-primary btn-lg">
+            See Listing Options
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <p class="text-muted" style="font-size: 0.8125rem; margin-top: 0.875rem;">Free listing available · $9 featured pin · $29 lifetime</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Groups Hero ---- */
+  .groups-hero {
+    text-align: center;
+    padding-bottom: 2rem;
+  }
+
+  .groups-title {
+    margin-bottom: 1.25rem;
+  }
+
+  /* "Discover Top" 和渐变标题分两行显示，但用 display:block 让现代浏览器自动平衡 */
+  .groups-title .text-gradient {
+    display: block;
+    margin-top: 0.15em;
+  }
+
+  .groups-subtitle {
+    font-size: 1.0625rem;
+    max-width: 600px;
+    margin: 0 auto 2.25rem;
+    line-height: 1.55;
+    /* 让浏览器均衡首尾换行，避免孤子字 */
+    text-wrap: pretty;
+  }
+
+  .groups-subtitle strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ---- Search ---- */
+  .search-box {
+    position: relative;
+    max-width: 560px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+  }
+
+  .search-box input {
+    padding-left: 2.75rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-secondary);
+    font-size: 0.9375rem;
+    height: 3rem;
+  }
+
+  /* ---- Tags ---- */
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  /* ---- Grid ---- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  /* ---- Group Card ---- */
+  .group-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  .group-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .group-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  .group-name {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .group-desc {
+    font-size: 0.875rem;
+    line-height: 1.6;
+    flex: 1;
+  }
+
+  .group-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: auto;
+  }
+
+  .members-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .members-bar {
+    height: 4px;
+    background: var(--bg-secondary);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 0.25rem;
+  }
+
+  .members-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 2px;
+    transition: width 0.3s ease;
+  }
+
+  .members-count {
+    font-size: 0.6875rem;
+    font-family: var(--font-mono);
+  }
+
+  /* ---- Submit Section ---- */
+  .submit-section {
+    max-width: 640px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .submit-header {
+    margin-bottom: 2rem;
+  }
+
+  .submit-header p {
+    margin-top: 0.75rem;
+  }
+
+  .submit-cta {
+    margin-top: 1.5rem;
+  }
+
+  .btn-lg {
+    padding: 0.875rem 2rem;
+    font-size: 1.0625rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+
+  .btn-lg svg {
+    flex-shrink: 0;
+  }
+
+  /* ---- Coming Soon State (Apple 风空状态) ---- */
+  .coming-soon-state {
+    text-align: center;
+    padding: 4.5rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    max-width: 560px;
+    margin: 0 auto;
+    /* 极淡的径向渐变 + 顶部高光，避免虚线框的廉价感 */
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.04), transparent 60%),
+      var(--bg-card);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 1px 2px rgba(0, 0, 0, 0.4);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .coming-soon-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    margin-bottom: 1.25rem;
+    color: var(--accent-light);
+    background: rgba(29, 155, 240, 0.08);
+    position: relative;
+  }
+
+  /* 圆点脉冲指示器：表示"正在等待" */
+  .coming-soon-icon::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid rgba(29, 155, 240, 0.3);
+    animation: radar-pulse 2.8s ease-out infinite;
+  }
+
+  @keyframes radar-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  .coming-soon-state h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+  }
+
+  .coming-soon-state p {
+    max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .coming-soon-hint {
+    font-size: 0.875rem;
+    margin-top: 1rem;
+  }
+
+  .coming-soon-hint a {
+    color: var(--accent-light);
+    font-weight: 500;
+  }
+
+  /* ---- Empty State ---- */
+  .empty-state {
+    text-align: center;
+    padding: 3rem 0;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .grid {
+      grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  /* ---- 分类筛选逻辑 ---- */
+  const tags = document.querySelectorAll<HTMLButtonElement>('.tag');
+  const cards = document.querySelectorAll<HTMLElement>('.group-card');
+  const emptyState = document.getElementById('empty-state');
+
+  tags.forEach((tag) => {
+    tag.addEventListener('click', () => {
+      /* 切换 active 状态 */
+      tags.forEach((t) => {
+        t.classList.remove('active');
+        t.setAttribute('aria-selected', 'false');
+      });
+      tag.classList.add('active');
+      tag.setAttribute('aria-selected', 'true');
+
+      const category = tag.dataset.category;
+      let visibleCount = 0;
+
+      cards.forEach((card) => {
+        const match = category === 'All' || card.dataset.category === category;
+        card.style.display = match ? '' : 'none';
+        if (match) visibleCount++;
+      });
+
+      if (emptyState) {
+        emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+      }
+    });
+  });
+
+  /* ---- 搜索逻辑 ---- */
+  const searchInput = document.getElementById('group-search') as HTMLInputElement;
+
+  /* 从 URL ?q= 参数预填搜索框（支持从 404 页或其他入口跳转过来） */
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialQuery = urlParams.get('q');
+  if (initialQuery && searchInput) {
+    searchInput.value = initialQuery;
+    // 触发一次搜索
+    searchInput.dispatchEvent(new Event('input'));
+  }
+
+  searchInput?.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const text = card.textContent?.toLowerCase() || '';
+      const match = text.includes(query);
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    /* 重置分类高亮到 All */
+    tags.forEach((t) => {
+      t.classList.remove('active');
+      t.setAttribute('aria-selected', 'false');
+    });
+    tags[0]?.classList.add('active');
+    tags[0]?.setAttribute('aria-selected', 'true');
+
+    if (emptyState) {
+      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+  });
+</script>

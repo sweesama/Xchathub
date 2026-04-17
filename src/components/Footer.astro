@@ -1,0 +1,82 @@
+---
+/**
+ * Footer.astro — 全站底部
+ * 包含免责声明、版权信息和快速链接
+ */
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container">
+    <hr class="divider" />
+    <div class="footer-inner">
+      <p class="disclaimer">
+        This is an <strong>unofficial</strong> community project. Not affiliated with X Corp or Elon Musk.
+        All trademarks belong to their respective owners.
+      </p>
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <span class="dot">·</span>
+        <a href="/groups">Groups</a>
+        <span class="dot">·</span>
+        <a href="/list-your-group">List Your Group</a>
+        <span class="dot">·</span>
+        <a href="/about">About</a>
+        <span class="dot">·</span>
+        <a href="/privacy">Privacy</a>
+        <span class="dot">·</span>
+        <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Channel</a>
+        <span class="dot">·</span>
+        <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">Community</a>
+      </div>
+      <p class="copyright">&copy; {year} XChat Hub. Built for the community.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding: 3rem 0 2rem;
+  }
+
+  .footer-inner {
+    padding-top: 2rem;
+    text-align: center;
+  }
+
+  .disclaimer {
+    color: var(--text-muted);
+    font-size: 0.8125rem;
+    max-width: 600px;
+    margin: 0 auto 1rem;
+    line-height: 1.6;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .footer-links a {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    transition: color 0.15s;
+  }
+
+  .footer-links a:hover {
+    color: var(--text-primary);
+  }
+
+  .dot {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+
+  .copyright {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+  }
+</style>

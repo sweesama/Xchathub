@@ -1,0 +1,95 @@
+---
+/**
+ * Header.astro — 全站顶部导航栏
+ * 极简设计，左侧 Logo，右侧导航链接
+ */
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <!-- Logo -->
+    <a href="/" class="logo" aria-label="XChat Hub Home">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M13.544 10.456L20.364 2h-1.616l-5.92 6.736L8.02 2H2l7.152 10.192L2 21h1.616l6.252-7.112L14.98 21H21L13.544 10.456zM10.74 12.896l-.724-1.016L4.26 3.232h2.48l4.652 6.52.724 1.016L18.748 19.8h-2.48L10.74 12.896z" fill="#e7e9ea"/>
+      </svg>
+      <span class="logo-text">Chat<span class="logo-accent">Hub</span></span>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="header-nav" aria-label="Main navigation">
+      <a href="/" class="nav-link">Tracker</a>
+      <a href="/groups" class="nav-link">Groups</a>
+      <a href="/list-your-group" class="nav-link hide-mobile-nav">List</a>
+      <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Join Community</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 56px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.0625rem;
+  }
+
+  .logo-text {
+    letter-spacing: -0.02em;
+  }
+
+  .logo-accent {
+    color: var(--accent);
+  }
+
+  .header-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .nav-link {
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    transition: color 0.15s;
+  }
+
+  .nav-link:hover {
+    color: var(--text-primary);
+  }
+
+  @media (max-width: 640px) {
+    .hide-mobile-nav {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .header-nav {
+      gap: 0.75rem;
+    }
+    .nav-link {
+      font-size: 0.8125rem;
+    }
+  }
+</style>

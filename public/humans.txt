@@ -1,0 +1,42 @@
+/* TEAM */
+
+    Project: XChat Hub
+    Role: Unofficial community resource for XChat
+    Site: https://xchat.wiki
+    Contact: https://t.me/Xchathubcommunity
+    Location: Worldwide
+
+
+/* THANKS */
+
+    The XChat user community
+    Everyone who submits groups and corrections via Telegram
+    Apple App Store listing (primary source of truth)
+    @chat on X (release announcements)
+
+
+/* SITE */
+
+    Last update: 2026/04/17
+    Language: English
+    Doctype: HTML5
+    IDE: Windsurf
+    Standards: HTML5, CSS3, Schema.org JSON-LD, llms.txt, Web Manifest
+
+    Framework: Astro 4 (static site generation)
+    Styling: Hand-written CSS, zero dependencies
+    Hosting: Vercel + Cloudflare DNS
+    Domain: xchat.wiki
+
+    Performance budget:
+      - Zero runtime JavaScript frameworks
+      - Sub-100KB page weight (excluding images)
+      - Lighthouse: 100/100/100/100 target
+
+
+/* DISCLAIMER */
+
+    This project is independently operated by fans and is not
+    affiliated with, endorsed by, or sponsored by X Corp,
+    Elon Musk, or any XChat team member. All trademarks
+    belong to their respective owners.

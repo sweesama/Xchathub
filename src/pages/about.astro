@@ -1,0 +1,132 @@
+---
+/**
+ * about.astro — 关于我们
+ * 建立信任感、满足 E-E-A-T、为 AdSense 审核加分
+ */
+import Layout from '../layouts/Layout.astro';
+
+const aboutJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'AboutPage',
+  name: 'About XChat Hub',
+  description: 'XChat Hub is an unofficial community resource for tracking XChat Android availability and discovering public XChat groups.',
+  url: 'https://xchat.wiki/about',
+};
+---
+
+<Layout
+  title="About XChat Hub — Who We Are & Why We Built This"
+  description="XChat Hub is a community-run information hub for XChat users. Learn about our mission, editorial standards, and why we're building the first XChat group directory."
+  jsonLd={aboutJsonLd}
+  canonicalPath="/about"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.wiki/' },
+    { name: 'About', url: 'https://xchat.wiki/about/' },
+  ]}
+>
+  <section class="section">
+    <div class="container content-page">
+      <h1>About XChat Hub</h1>
+      <p class="lead text-secondary">
+        The independent, community-run resource hub for XChat — Elon Musk's encrypted messaging app. We exist because the official channels don't answer the questions users actually ask.
+      </p>
+
+      <h2>Our Mission</h2>
+      <p>
+        When XChat went into iOS beta in early 2026, we noticed three gaps that the official team either couldn't or wouldn't address:
+      </p>
+      <ul>
+        <li><strong>No Android answer.</strong> Millions of Android users searched "XChat APK" and found nothing but outdated forum posts and sketchy download sites.</li>
+        <li><strong>No group discovery.</strong> XChat has no built-in public group search. Users had no way to find communities or share invite links.</li>
+        <li><strong>No comparison data.</strong> How does XChat actually stack up against WhatsApp, Signal, and Telegram? Nobody had done the homework.</li>
+      </ul>
+      <p>
+        XChat Hub fills those gaps. We track release status, maintain a community-submitted group directory, and publish verified comparisons grounded in official sources — the App Store listing, @chat posts on X, and app metadata.
+      </p>
+
+      <h2>What We Are Not</h2>
+      <ul>
+        <li>We are <strong>not affiliated</strong> with X Corp, Elon Musk, or anyone on the XChat team.</li>
+        <li>We do <strong>not</strong> distribute XChat APKs or any unofficial builds. Any site claiming to offer "XChat Android APK" is unsafe — do not use them.</li>
+        <li>We do <strong>not</strong> collect personal data beyond public group submissions (see our <a href="/privacy">Privacy Policy</a>).</li>
+      </ul>
+
+      <h2>Editorial Standards</h2>
+      <p>Every fact on this site is traceable to one of:</p>
+      <ul>
+        <li>The official <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer">XChat App Store listing</a></li>
+        <li>Public posts from Elon Musk or the official @chat account on X</li>
+        <li>Direct inspection of the app's public metadata (size, language count, iOS requirements, etc.)</li>
+      </ul>
+      <p>
+        When information is uncertain or unverified, we say so explicitly ("Not yet announced", "Claimed by XChat but not independently audited", etc.). We will never fabricate a date, feature, or quote to drive traffic.
+      </p>
+
+      <h2>How We're Funded</h2>
+      <p>
+        XChat Hub is a volunteer-run project. We may display non-intrusive advertising (e.g., Google AdSense) to cover hosting costs. We do <strong>not</strong> accept payment for editorial content — paid placements, if any, will be clearly labeled as "Sponsored" or "Featured".
+      </p>
+
+      <h2>Contact & Community</h2>
+      <p>The fastest way to reach us or contribute:</p>
+      <ul>
+        <li><strong>Telegram Channel</strong> (announcements): <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">@xchathubdirectory</a></li>
+        <li><strong>Telegram Community</strong> (discussion & group submissions): <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a></li>
+      </ul>
+      <p>
+        Found an error, have a correction, or want to suggest a feature? Drop a message in the community group — we read everything and typically respond within 48 hours.
+      </p>
+
+      <div class="about-cta">
+        <a href="/" class="btn btn-primary">Back to Android Tracker</a>
+        <a href="/groups" class="btn btn-secondary">Browse Groups Directory</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .content-page {
+    max-width: 720px;
+  }
+
+  .content-page h1 {
+    margin-bottom: 1rem;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+  }
+
+  .content-page h2 {
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.375rem;
+  }
+
+  .content-page p {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .content-page ul {
+    color: var(--text-secondary);
+    line-height: 1.8;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .content-page li {
+    margin-bottom: 0.5rem;
+  }
+
+  .about-cta {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+</style>

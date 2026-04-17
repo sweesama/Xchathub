@@ -1,0 +1,442 @@
+/* ============================================
+   XChat Unofficial Hub — Global Styles
+   纯黑 X/Elon 科技风：简洁、低调、酷炫
+   ============================================ */
+
+/* ---------- CSS Reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---------- CSS Variables ---------- */
+:root {
+  /* 背景色：纯黑基调 */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-card: #0f0f0f;
+  --bg-input: #111111;
+  --bg-elevated: #161616;
+
+  /* 边框色：极其微妙 */
+  --border: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.12);
+
+  /* 文字色 */
+  --text-primary: #e7e9ea;
+  --text-secondary: #8b8d90;
+  --text-muted: #56585c;
+
+  /* 强调色：X Blue */
+  --accent: #1d9bf0;
+  --accent-hover: #1a8cd8;
+  --accent-light: #4db5f5;
+  --accent-glow: rgba(29, 155, 240, 0.15);
+
+  /* 状态色 */
+  --success: #00ba7c;
+  --warning: #f5c518;
+  --danger: #f4212e;
+
+  /* 间距与尺寸 */
+  --max-width: 1080px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* 字体：优先命中 Apple SF Pro（iOS/macOS 用户），退回 X 风格系统字体栈 */
+  --font-sans: 'SF Pro Display', 'SF Pro Text', -apple-system, BlinkMacSystemFont,
+    'Inter', 'Segoe UI Variable', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'SF Mono', ui-monospace, 'Cascadia Code', 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* 折光曲线（Apple 风格互动缓动） */
+  --ease-snap: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  /* 开启字核特性：等宽数字 + 字高优化 + 字与CJK 行距修正 */
+  font-feature-settings: 'kern', 'liga', 'calt', 'ss01';
+  min-height: 100vh;
+}
+
+/* 数字全局用等宽数字（统计、计数器更整齐） */
+.stat-number,
+.members-count,
+.error-code,
+time,
+.badge {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'tnum', 'ss01';
+}
+
+a {
+  color: var(--accent-light);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+a:hover {
+  color: var(--accent);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+/* ---------- Layout ---------- */
+.container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.section {
+  padding: 5rem 0;
+}
+
+.section-sm {
+  padding: 3rem 0;
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4 {
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.022em;
+  text-wrap: balance; /* 现代浏览器自动均衡换行，标题不再孤子字 */
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5.5vw, 4rem);
+  letter-spacing: -0.035em;
+  font-weight: 800;
+}
+h2 { font-size: clamp(1.625rem, 3.2vw, 2.375rem); letter-spacing: -0.028em; }
+h3 { font-size: clamp(1.125rem, 2vw, 1.5rem); }
+
+.text-gradient {
+  background: linear-gradient(135deg, #ffffff 0%, var(--accent-light) 60%, var(--accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+/* 正文 utility：更精致的行距 + 行间平衡（避免孤子字） */
+.prose-body {
+  line-height: 1.65;
+  text-wrap: pretty;
+  letter-spacing: -0.003em;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s var(--ease-snap), background 0.2s, box-shadow 0.3s, border-color 0.2s;
+  white-space: nowrap;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.15) inset,
+    0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.18) inset,
+    0 6px 24px var(--accent-glow),
+    0 0 48px rgba(29, 155, 240, 0.12);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text-primary);
+  border: 1px solid var(--border-hover);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset;
+}
+
+.btn-secondary:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateY(-1px);
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.8125rem;
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 1.5rem;
+  /* Apple 风风fr 卡片：极淡顶部高光 + 底部投影 */
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.035) inset,
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.3s var(--ease-smooth), box-shadow 0.3s, transform 0.3s var(--ease-smooth);
+}
+
+.card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.06) inset,
+    0 0 0 1px var(--border-hover),
+    0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- Forms ---------- */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 0.9375rem;
+  font-family: var(--font-sans);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+::placeholder {
+  color: var(--text-muted);
+}
+
+/* ---------- Status Badge ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-mono);
+}
+
+.badge-live {
+  background: rgba(0, 186, 124, 0.08);
+  color: var(--success);
+  border: 1px solid rgba(0, 186, 124, 0.15);
+}
+
+.badge-pending {
+  background: rgba(245, 197, 24, 0.08);
+  color: var(--warning);
+  border: 1px solid rgba(245, 197, 24, 0.15);
+}
+
+/* 脉冲动画圆点 */
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.pulse-dot-live {
+  background: var(--success);
+  animation: pulse-green 2.5s ease-in-out infinite;
+}
+
+.pulse-dot-pending {
+  background: var(--warning);
+  animation: pulse-yellow 2.5s ease-in-out infinite;
+}
+
+@keyframes pulse-green {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 186, 124, 0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(0, 186, 124, 0); }
+}
+
+@keyframes pulse-yellow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.4); }
+  50% { box-shadow: 0 0 0 5px rgba(245, 197, 24, 0); }
+}
+
+/* ---------- FAQ Accordion ---------- */
+details {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+details + details {
+  margin-top: -1px;
+}
+
+details[open] {
+  border-color: var(--border-hover);
+}
+
+details summary {
+  padding: 1.125rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  list-style: none;
+  user-select: none;
+  transition: background 0.15s;
+}
+
+details summary:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+details summary::-webkit-details-marker { display: none; }
+details summary::marker { display: none; }
+
+details summary::after {
+  content: '+';
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  font-weight: 300;
+  transition: transform 0.2s;
+}
+
+details[open] summary::after {
+  content: '−';
+}
+
+details .faq-body {
+  padding: 0 1.25rem 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+/* ---------- Tags / Pills ---------- */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4375rem 0.9375rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.003em;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.015);
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s var(--ease-snap), background 0.15s,
+    transform 0.15s var(--ease-snap), box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tag:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.tag.active {
+  border-color: transparent;
+  color: #fff;
+  background: var(--accent);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.2) inset,
+    0 2px 12px var(--accent-glow);
+}
+
+.tag:active {
+  transform: scale(0.96);
+}
+
+/* ---------- Divider ---------- */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .section { padding: 3.5rem 0; }
+  .container { padding: 0 1rem; }
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  border: 2px solid var(--bg-primary);
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.16);
+  background-clip: padding-box;
+  border: 2px solid var(--bg-primary);
+}
+
+/* Firefox */
+html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent; }
+
+/* ---------- Selection ---------- */
+::selection {
+  background: rgba(29, 155, 240, 0.3);
+  color: #fff;
+}

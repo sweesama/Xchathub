@@ -1,0 +1,673 @@
+---
+/**
+ * index.astro — 首页
+ * 核心目标：截获 "XChat Android download" 等搜索流量
+ * 三大模块：Hero + 替代方案 + 结构化 FAQ
+ */
+import Layout from '../layouts/Layout.astro';
+
+/* 构建日期：用于"最新数据截止时间"标注，每次构建自动刷新 */
+const buildDate = new Date();
+const buildDateISO = buildDate.toISOString().split('T')[0]; // YYYY-MM-DD
+const buildDateDisplay = buildDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
+
+/* ---- FAQ 数据 & Schema.org JSON-LD ---- */
+const faqs = [
+  {
+    question: 'Is XChat available for Android?',
+    answer:
+      'No. As of April 2026, XChat is <strong>iOS-only</strong> (iPhone & iPad). There is no official Android APK, no web version, and no desktop client. X has <strong>not announced any plans or timeline</strong> for an Android release. Join our <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Telegram channel</a> to be the first to know if that changes.',
+  },
+  {
+    question: 'Is XChat safer than WhatsApp?',
+    answer:
+      'Both apps offer <strong>end-to-end encryption</strong>. However, XChat additionally features <strong>screenshot blocking</strong> and <strong>disappearing messages</strong> out of the box. According to its App Store listing, XChat promises "no ads, no tracking." The app is built in <strong>Rust with Bitcoin-style encryption</strong>. WhatsApp also has E2E encryption by default, but it is owned by Meta and has faced scrutiny over its broader data-sharing policies. Note: XChat is brand new and has not yet been independently audited.',
+  },
+  {
+    question: 'How many members can join an XChat group?',
+    answer:
+      'According to the App Store listing, each XChat group supports up to <strong>481 members</strong>. This is notably smaller than WhatsApp (1,024 members) or Telegram channels (200,000 subscribers).',
+  },
+  {
+    question: 'Can I search for XChat groups inside the app?',
+    answer:
+      'Based on the app preview, XChat does <strong>not appear to include</strong> a built-in public group search or discovery feature. You join a group via a direct invite link shared by an existing member. That\'s why we\'re building the <a href="/groups">XChat Groups Directory</a> — a community-powered hub to discover and share public XChat group links after launch.',
+  },
+  {
+    question: 'What features does XChat have?',
+    answer:
+      'According to the <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer">App Store listing</a> and official @xchat posts, confirmed features include: <strong>end-to-end encrypted messaging</strong>, <strong>voice notes</strong>, <strong>audio & video calls</strong>, <strong>disappearing messages</strong>, <strong>screenshot blocking with attempt notifications</strong>, <strong>file & document sharing</strong>, <strong>message editing & deletion</strong>, <strong>subscriber badges</strong>, and <strong>group chats up to 481 members</strong>. The app requires an existing X account to sign in and <strong>iOS 26.0 or later</strong>.',
+  },
+  {
+    question: 'When will XChat launch?',
+    answer:
+      'XChat is expected to launch on <strong><time datetime="2026-04-23">April 23, 2026</time></strong> on the iOS App Store. It is a free download and is already <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer">available for pre-order</a>. The app requires <strong>iOS 26.0+</strong>, has been in internal testing since May 2025, and entered iOS public beta in March 2026. It supports <strong>46 languages</strong>. There is no confirmed date for Android.',
+  },
+];
+
+/* ---- 页面级 JSON-LD：FAQ + 对比表 ItemList（用 @graph 合并 GEO 弹药） ---- */
+const pageJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: f.answer.replace(/<[^>]*>/g, ''),
+        },
+      })),
+    },
+    {
+      '@type': 'ItemList',
+      name: 'XChat vs WhatsApp vs Signal vs Telegram — Feature Comparison',
+      description: 'Side-by-side comparison of XChat with leading encrypted messaging apps as of April 2026.',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'XChat', description: 'E2E encrypted messenger by X Corp, iOS-only, 481-member groups, screenshot blocking, no Android support.' },
+        { '@type': 'ListItem', position: 2, name: 'WhatsApp', description: 'E2E encrypted messenger by Meta, cross-platform, 1024-member groups, no screenshot blocking.' },
+        { '@type': 'ListItem', position: 3, name: 'Signal', description: 'Open-source E2E encrypted messenger, cross-platform, 1000-member groups, no ads or tracking.' },
+        { '@type': 'ListItem', position: 4, name: 'Telegram', description: 'Cross-platform messenger, 200k-subscriber channels, E2E only in Secret Chats.' },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title="XChat Android Status Tracker — Get Notified | XChat Hub"
+  description="Is XChat available for Android? Not yet. Track the official Android release, get notified via Telegram, and discover XChat group links. Updated April 2026."
+  jsonLd={pageJsonLd}
+  canonicalPath=""
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.wiki/' },
+    { name: 'Android Tracker', url: 'https://xchat.wiki/' },
+  ]}
+>
+  <!-- ==================== HERO SECTION ==================== -->
+  <section class="hero section" id="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container hero-container">
+      <!-- 状态指示灯 -->
+      <div class="status-bar">
+        <span class="badge badge-live">
+          <span class="pulse-dot pulse-dot-live"></span>
+          iOS: PRE-ORDER LIVE
+        </span>
+        <span class="badge badge-pending">
+          <span class="pulse-dot pulse-dot-pending"></span>
+          Android: NOT ANNOUNCED
+        </span>
+      </div>
+
+      <!-- 主标题 -->
+      <h1 class="hero-title">
+        XChat for Android<br />
+        <span class="text-gradient">is Not Here Yet.</span>
+      </h1>
+      <p class="hero-subtitle text-secondary prose-body">
+        X's standalone encrypted messenger launches <strong><time datetime="2026-04-23">April 23, 2026</time></strong> — iPhone &amp; iPad only. No Android date announced. Be the first to know when it changes.
+      </p>
+
+      <!-- 双 CTA：App Store + Telegram -->
+      <div class="cta-group" id="notify">
+        <div class="cta-buttons">
+          <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            Pre-order on App Store
+          </a>
+          <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+            Get Notified on Telegram
+          </a>
+        </div>
+        <p class="form-hint text-muted">iPhone? Pre-order free on the App Store. Android? Subscribe to our Telegram channel — we'll ping you the moment anything changes.</p>
+      </div>
+
+      <!-- 统计数字 -->
+      <div class="stats-row">
+        <div class="stat-item">
+          <span class="stat-number">481</span>
+          <span class="stat-label text-muted">Max Group Size</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">E2E</span>
+          <span class="stat-label text-muted">Encrypted</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-number">0</span>
+          <span class="stat-label text-muted">Ads & Tracking</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ALTERNATIVE GUIDE ==================== -->
+  <section class="section-sm" id="alternative">
+    <div class="container">
+      <div class="card alt-card">
+        <div class="alt-header">
+          <span class="alt-icon">💡</span>
+          <h2>Can't Wait? Try This Workaround</h2>
+        </div>
+        <p class="text-secondary" style="margin-bottom: 1rem;">
+          While there's no XChat for Android yet, you can still keep up with XChat communities through the X (Twitter) mobile web:
+        </p>
+        <ol class="alt-steps">
+          <li>Open <a href="https://x.com" target="_blank" rel="noopener noreferrer"><strong>x.com</strong></a> in your Android browser (Chrome recommended).</li>
+          <li>Tap the <strong>⋮ menu → "Add to Home screen"</strong> to install it as a PWA.</li>
+          <li>Follow <a href="https://x.com/search?q=%23XChat" target="_blank" rel="noopener noreferrer"><strong>#XChat</strong></a> hashtag for real-time updates and group invites shared publicly.</li>
+          <li>Bookmark our <a href="/groups"><strong>Groups Directory</strong></a> to find invite links once you get access.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== COMPARISON TABLE (GEO 核心弹药) ==================== -->
+  <section class="section" id="compare">
+    <div class="container">
+      <div class="compare-header">
+        <h2>XChat vs WhatsApp vs Signal vs Telegram</h2>
+        <p class="text-secondary">A side-by-side comparison based on publicly available information as of <time datetime={buildDateISO}>{buildDateDisplay}</time>.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>XChat</th>
+              <th>WhatsApp</th>
+              <th>Signal</th>
+              <th>Telegram</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>End-to-End Encryption</td>
+              <td><strong>Yes (default)</strong></td>
+              <td>Yes (default)</td>
+              <td>Yes (default)</td>
+              <td>Secret Chats only</td>
+            </tr>
+            <tr>
+              <td>Screenshot Blocking</td>
+              <td><strong>Yes</strong></td>
+              <td>No</td>
+              <td>No</td>
+              <td>Secret Chats only</td>
+            </tr>
+            <tr>
+              <td>Disappearing Messages</td>
+              <td><strong>Yes</strong></td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Max Group Size</td>
+              <td>481</td>
+              <td>1,024</td>
+              <td>1,000</td>
+              <td>200,000</td>
+            </tr>
+            <tr>
+              <td>Video &amp; Audio Calls</td>
+              <td><strong>Yes</strong></td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>No Ads, No Tracking</td>
+              <td><strong>Claimed</strong></td>
+              <td>No ads</td>
+              <td>No ads, no tracking</td>
+              <td>Has ads (free tier)</td>
+            </tr>
+            <tr>
+              <td>Android Support</td>
+              <td class="text-warning"><strong>Not yet</strong></td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Web / Desktop Client</td>
+              <td class="text-warning"><strong>No</strong></td>
+              <td>Yes</td>
+              <td>Yes</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td>Account Requirement</td>
+              <td>X account</td>
+              <td>Phone number</td>
+              <td>Phone number</td>
+              <td>Phone number</td>
+            </tr>
+            <tr>
+              <td>Open Source</td>
+              <td>No</td>
+              <td>No</td>
+              <td><strong>Yes</strong></td>
+              <td>Client only</td>
+            </tr>
+            <tr>
+              <td>Price</td>
+              <td>Free</td>
+              <td>Free</td>
+              <td>Free</td>
+              <td>Free / Premium</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="compare-note text-muted">
+        Sources: Apple App Store listing, official @chat posts on X, respective app documentation. XChat has not been independently audited for its privacy claims.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ SECTION ==================== -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="faq-header">
+        <h2>Frequently Asked Questions</h2>
+        <p class="text-secondary">Everything you need to know about XChat, based on official sources and verified reporting.</p>
+      </div>
+      <div class="faq-list">
+        {faqs.map((faq, i) => (
+          <details open={i === 0}>
+            <summary>{faq.question}</summary>
+            <div class="faq-body" set:html={faq.answer} />
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FINAL CTA (二次转化切面) ==================== -->
+  <section class="section final-cta-section">
+    <div class="container">
+      <div class="final-cta-card">
+        <h2 class="final-cta-title">Don't Miss XChat Launch Day</h2>
+        <p class="text-secondary final-cta-desc">
+          Pre-order on the App Store so the app auto-installs on <time datetime="2026-04-23">April 23</time>, or subscribe to our Telegram channel to be notified the instant Android news drops.
+        </p>
+        <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
+          <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            Pre-order on App Store
+          </a>
+          <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+            </svg>
+            Get Notified
+          </a>
+        </div>
+        <p class="text-muted" style="margin-top: 1rem; font-size: 0.8125rem;">Prefer to chat? <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">Join our community group</a> to discuss with other XChat users.</p>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    text-align: center;
+    padding-top: 8rem;
+    padding-bottom: 5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(29, 155, 240, 0.08) 0%, rgba(29, 155, 240, 0.02) 40%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+
+  .status-bar {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .hero-title {
+    margin-bottom: 1.5rem;
+    max-width: 760px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .hero-subtitle {
+    font-size: 1.125rem;
+    max-width: 620px;
+    margin-bottom: 3rem;
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .hero-subtitle strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ---- CTA Group (Dual Buttons) ---- */
+  .cta-group {
+    margin-bottom: 3.5rem;
+    text-align: center;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-lg {
+    padding: 0.8125rem 1.75rem;
+    font-size: 0.9375rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-lg svg {
+    flex-shrink: 0;
+  }
+
+  .form-hint {
+    font-size: 0.8125rem;
+    margin-top: 1rem;
+  }
+
+  /* ---- Stats ---- */
+  .stats-row {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+  }
+
+  .stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .stat-number {
+    font-size: 1.5rem;
+    font-weight: 800;
+    font-family: var(--font-mono);
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
+  }
+
+  .stat-label {
+    font-size: 0.6875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  .stat-divider {
+    width: 1px;
+    height: 2rem;
+    background: var(--border);
+  }
+
+  /* ---- Alternative Guide ---- */
+  .alt-card {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .alt-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .alt-icon {
+    font-size: 1.5rem;
+  }
+
+  .alt-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .alt-steps {
+    list-style: none;
+    counter-reset: steps;
+  }
+
+  .alt-steps li {
+    counter-increment: steps;
+    padding: 0.5rem 0 0.5rem 2rem;
+    position: relative;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .alt-steps li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    width: 1.375rem;
+    height: 1.375rem;
+    border-radius: 50%;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-muted);
+  }
+
+  /* ---- Comparison Table ---- */
+  .compare-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .compare-header p {
+    margin-top: 0.75rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-bottom: 1rem;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+    min-width: 600px;
+  }
+
+  .compare-table th,
+  .compare-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table thead th {
+    font-weight: 700;
+    font-size: 0.8125rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+    background: var(--bg-secondary);
+    position: sticky;
+    top: 56px;
+  }
+
+  .compare-table thead th:nth-child(2) {
+    color: var(--accent-light);
+  }
+
+  .compare-table tbody td:first-child {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .compare-table tbody td {
+    color: var(--text-secondary);
+  }
+
+  .compare-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .text-warning {
+    color: var(--warning) !important;
+  }
+
+  .compare-note {
+    font-size: 0.75rem;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* ---- FAQ ---- */
+  .faq-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .faq-header p {
+    margin-top: 0.75rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .faq-list {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* ---- Final CTA (二次转化切面) ---- */
+  .final-cta-section {
+    padding-top: 2rem;
+    padding-bottom: 4rem;
+  }
+
+  .final-cta-card {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, rgba(29, 155, 240, 0.04), rgba(29, 155, 240, 0.01));
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 500px;
+    height: 300px;
+    background: radial-gradient(ellipse, rgba(29, 155, 240, 0.12) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .final-cta-title {
+    position: relative;
+    z-index: 1;
+    font-size: 1.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .final-cta-desc {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .final-cta-card > .cta-buttons,
+  .final-cta-card > p {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .hero {
+      padding-top: 5rem;
+      padding-bottom: 3rem;
+    }
+
+    .final-cta-card {
+      padding: 2rem 1.25rem;
+    }
+
+    .final-cta-title {
+      font-size: 1.375rem;
+    }
+
+    .hero-glow {
+      width: 400px;
+      height: 400px;
+      top: -30%;
+    }
+
+    .stats-row {
+      gap: 1.5rem;
+    }
+
+    .stat-number {
+      font-size: 1.25rem;
+    }
+  }
+</style>
+
