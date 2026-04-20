@@ -1,0 +1,272 @@
+---
+/**
+ * vs/signal.astro — XChat vs Signal 对比页
+ *
+ * SEO 战略：目标关键词 "xchat vs signal"、"is xchat as secure as signal"。
+ * Signal 在 privacy-conscious 用户群里是"金标准"，我们坦诚对比。
+ */
+import Layout from '../../layouts/Layout.astro';
+
+const rows = [
+  { label: 'Owner',                    xchat: 'X Corp (for-profit)',           other: 'Signal Foundation (nonprofit)' },
+  { label: 'Launched',                 xchat: 'April 23, 2026',                other: '2014' },
+  { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '~40 million' },
+  { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default (Signal Protocol)' },
+  { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
+  { label: 'iOS',                      xchat: 'Yes (launch day)',              other: 'Yes' },
+  { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
+  { label: 'Desktop apps',             xchat: 'Via x.com web only',            other: 'Yes (Win / Mac / Linux)' },
+  { label: 'Open source',              xchat: 'No',                            other: 'Yes, fully (server & client)' },
+  { label: 'Independent audits',       xchat: 'None published yet',            other: 'Multiple, ongoing' },
+  { label: 'Max group size',           xchat: '481 members',                   other: '1,000 members' },
+  { label: 'Disappearing messages',    xchat: 'Expected',                      other: 'Yes (custom timers)' },
+  { label: 'Voice / video calls',      xchat: 'Not on day one',                other: 'Yes, E2EE' },
+  { label: 'Metadata collected',       xchat: 'Tied to X profile',             other: 'Minimal (best in class)' },
+  { label: 'Advertising revenue',      xchat: 'Yes (X platform)',              other: 'No — donation funded' },
+];
+
+const comparisonJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'XChat vs Signal — Security and Privacy Compared',
+  author: { '@type': 'Organization', name: 'XChat Hub' },
+  publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
+  datePublished: '2026-04-20',
+  dateModified: new Date().toISOString().split('T')[0],
+  mainEntityOfPage: 'https://xchat.directory/vs/signal',
+  description: 'XChat vs Signal compared: encryption, open source, audits, metadata, and who wins on privacy. Updated April 2026.',
+};
+---
+
+<Layout
+  title="XChat vs Signal (2026) — Is XChat as Secure as Signal? | XChat Hub"
+  description="Honest XChat vs Signal comparison. Signal has 10+ years of audited Signal Protocol; XChat is new and closed source. Here's who should use which."
+  jsonLd={comparisonJsonLd}
+  canonicalPath="/vs/signal"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'Comparisons', url: 'https://xchat.directory/vs/signal/' },
+    { name: 'XChat vs Signal', url: 'https://xchat.directory/vs/signal/' },
+  ]}
+>
+  <section class="section vs-hero">
+    <div class="container">
+      <span class="eyebrow">Head-to-Head Comparison</span>
+      <h1>
+        XChat vs Signal
+        <span class="text-gradient">Can the New Kid Beat the Gold Standard?</span>
+      </h1>
+      <p class="lead text-secondary prose-body">
+        Signal is what cryptographers recommend when lives depend on it. XChat is a brand-new closed-source messenger from Elon Musk's X. Short answer on who wins on privacy: Signal, for now.
+      </p>
+    </div>
+  </section>
+
+  <section class="section-sm">
+    <div class="container">
+      <div class="table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th class="vs-col-xchat">XChat</th>
+              <th>Signal</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <td class="vs-label">{row.label}</td>
+                <td class="vs-col-xchat">{row.xchat}</td>
+                <td>{row.other}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Who Should Choose What</h2>
+      <div class="pick-grid">
+        <article class="pick-card pick-xchat">
+          <header class="pick-header">
+            <span class="pick-tag">Choose XChat if...</span>
+          </header>
+          <ul class="pick-list">
+            <li>Your daily life happens on X and you want messaging to match</li>
+            <li>You don't want to give out your phone number</li>
+            <li>You value social discovery over audited cryptography</li>
+            <li>You're OK with early-days, un-audited status for casual chats</li>
+          </ul>
+        </article>
+        <article class="pick-card">
+          <header class="pick-header">
+            <span class="pick-tag">Stick with Signal if...</span>
+          </header>
+          <ul class="pick-list">
+            <li>You're a journalist, activist, or high-value target</li>
+            <li>You want the most peer-reviewed, open-source crypto available</li>
+            <li>You need E2EE voice/video calls on launch day</li>
+            <li>You don't trust ad-supported for-profit companies with your messages</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <h2>The Honest Take</h2>
+        <p>
+          <strong>Signal</strong> is the benchmark. Snowden uses it. Cryptographers recommend it. The <em>Signal Protocol</em> is the backbone of WhatsApp's encryption too — it's that important. Signal is a nonprofit, fully open source, regularly audited, and collects close to zero metadata. If privacy is life-and-death, this is your answer.
+        </p>
+        <p>
+          <strong>XChat</strong> says it's end-to-end encrypted, and there's no reason to doubt the claim — but until independent researchers publish an audit, "trust us" is not the same as "verify us." XChat is also closed source, which means the community can't check the implementation for bugs or backdoors.
+        </p>
+        <p>
+          That said, XChat has one real privacy advantage: <strong>no phone number required</strong>. Your identity is your X handle, which is a pseudonym by default. Signal still needs your real phone number to sign up, and that number is visible to everyone in your chats.
+        </p>
+        <p>
+          <strong>Verdict:</strong> for most people, XChat will be "good enough" and fun to use with the X social graph. For anyone whose threat model includes governments or corporate surveillance, Signal remains the clear winner until XChat has been audited.
+        </p>
+        <p class="muted-note">
+          Read more in our <a href="/faq">XChat FAQ</a>, or compare <a href="/vs/whatsapp">XChat vs WhatsApp</a> and <a href="/vs/telegram">XChat vs Telegram</a>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="related-wrap">
+        <h2>More Comparisons</h2>
+        <div class="related-grid">
+          <a href="/vs/whatsapp" class="related-card">
+            <h3>XChat vs WhatsApp</h3>
+            <p class="text-secondary">The incumbent 2B-user giant vs. the X challenger.</p>
+            <span class="related-arrow">→</span>
+          </a>
+          <a href="/vs/telegram" class="related-card">
+            <h3>XChat vs Telegram</h3>
+            <p class="text-secondary">Biggest public groups vs. tight social graph.</p>
+            <span class="related-arrow">→</span>
+          </a>
+          <a href="/faq" class="related-card">
+            <h3>XChat FAQ</h3>
+            <p class="text-secondary">Answers to every "is XChat..." question.</p>
+            <span class="related-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Shared vs/* page styles ---- */
+  .vs-hero { text-align: center; padding-top: 5rem; padding-bottom: 2rem; }
+  .eyebrow {
+    display: inline-block; font-size: 0.75rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-light);
+    margin-bottom: 1.25rem; padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25); border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+  .vs-hero h1 { max-width: 820px; margin: 0 auto 1.5rem; }
+  .vs-hero h1 .text-gradient { display: block; margin-top: 0.1em; }
+  .lead { font-size: 1.125rem; max-width: 640px; margin: 0 auto; }
+
+  .table-wrap {
+    max-width: 880px; margin: 0 auto; overflow-x: auto;
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    background: var(--bg-card);
+  }
+  .vs-table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; min-width: 640px; }
+  .vs-table th, .vs-table td {
+    padding: 0.875rem 1.125rem; text-align: left; border-bottom: 1px solid var(--border);
+  }
+  .vs-table thead th {
+    font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .vs-table tbody tr:last-child td { border-bottom: none; }
+  .vs-table tbody tr:hover { background: rgba(255, 255, 255, 0.015); }
+  .vs-label { color: var(--text-secondary); font-weight: 500; }
+  .vs-col-xchat { color: var(--text-primary); background: rgba(29, 155, 240, 0.04); }
+  .vs-table thead .vs-col-xchat { color: var(--accent-light); background: rgba(29, 155, 240, 0.08); }
+
+  .section-title { text-align: center; margin-bottom: 2.5rem; }
+  .pick-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem; max-width: 880px; margin: 0 auto;
+  }
+  .pick-card {
+    padding: 1.75rem; border: 1px solid var(--border); border-radius: var(--radius-xl);
+    background: var(--bg-card); transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+  }
+  .pick-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+  .pick-xchat {
+    border-color: rgba(29, 155, 240, 0.3);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.05), transparent 70%),
+      var(--bg-card);
+  }
+  .pick-header { margin-bottom: 1.25rem; }
+  .pick-tag {
+    display: inline-block; padding: 0.3125rem 0.75rem;
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em;
+    color: var(--accent-light); background: rgba(29, 155, 240, 0.1);
+    border-radius: var(--radius-full);
+  }
+  .pick-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.75rem; }
+  .pick-list li {
+    padding-left: 1.5rem; position: relative; font-size: 0.9375rem;
+    line-height: 1.55; color: var(--text-secondary);
+  }
+  .pick-list li::before {
+    content: ''; position: absolute; left: 0; top: 0.625rem;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-light); opacity: 0.6;
+  }
+
+  .prose { max-width: 680px; margin: 0 auto; }
+  .prose h2 { margin-bottom: 1.25rem; text-align: center; }
+  .prose p { color: var(--text-secondary); font-size: 1rem; line-height: 1.75; margin-bottom: 1rem; }
+  .prose strong { color: var(--text-primary); }
+  .prose a { color: var(--accent-light); font-weight: 500; }
+  .muted-note {
+    font-size: 0.875rem !important; color: var(--text-muted) !important;
+    margin-top: 1.5rem !important; padding-top: 1.25rem; border-top: 1px solid var(--border);
+  }
+
+  .related-wrap { max-width: 960px; margin: 0 auto; text-align: center; }
+  .related-wrap h2 { margin-bottom: 2rem; }
+  .related-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem; text-align: left;
+  }
+  .related-card {
+    padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); text-decoration: none; color: inherit;
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth); position: relative;
+  }
+  .related-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .related-card h3 { font-size: 1rem; margin-bottom: 0.375rem; }
+  .related-card p { font-size: 0.875rem; line-height: 1.55; margin: 0; }
+  .related-arrow {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    color: var(--text-muted); font-size: 1.125rem;
+    transition: color 0.15s, transform 0.2s;
+  }
+  .related-card:hover .related-arrow { color: var(--accent-light); transform: translateX(2px); }
+
+  @media (max-width: 640px) {
+    .vs-hero { padding-top: 3.5rem; }
+    .vs-table th, .vs-table td { padding: 0.75rem 0.875rem; font-size: 0.875rem; }
+  }
+</style>

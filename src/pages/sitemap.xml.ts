@@ -10,6 +10,11 @@ const SITE = 'https://xchat.directory';
 const pages = [
   { path: '/', priority: 1.0, changefreq: 'daily' },
   { path: '/groups/', priority: 0.9, changefreq: 'daily' },
+  { path: '/faq/', priority: 0.85, changefreq: 'weekly' },
+  { path: '/launch-countdown/', priority: 0.9, changefreq: 'daily' },
+  { path: '/vs/whatsapp/', priority: 0.75, changefreq: 'monthly' },
+  { path: '/vs/signal/', priority: 0.75, changefreq: 'monthly' },
+  { path: '/vs/telegram/', priority: 0.75, changefreq: 'monthly' },
   { path: '/list-your-group/', priority: 0.7, changefreq: 'weekly' },
   { path: '/about/', priority: 0.5, changefreq: 'monthly' },
   { path: '/privacy/', priority: 0.3, changefreq: 'monthly' },

@@ -1,0 +1,416 @@
+---
+/**
+ * launch-countdown.astro — XChat 正式发布日倒计时页
+ *
+ * SEO 战略：
+ * 主打 "xchat launch date / release date / april 23 / countdown" 等即时性关键词。
+ * 发布当天（4/23 之后）这一页会自动切换为 "LIVE NOW" 状态，并继续吃 "xchat launched"
+ * "is xchat out" 等后续搜索词。
+ *
+ * 技术：倒计时逻辑在客户端 JS 实时运行，SSG 预渲染的 HTML 带静态兜底文案。
+ */
+import Layout from '../layouts/Layout.astro';
+
+/** 发布目标时刻：2026-04-23 00:00:00 UTC（Apple App Store 全球统一发布时刻） */
+const LAUNCH_ISO = '2026-04-23T00:00:00Z';
+const launchDate = new Date(LAUNCH_ISO);
+const now = new Date();
+const msLeft = launchDate.getTime() - now.getTime();
+const isLaunched = msLeft <= 0;
+
+/* 用于兜底渲染（JS 禁用时仍能看到大致天数） */
+const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
+const buildDateDisplay = now.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+
+/* JSON-LD: Event schema — 告诉 Google 这是一个时间相关的事件页 */
+const eventJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Event',
+  name: 'XChat Public Launch',
+  startDate: LAUNCH_ISO,
+  eventStatus: isLaunched
+    ? 'https://schema.org/EventScheduled'
+    : 'https://schema.org/EventScheduled',
+  eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
+  location: {
+    '@type': 'VirtualLocation',
+    url: 'https://apps.apple.com/us/app/xchat/id6760873038',
+  },
+  description: 'XChat, X Corp\'s standalone end-to-end encrypted messenger, launches publicly on the iOS App Store on April 23, 2026. iPhone and iPad only on day one; Android timing unannounced.',
+  organizer: {
+    '@type': 'Organization',
+    name: 'X Corp',
+    url: 'https://x.com',
+  },
+  image: 'https://xchat.directory/og-image.png',
+};
+---
+
+<Layout
+  title="XChat Launch Countdown — Official Release April 23, 2026 | XChat Hub"
+  description="Real-time countdown to XChat's public launch on April 23, 2026. Pre-order on the App Store now so the app installs automatically the moment it goes live."
+  jsonLd={eventJsonLd}
+  canonicalPath="/launch-countdown"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'Launch Countdown', url: 'https://xchat.directory/launch-countdown/' },
+  ]}
+>
+  <!-- ==================== HERO + COUNTDOWN ==================== -->
+  <section class="section countdown-hero">
+    <div class="container">
+      <span class="eyebrow">
+        <span class="live-dot" aria-hidden="true"></span>
+        {isLaunched ? 'Live Now' : `${daysLeft} Day${daysLeft === 1 ? '' : 's'} Left`}
+      </span>
+      <h1>
+        {isLaunched ? (
+          <>XChat <span class="text-gradient">Is Live.</span></>
+        ) : (
+          <>XChat Launches<br /><span class="text-gradient">April 23, 2026.</span></>
+        )}
+      </h1>
+      <p class="lead text-secondary prose-body">
+        {isLaunched
+          ? 'The wait is over. XChat is now available on the iOS App Store — tap below to download, or read our day-one coverage.'
+          : 'X Corp\'s standalone end-to-end encrypted messenger drops globally at 00:00 UTC on April 23, 2026 — iPhone and iPad only on day one.'}
+      </p>
+
+      <!-- 倒计时盘 -->
+      <div class="countdown" id="countdown" data-target={LAUNCH_ISO}>
+        <div class="count-unit">
+          <span class="count-num" id="count-days">{String(daysLeft).padStart(2, '0')}</span>
+          <span class="count-label">Days</span>
+        </div>
+        <div class="count-unit">
+          <span class="count-num" id="count-hours">00</span>
+          <span class="count-label">Hours</span>
+        </div>
+        <div class="count-unit">
+          <span class="count-num" id="count-mins">00</span>
+          <span class="count-label">Minutes</span>
+        </div>
+        <div class="count-unit">
+          <span class="count-num" id="count-secs">00</span>
+          <span class="count-label">Seconds</span>
+        </div>
+      </div>
+
+      <!-- CTA 按钮 -->
+      <div class="cta-buttons">
+        <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          {isLaunched ? 'Download on App Store' : 'Pre-order on App Store'}
+        </a>
+        <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          Notify Me on Telegram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WHAT TO EXPECT ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="expect-wrap">
+        <h2>What to Expect on Launch Day</h2>
+        <div class="expect-grid">
+          <article class="expect-card">
+            <div class="expect-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+            </div>
+            <h3>iPhone &amp; iPad Only</h3>
+            <p class="text-secondary">Apple App Store worldwide. Requires iOS 16 or later. Free to download and use.</p>
+          </article>
+          <article class="expect-card">
+            <div class="expect-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            </div>
+            <h3>End-to-End Encrypted</h3>
+            <p class="text-secondary">Messages encrypted locally. Keys stored on device only. PIN-protected history.</p>
+          </article>
+          <article class="expect-card">
+            <div class="expect-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+            <h3>Groups up to 481</h3>
+            <p class="text-secondary">Based on X Corp's technical specs. Larger group sizes may roll out post-launch.</p>
+          </article>
+          <article class="expect-card">
+            <div class="expect-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <h3>No Android (Yet)</h3>
+            <p class="text-secondary">Android release date not announced. We'll track it at <a href="/">xchat.directory</a>.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FINAL CTA ==================== -->
+  <section class="section final-section">
+    <div class="container">
+      <div class="final-card">
+        <h2>{isLaunched ? 'Welcome to XChat.' : 'Get a Head Start.'}</h2>
+        <p class="text-secondary prose-body">
+          {isLaunched
+            ? 'Check out our Groups Directory to find active XChat communities from day one — crypto, tech, AI, gaming, and more.'
+            : 'Pre-order on the App Store now. The second XChat goes live, it auto-installs on your iPhone — no racing to the store, no "loading" screens, no missed launch-day chaos.'}
+        </p>
+        <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
+          <a href={isLaunched ? '/groups' : 'https://apps.apple.com/us/app/xchat/id6760873038'} target={isLaunched ? undefined : '_blank'} rel={isLaunched ? undefined : 'noopener noreferrer'} class="btn btn-primary btn-lg">
+            {isLaunched ? 'Browse Groups' : 'Pre-order Free'}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .countdown-hero {
+    text-align: center;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1.25rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.6);
+    animation: live-pulse 1.8s ease-out infinite;
+  }
+
+  @keyframes live-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.6); }
+    70% { box-shadow: 0 0 0 8px rgba(29, 155, 240, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0); }
+  }
+
+  .countdown-hero h1 {
+    max-width: 820px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .countdown-hero h1 .text-gradient {
+    display: block;
+    margin-top: 0.1em;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    max-width: 620px;
+    margin: 0 auto 3rem;
+  }
+
+  /* ---- Countdown Display ---- */
+  .countdown {
+    display: inline-flex;
+    gap: 1rem;
+    padding: 1.75rem 2rem;
+    margin: 0 auto 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.05), transparent 60%),
+      var(--bg-card);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 8px 32px rgba(0, 0, 0, 0.3);
+  }
+
+  .count-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 72px;
+  }
+
+  .count-num {
+    font-size: 2.75rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--text-primary);
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.5rem;
+  }
+
+  .count-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+    margin-top: 1rem;
+  }
+
+  /* ---- Expect Grid ---- */
+  .expect-wrap {
+    text-align: center;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .expect-wrap h2 {
+    margin-bottom: 2.5rem;
+  }
+
+  .expect-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .expect-card {
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+  }
+
+  .expect-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+
+  .expect-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-md);
+    background: rgba(29, 155, 240, 0.08);
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .expect-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .expect-card p {
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .expect-card a {
+    color: var(--accent-light);
+    font-weight: 500;
+  }
+
+  /* ---- Final CTA ---- */
+  .final-section {
+    padding-top: 2rem;
+  }
+
+  .final-card {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.05), transparent 60%),
+      var(--bg-card);
+  }
+
+  .final-card h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .countdown-hero { padding-top: 3.5rem; }
+    .countdown { gap: 0.5rem; padding: 1.25rem 1rem; }
+    .count-unit { min-width: 56px; }
+    .count-num { font-size: 2rem; }
+    .count-label { font-size: 0.625rem; }
+  }
+
+  @media (max-width: 400px) {
+    .count-unit { min-width: 48px; }
+    .count-num { font-size: 1.75rem; }
+  }
+</style>
+
+<script>
+  /**
+   * 倒计时脚本：每秒刷新 DOM 显示
+   * 文件顶端常量 LAUNCH_ISO 已通过 data-target 属性传递到客户端
+   */
+  const countdownEl = document.getElementById('countdown');
+  if (countdownEl) {
+    const target = new Date(countdownEl.dataset.target || '').getTime();
+    const elDays = document.getElementById('count-days');
+    const elHours = document.getElementById('count-hours');
+    const elMins = document.getElementById('count-mins');
+    const elSecs = document.getElementById('count-secs');
+
+    const pad = (n: number) => String(Math.max(0, Math.floor(n))).padStart(2, '0');
+
+    const tick = () => {
+      const diff = target - Date.now();
+      if (diff <= 0) {
+        if (elDays) elDays.textContent = '00';
+        if (elHours) elHours.textContent = '00';
+        if (elMins) elMins.textContent = '00';
+        if (elSecs) elSecs.textContent = '00';
+        return false;
+      }
+      const d = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const h = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const m = Math.floor((diff / (1000 * 60)) % 60);
+      const s = Math.floor((diff / 1000) % 60);
+      if (elDays) elDays.textContent = pad(d);
+      if (elHours) elHours.textContent = pad(h);
+      if (elMins) elMins.textContent = pad(m);
+      if (elSecs) elSecs.textContent = pad(s);
+      return true;
+    };
+
+    tick();
+    const timer = setInterval(() => {
+      if (!tick()) clearInterval(timer);
+    }, 1000);
+  }
+</script>

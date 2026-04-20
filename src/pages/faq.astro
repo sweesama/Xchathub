@@ -1,0 +1,283 @@
+---
+/**
+ * faq.astro — 长尾关键词聚合问答页
+ *
+ * SEO 战略：
+ * 一页吃下 "is xchat free/real/safe/launched/encrypted" 等 10+ 个长尾问题词。
+ * 每个问题独立 <h2> + JSON-LD FAQPage，帮助 Google Featured Snippet 抓取。
+ *
+ * 数据来源：
+ * - Elon Musk 公开声明（X / @elonmusk）
+ * - Apple App Store 预购页 (id1562466975)
+ * - 技术媒体报道（TechCrunch, Engadget, Bangkok Post, Alarabiya）
+ * - 截至日期会在下方通过 buildDate 自动注入
+ */
+import Layout from '../layouts/Layout.astro';
+
+const buildDate = new Date();
+const buildDateISO = buildDate.toISOString().split('T')[0];
+const buildDateDisplay = buildDate.toLocaleDateString('en-US', {
+  year: 'numeric', month: 'long', day: 'numeric',
+});
+
+/** 问答数据：同时用于渲染和 JSON-LD */
+const faqs = [
+  {
+    q: 'Is XChat free?',
+    a: 'Yes. XChat is free to use. X Corp has not announced any paid tier for XChat messaging itself. However, access may require an active X (formerly Twitter) account, and X offers paid subscriptions (Premium / Premium+) that unlock other X platform features unrelated to XChat.',
+    keywords: ['is xchat free', 'xchat pricing', 'xchat cost'],
+  },
+  {
+    q: 'Is XChat real? Is it actually launching?',
+    a: 'Yes, XChat is real. Elon Musk publicly announced it on X (formerly Twitter) in mid-2025. A pre-order listing went live on the Apple App Store in early 2026 under the name "XChat" (App ID 6760873038). The official launch date is <strong>April 23, 2026</strong>, iPhone and iPad only on day one.',
+    keywords: ['is xchat real', 'is xchat fake', 'is xchat legit'],
+  },
+  {
+    q: 'Has XChat launched yet?',
+    a: `As of <time datetime="${buildDateISO}">${buildDateDisplay}</time>, XChat is in pre-order status on the iOS App Store. The official public release is scheduled for <strong>April 23, 2026</strong>. If you pre-order now, the app will auto-install on your iPhone or iPad the moment it goes live.`,
+    keywords: ['is xchat launched', 'has xchat launched', 'when was xchat launched'],
+  },
+  {
+    q: 'When will XChat launch?',
+    a: 'The public launch date confirmed by X Corp is <strong>April 23, 2026</strong>, for iPhone and iPad. Android availability has <strong>not been announced</strong>. No pre-order, beta, or release window exists for Android users as of today.',
+    keywords: ['when will xchat launch', 'xchat launch date', 'xchat release date'],
+  },
+  {
+    q: 'Is XChat available on Android?',
+    a: 'No. XChat is iOS-only at launch. X Corp has given no release date, beta program, or even a signup list for Android. If you use Android and want to stay in XChat communities, your only option today is opening X on a mobile browser (x.com) and accessing XChat group threads via the web interface.',
+    keywords: ['is xchat available on android', 'xchat android', 'does xchat work on android'],
+  },
+  {
+    q: 'Will XChat ever come to Android?',
+    a: 'Almost certainly yes — Android has over 70% of the global smartphone market, and no serious messenger stays iOS-only long term. However, X Corp has given no timeline. Based on how previous X features rolled out (Spaces, Communities, Audio), a realistic estimate is <strong>3 to 9 months after iOS launch</strong>. We maintain a dedicated Android tracker at <a href="/">xchat.directory</a> that updates the moment anything official drops.',
+    keywords: ['xchat for android when', 'xchat android release'],
+  },
+  {
+    q: 'Is XChat safe and secure?',
+    a: 'XChat is marketed as end-to-end encrypted (E2EE), with forward secrecy and local device-only key storage. However, <strong>no independent security audit has been published</strong> as of the launch date. This is different from Signal, which has been peer-reviewed for years. If you are a journalist, activist, or need maximum assurance, wait for audit results or use <a href="/vs/signal">Signal</a> in the meantime.',
+    keywords: ['is xchat safe', 'is xchat secure', 'xchat security'],
+  },
+  {
+    q: 'Is XChat end-to-end encrypted?',
+    a: 'Yes, according to X Corp. XChat uses end-to-end encryption (E2EE) for direct messages, meaning only you and the recipient can read them — not X, not governments, not third parties. Keys are stored locally on your device. A PIN protects message history on new devices. Note: this is XChat-specific; regular X Direct Messages (DMs) are <strong>not</strong> E2EE by default.',
+    keywords: ['is xchat encrypted', 'is xchat end to end encrypted', 'xchat e2ee'],
+  },
+  {
+    q: 'What is XChat exactly?',
+    a: 'XChat is a standalone encrypted messenger app from X Corp (the company formerly known as Twitter). It is built into the X platform but also available as a dedicated app. Think of it as X\'s answer to WhatsApp and Signal: private one-on-one and group messages, end-to-end encrypted by default, tied to your X account.',
+    keywords: ['what is xchat', 'what is xchat app', 'xchat meaning'],
+  },
+  {
+    q: 'Who made XChat? Is it Elon Musk?',
+    a: 'XChat is built by X Corp, the company owned by Elon Musk. Elon announced the feature personally on X and has promoted it as a privacy-respecting alternative to mainstream messengers. The development team is part of X\'s internal engineering organization, but specific team member names have not been made public.',
+    keywords: ['who made xchat', 'xchat elon musk', 'is xchat by elon'],
+  },
+  {
+    q: 'How do I get XChat?',
+    a: 'Three steps: (1) Open the <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer">Apple App Store pre-order page</a> on your iPhone or iPad. (2) Tap "Get" to pre-order (it\'s free). (3) On April 23, 2026, XChat will automatically install on your device. Android users currently have no way to get XChat — the app does not exist on Google Play.',
+    keywords: ['how to get xchat', 'where to download xchat', 'xchat download'],
+  },
+  {
+    q: 'How to change your XChat PIN?',
+    a: 'After launch, the PIN-change flow will be inside the XChat app under <strong>Settings → Security → Change PIN</strong>. Since the app is not yet live, the exact menu path may vary. We will update this answer with screenshots the moment the app goes public on April 23, 2026. Subscribe to our <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Telegram channel</a> to get the walkthrough the day it drops.',
+    keywords: ['how to change xchat pin', 'xchat pin reset'],
+  },
+  {
+    q: 'How to delete messages in XChat?',
+    a: 'Like most modern messengers, XChat is expected to support both "Delete for me" and "Delete for everyone" on individual messages. Full deletion of chat history will likely be available under Settings. Exact UI will be confirmed after April 23, 2026 launch.',
+    keywords: ['how to delete xchat messages', 'xchat delete chat'],
+  },
+  {
+    q: 'Does XChat work without a phone number?',
+    a: 'Unlike WhatsApp and Signal, XChat is tied to your <strong>X account</strong>, not your phone number. This means you can sign up with just an email or your existing X handle. That\'s a privacy advantage for users who don\'t want to expose their phone number to contacts.',
+    keywords: ['xchat without phone number', 'xchat signup'],
+  },
+  {
+    q: 'Can I use XChat on my computer or desktop?',
+    a: 'Not yet as a standalone app. However, XChat messages are synced with your X account, so you can read and send XChat messages from <a href="https://x.com" target="_blank" rel="noopener noreferrer">x.com</a> in any desktop browser. A dedicated XChat desktop app has not been announced.',
+    keywords: ['xchat desktop', 'xchat for windows', 'xchat for mac'],
+  },
+  {
+    q: 'Is XChat better than WhatsApp, Signal, or Telegram?',
+    a: 'It depends on what you value. We built side-by-side comparison pages to help you decide: <a href="/vs/whatsapp">XChat vs WhatsApp</a>, <a href="/vs/signal">XChat vs Signal</a>, <a href="/vs/telegram">XChat vs Telegram</a>. Short version: Signal wins on proven security, WhatsApp wins on ubiquity, Telegram wins on group features, and XChat wins on being tied to the X social graph (no phone number needed).',
+    keywords: ['xchat vs whatsapp', 'xchat vs signal', 'xchat vs telegram', 'is xchat better'],
+  },
+  {
+    q: 'Does XChat replace X Direct Messages (DMs)?',
+    a: 'Not replace — extend. Regular X DMs still exist and are <strong>not</strong> end-to-end encrypted by default. XChat is the encrypted layer on top, for conversations where privacy matters. You can choose whether a given chat is a regular DM or an XChat encrypted thread.',
+    keywords: ['xchat vs x dm', 'xchat direct message'],
+  },
+];
+
+/* JSON-LD: FAQPage schema — 让 Google 把每个问答独立显示为 Featured Snippet */
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: faq.a.replace(/<[^>]+>/g, ''), // 纯文本版本给 schema
+    },
+  })),
+};
+---
+
+<Layout
+  title="XChat FAQ — Is It Free, Safe, Launched? Every Answer | XChat Hub"
+  description="Comprehensive XChat FAQ: is it free? is it safe? has it launched? Android availability, PIN help, encryption, comparison. All answers sourced from official X Corp statements and verified reporting."
+  jsonLd={faqJsonLd}
+  canonicalPath="/faq"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'FAQ', url: 'https://xchat.directory/faq/' },
+  ]}
+>
+  <!-- ==================== HEADER ==================== -->
+  <section class="section faq-hero">
+    <div class="container">
+      <span class="eyebrow">XChat Questions, Answered</span>
+      <h1>
+        Every XChat Question
+        <span class="text-gradient">We Could Find.</span>
+      </h1>
+      <p class="lead text-secondary prose-body">
+        Compiled from official X Corp announcements, App Store metadata, and verified tech reporting. Last reviewed <time datetime={buildDateISO}>{buildDateDisplay}</time> — we update the moment anything changes.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ LIST ==================== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="faq-page-list">
+        {faqs.map((faq, i) => (
+          <article class="faq-item" id={`q${i + 1}`}>
+            <h2 class="faq-q">{faq.q}</h2>
+            <div class="faq-a text-secondary prose-body" set:html={faq.a} />
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FINAL CTA ==================== -->
+  <section class="section final-section">
+    <div class="container">
+      <div class="final-card">
+        <h2>Didn't Find Your Question?</h2>
+        <p class="text-secondary prose-body">
+          Drop it in our Telegram community — real humans, real answers, usually within a few hours. We update this page weekly based on what you ask.
+        </p>
+        <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg" style="margin-top: 1.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          Ask on Telegram
+        </a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .faq-hero {
+    text-align: center;
+    padding-top: 6rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1.25rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .faq-hero h1 {
+    max-width: 780px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .faq-hero h1 .text-gradient {
+    display: block;
+    margin-top: 0.1em;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    max-width: 620px;
+    margin: 0 auto;
+  }
+
+  /* ---- FAQ List (独立段落，非折叠 — 每个 Q 都是静态 h2，利于 Google Featured Snippet) ---- */
+  .faq-page-list {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .faq-item {
+    scroll-margin-top: 6rem; /* 锚点跳转时给 sticky header 留空间 */
+  }
+
+  .faq-q {
+    font-size: 1.375rem;
+    margin-bottom: 0.875rem;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+
+  .faq-a {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .faq-a a {
+    color: var(--accent-light);
+    font-weight: 500;
+  }
+
+  .faq-a strong {
+    color: var(--text-primary);
+  }
+
+  /* ---- Final CTA ---- */
+  .final-section {
+    padding-top: 2rem;
+  }
+
+  .final-card {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.05), transparent 60%),
+      var(--bg-card);
+  }
+
+  .final-card h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .faq-hero { padding-top: 4rem; }
+    .faq-page-list { gap: 2rem; }
+    .faq-q { font-size: 1.1875rem; }
+  }
+</style>

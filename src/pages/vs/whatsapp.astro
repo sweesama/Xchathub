@@ -1,0 +1,444 @@
+---
+/**
+ * vs/whatsapp.astro — XChat vs WhatsApp 对比页
+ *
+ * SEO 战略：
+ * 直打 "xchat vs whatsapp" 比价意图关键词。
+ * 大表格 + pros/cons + when-to-use 推荐，同时满足 Google Featured Snippet 抓取。
+ */
+import Layout from '../../layouts/Layout.astro';
+
+/** 对比维度数据 */
+const rows = [
+  { label: 'Owner',                    xchat: 'X Corp (Elon Musk)',            other: 'Meta Platforms' },
+  { label: 'Launched',                 xchat: 'April 23, 2026',                other: '2009' },
+  { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '2+ billion' },
+  { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default' },
+  { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
+  { label: 'iOS',                      xchat: 'Yes (launch day)',              other: 'Yes' },
+  { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
+  { label: 'Desktop / Web',            xchat: 'Via x.com web only',            other: 'Native + Web' },
+  { label: 'Independent security audit', xchat: 'Not published yet',           other: 'Signal Protocol (audited)' },
+  { label: 'Open source',              xchat: 'No',                            other: 'Partial (Signal Protocol)' },
+  { label: 'Max group size',           xchat: '481 members',                   other: '1,024 members' },
+  { label: 'Disappearing messages',    xchat: 'Expected',                      other: 'Yes (24h / 7d / 90d)' },
+  { label: 'Voice / video calls',      xchat: 'Not on day one',                other: 'Yes' },
+  { label: 'Metadata collected',       xchat: 'Tied to X profile',             other: 'Phone number + contacts' },
+  { label: 'Owned by advertising co.', xchat: 'Yes (X Ads)',                   other: 'Yes (Meta Ads)' },
+];
+
+const comparisonJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'XChat vs WhatsApp — Full Side-by-Side Comparison',
+  author: { '@type': 'Organization', name: 'XChat Hub' },
+  publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
+  datePublished: '2026-04-20',
+  dateModified: new Date().toISOString().split('T')[0],
+  mainEntityOfPage: 'https://xchat.directory/vs/whatsapp',
+  description: 'XChat vs WhatsApp compared on encryption, privacy, platforms, group size, and more. Which messenger should you use in 2026?',
+};
+---
+
+<Layout
+  title="XChat vs WhatsApp (2026) — Encryption, Privacy, Features Compared | XChat Hub"
+  description="Detailed XChat vs WhatsApp comparison: E2EE, phone numbers, Android availability, group size, security audits, and who should switch. Updated April 2026."
+  jsonLd={comparisonJsonLd}
+  canonicalPath="/vs/whatsapp"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'Comparisons', url: 'https://xchat.directory/vs/whatsapp/' },
+    { name: 'XChat vs WhatsApp', url: 'https://xchat.directory/vs/whatsapp/' },
+  ]}
+>
+  <!-- ==================== HERO ==================== -->
+  <section class="section vs-hero">
+    <div class="container">
+      <span class="eyebrow">Head-to-Head Comparison</span>
+      <h1>
+        XChat vs WhatsApp
+        <span class="text-gradient">Which One Wins in 2026?</span>
+      </h1>
+      <p class="lead text-secondary prose-body">
+        WhatsApp is the default messenger for 2 billion people. XChat is the new challenger from X (Twitter). Here's the honest comparison — no hype, just specs and trade-offs.
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== COMPARISON TABLE ==================== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="table-wrap">
+        <table class="vs-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th class="vs-col-xchat">XChat</th>
+              <th>WhatsApp</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <td class="vs-label">{row.label}</td>
+                <td class="vs-col-xchat">{row.xchat}</td>
+                <td>{row.other}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WHO SHOULD CHOOSE WHAT ==================== -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Who Should Choose What</h2>
+      <div class="pick-grid">
+        <article class="pick-card pick-xchat">
+          <header class="pick-header">
+            <span class="pick-tag">Choose XChat if...</span>
+          </header>
+          <ul class="pick-list">
+            <li>You already live on X (Twitter) and want messaging tied to your social graph</li>
+            <li>You hate giving out your phone number to every app</li>
+            <li>You want a fresh start with a smaller, curated community</li>
+            <li>You're on iPhone and early-adopter energy excites you</li>
+          </ul>
+        </article>
+        <article class="pick-card">
+          <header class="pick-header">
+            <span class="pick-tag">Stick with WhatsApp if...</span>
+          </header>
+          <ul class="pick-list">
+            <li>Your entire family and friend group is already there (network effect wins)</li>
+            <li>You're on Android — no XChat option for you today</li>
+            <li>You rely on voice/video calls daily</li>
+            <li>You need proven, audited encryption (Signal Protocol)</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== DETAILED TAKE ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <h2>The Honest Take</h2>
+        <p>
+          <strong>WhatsApp</strong> is 15 years old. Its end-to-end encryption uses the <em>Signal Protocol</em>, peer-reviewed by cryptographers for over a decade. 2 billion people use it, which means your mom, your boss, and your college group chat are already there. That's a moat XChat cannot cross overnight.
+        </p>
+        <p>
+          <strong>XChat's</strong> genuine advantages sit in two places. First, no phone number — your identity is your X handle, which feels modern and protects your real number from leaking to every contact. Second, it's bundled with the X social platform, so discovering groups and people you follow is frictionless in a way WhatsApp never achieved.
+        </p>
+        <p>
+          The real loss for XChat is <strong>Android</strong>. Until that ships (unannounced as of <time datetime="2026-04-20">April 2026</time>), XChat can never be your primary messenger because half your contacts literally cannot install it. For now, it's a complement, not a replacement.
+        </p>
+        <p class="muted-note">
+          See the full Android tracker at <a href="/">xchat.directory</a>, or check our <a href="/faq">FAQ page</a> for more XChat answers.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== RELATED ==================== -->
+  <section class="section">
+    <div class="container">
+      <div class="related-wrap">
+        <h2>More Comparisons</h2>
+        <div class="related-grid">
+          <a href="/vs/signal" class="related-card">
+            <h3>XChat vs Signal</h3>
+            <p class="text-secondary">Gold-standard encryption vs. new challenger.</p>
+            <span class="related-arrow">→</span>
+          </a>
+          <a href="/vs/telegram" class="related-card">
+            <h3>XChat vs Telegram</h3>
+            <p class="text-secondary">Social features vs. social-graph integration.</p>
+            <span class="related-arrow">→</span>
+          </a>
+          <a href="/faq" class="related-card">
+            <h3>XChat FAQ</h3>
+            <p class="text-secondary">17+ answers to the most-searched XChat questions.</p>
+            <span class="related-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .vs-hero {
+    text-align: center;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1.25rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .vs-hero h1 {
+    max-width: 820px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .vs-hero h1 .text-gradient {
+    display: block;
+    margin-top: 0.1em;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  /* ---- Comparison Table ---- */
+  .table-wrap {
+    max-width: 880px;
+    margin: 0 auto;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+  }
+
+  .vs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    min-width: 640px;
+  }
+
+  .vs-table th,
+  .vs-table td {
+    padding: 0.875rem 1.125rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .vs-table thead th {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .vs-table tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  .vs-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.015);
+  }
+
+  .vs-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+
+  .vs-col-xchat {
+    color: var(--text-primary);
+    background: rgba(29, 155, 240, 0.04);
+  }
+
+  .vs-table thead .vs-col-xchat {
+    color: var(--accent-light);
+    background: rgba(29, 155, 240, 0.08);
+  }
+
+  /* ---- Pick Cards ---- */
+  .section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .pick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .pick-card {
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+  }
+
+  .pick-card:hover {
+    border-color: var(--border-hover);
+    transform: translateY(-2px);
+  }
+
+  .pick-xchat {
+    border-color: rgba(29, 155, 240, 0.3);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.05), transparent 70%),
+      var(--bg-card);
+  }
+
+  .pick-header {
+    margin-bottom: 1.25rem;
+  }
+
+  .pick-tag {
+    display: inline-block;
+    padding: 0.3125rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--accent-light);
+    background: rgba(29, 155, 240, 0.1);
+    border-radius: var(--radius-full);
+  }
+
+  .pick-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pick-list li {
+    padding-left: 1.5rem;
+    position: relative;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  .pick-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.625rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    opacity: 0.6;
+  }
+
+  /* ---- Prose (Detailed Take) ---- */
+  .prose {
+    max-width: 680px;
+    margin: 0 auto;
+  }
+
+  .prose h2 {
+    margin-bottom: 1.25rem;
+    text-align: center;
+  }
+
+  .prose p {
+    color: var(--text-secondary);
+    font-size: 1rem;
+    line-height: 1.75;
+    margin-bottom: 1rem;
+  }
+
+  .prose strong {
+    color: var(--text-primary);
+  }
+
+  .prose a {
+    color: var(--accent-light);
+    font-weight: 500;
+  }
+
+  .muted-note {
+    font-size: 0.875rem !important;
+    color: var(--text-muted) !important;
+    margin-top: 1.5rem !important;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ---- Related ---- */
+  .related-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .related-wrap h2 {
+    margin-bottom: 2rem;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    text-align: left;
+  }
+
+  .related-card {
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+    position: relative;
+  }
+
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .related-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .related-card p {
+    font-size: 0.875rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .related-arrow {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: var(--text-muted);
+    font-size: 1.125rem;
+    transition: color 0.15s, transform 0.2s;
+  }
+
+  .related-card:hover .related-arrow {
+    color: var(--accent-light);
+    transform: translateX(2px);
+  }
+
+  /* ---- Responsive ---- */
+  @media (max-width: 640px) {
+    .vs-hero { padding-top: 3.5rem; }
+    .vs-table th, .vs-table td { padding: 0.75rem 0.875rem; font-size: 0.875rem; }
+  }
+</style>
