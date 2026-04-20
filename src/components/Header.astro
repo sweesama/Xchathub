@@ -1,9 +1,30 @@
 ---
 /**
- * Header.astro — 全站顶部导航栏
- * 极简设计，左侧 Logo，右侧导航链接
+ * Header.astro — 全站顶部导航栏（增强版）
+ *
+ * 设计：
+ * 1. 顶部发布倒计时横幅（可关闭，localStorage 记忆）
+ * 2. 桌面主导航 — Tracker / Groups / FAQ / Compare▾ / List + Join Community
+ * 3. 移动端汉堡菜单 → 全屏抽屉（分组展示所有链接）
+ * 4. Compare 下拉：vs WhatsApp / vs Signal / vs Telegram
  */
 ---
+
+<!-- ============ 顶部发布倒计时横幅（可关闭） ============ -->
+<div id="launch-banner" class="launch-banner" hidden>
+  <div class="container launch-banner-inner">
+    <span class="banner-pulse" aria-hidden="true"></span>
+    <span class="banner-text">
+      XChat launches <strong>April 23, 2026</strong> —
+      <a href="/launch-countdown" class="banner-cta">see countdown →</a>
+    </span>
+    <button id="launch-banner-close" class="banner-close" aria-label="Dismiss">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+</div>
 
 <header class="site-header">
   <div class="container header-inner">
@@ -15,17 +36,243 @@
       <span class="logo-text">Chat<span class="logo-accent">Hub</span></span>
     </a>
 
-    <!-- Navigation -->
-    <nav class="header-nav" aria-label="Main navigation">
+    <!-- ======= Desktop Navigation ======= -->
+    <nav class="header-nav desktop-nav" aria-label="Main navigation">
       <a href="/" class="nav-link">Tracker</a>
       <a href="/groups" class="nav-link">Groups</a>
-      <a href="/list-your-group" class="nav-link hide-mobile-nav">List</a>
-      <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">Join Community</a>
+      <a href="/faq" class="nav-link">FAQ</a>
+
+      <!-- Compare dropdown -->
+      <div class="nav-dropdown" data-dropdown>
+        <button class="nav-link nav-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
+          Compare
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+            <path d="M6 9l6 6 6-6" />
+          </svg>
+        </button>
+        <div class="nav-dropdown-menu" role="menu">
+          <a href="/vs/whatsapp" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">vs WhatsApp</span>
+            <span class="dropdown-sub">Encryption & privacy</span>
+          </a>
+          <a href="/vs/signal" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">vs Signal</span>
+            <span class="dropdown-sub">Gold-standard crypto</span>
+          </a>
+          <a href="/vs/telegram" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">vs Telegram</span>
+            <span class="dropdown-sub">Groups & channels</span>
+          </a>
+        </div>
+      </div>
+
+      <a href="/list-your-group" class="nav-link">List</a>
+      <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm nav-cta">Join Community</a>
     </nav>
+
+    <!-- ======= Mobile: hamburger ======= -->
+    <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" />
+      </svg>
+    </button>
   </div>
 </header>
 
+<!-- ======= Mobile drawer (outside header for full-viewport overlay) ======= -->
+<div id="mobile-drawer" class="mobile-drawer" hidden>
+  <div class="mobile-drawer-backdrop" data-drawer-close></div>
+  <aside class="mobile-drawer-panel" aria-label="Mobile navigation">
+    <div class="drawer-head">
+      <span class="drawer-logo">XChat<span class="logo-accent">Hub</span></span>
+      <button class="drawer-close" type="button" aria-label="Close menu" data-drawer-close>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <nav class="drawer-nav" aria-label="Mobile menu">
+      <div class="drawer-group">
+        <span class="drawer-heading">Main</span>
+        <a href="/" class="drawer-link">Tracker</a>
+        <a href="/groups" class="drawer-link">Groups</a>
+        <a href="/faq" class="drawer-link">FAQ</a>
+        <a href="/launch-countdown" class="drawer-link">Launch Countdown</a>
+      </div>
+
+      <div class="drawer-group">
+        <span class="drawer-heading">Compare</span>
+        <a href="/vs/whatsapp" class="drawer-link">XChat vs WhatsApp</a>
+        <a href="/vs/signal" class="drawer-link">XChat vs Signal</a>
+        <a href="/vs/telegram" class="drawer-link">XChat vs Telegram</a>
+      </div>
+
+      <div class="drawer-group">
+        <span class="drawer-heading">For Owners</span>
+        <a href="/list-your-group" class="drawer-link">List Your Group</a>
+        <a href="/about" class="drawer-link">About</a>
+      </div>
+
+      <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary drawer-cta">Join Community</a>
+    </nav>
+  </aside>
+</div>
+
+<!-- ======= Interactive behavior (vanilla, small) ======= -->
+<script is:inline>
+  (function () {
+    /* 1. Launch banner show/dismiss with localStorage */
+    try {
+      var banner = document.getElementById('launch-banner');
+      var closeBtn = document.getElementById('launch-banner-close');
+      var dismissed = localStorage.getItem('xchat-launch-banner-dismissed') === '1';
+      if (banner && !dismissed) {
+        banner.hidden = false;
+        document.body.classList.add('has-launch-banner');
+      }
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function () {
+          if (banner) banner.hidden = true;
+          document.body.classList.remove('has-launch-banner');
+          try { localStorage.setItem('xchat-launch-banner-dismissed', '1'); } catch (e) {}
+        });
+      }
+    } catch (e) {}
+
+    /* 2. Desktop Compare dropdown (click toggle + close on outside) */
+    var dropdown = document.querySelector('[data-dropdown]');
+    var dropdownBtn = document.querySelector('[data-dropdown-btn]');
+    if (dropdown && dropdownBtn) {
+      dropdownBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = dropdown.classList.toggle('open');
+        dropdownBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      });
+      document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target)) {
+          dropdown.classList.remove('open');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+          dropdown.classList.remove('open');
+          dropdownBtn.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    /* 3. Mobile drawer open/close */
+    var menuBtn = document.getElementById('mobile-menu-btn');
+    var drawer = document.getElementById('mobile-drawer');
+    function openDrawer() {
+      if (!drawer) return;
+      drawer.hidden = false;
+      requestAnimationFrame(function () { drawer.classList.add('open'); });
+      document.body.style.overflow = 'hidden';
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
+    }
+    function closeDrawer() {
+      if (!drawer) return;
+      drawer.classList.remove('open');
+      document.body.style.overflow = '';
+      if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
+      setTimeout(function () { drawer.hidden = true; }, 250);
+    }
+    if (menuBtn) menuBtn.addEventListener('click', openDrawer);
+    if (drawer) {
+      drawer.querySelectorAll('[data-drawer-close]').forEach(function (el) {
+        el.addEventListener('click', closeDrawer);
+      });
+      drawer.querySelectorAll('.drawer-link, .drawer-cta').forEach(function (el) {
+        el.addEventListener('click', closeDrawer);
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && drawer && drawer.classList.contains('open')) closeDrawer();
+    });
+  })();
+</script>
+
 <style>
+  /* ================= Launch Banner ================= */
+  .launch-banner {
+    position: sticky;
+    top: 0;
+    z-index: 101;
+    background:
+      linear-gradient(90deg,
+        rgba(29, 155, 240, 0.12),
+        rgba(29, 155, 240, 0.18),
+        rgba(29, 155, 240, 0.12)
+      );
+    border-bottom: 1px solid rgba(29, 155, 240, 0.25);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-size: 0.8125rem;
+    line-height: 1;
+  }
+
+  .launch-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    padding: 0.5rem 1rem;
+    position: relative;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .banner-pulse {
+    width: 7px;
+    height: 7px;
+    background: #1d9bf0;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.7);
+    animation: banner-pulse 2s infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes banner-pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.7); }
+    70%  { box-shadow: 0 0 0 8px rgba(29, 155, 240, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0); }
+  }
+
+  .banner-text { color: var(--text-secondary); }
+  .banner-text strong { color: var(--text-primary); font-weight: 600; }
+
+  .banner-cta {
+    color: var(--accent-light);
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 0.125rem;
+    white-space: nowrap;
+  }
+  .banner-cta:hover { text-decoration: underline; }
+
+  .banner-close {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.375rem;
+    display: inline-flex;
+    border-radius: var(--radius-full);
+    transition: color 0.15s, background 0.15s;
+  }
+  .banner-close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  /* ================= Site Header ================= */
   .site-header {
     position: sticky;
     top: 0;
@@ -35,6 +282,9 @@
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border-bottom: 1px solid var(--border);
   }
+
+  /* When banner is visible, header stacks below it */
+  :global(body.has-launch-banner) .site-header { top: 34px; }
 
   .header-inner {
     display: flex;
@@ -51,16 +301,13 @@
     text-decoration: none;
     font-weight: 700;
     font-size: 1.0625rem;
+    flex-shrink: 0;
   }
 
-  .logo-text {
-    letter-spacing: -0.02em;
-  }
+  .logo-text { letter-spacing: -0.02em; }
+  .logo-accent { color: var(--accent); }
 
-  .logo-accent {
-    color: var(--accent);
-  }
-
+  /* ================= Desktop Nav ================= */
   .header-nav {
     display: flex;
     align-items: center;
@@ -71,25 +318,207 @@
     color: var(--text-secondary);
     font-size: 0.9375rem;
     font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-family: inherit;
+    transition: color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .nav-link:hover { color: var(--text-primary); }
+
+  /* ================= Compare Dropdown ================= */
+  .nav-dropdown {
+    position: relative;
+  }
+
+  .nav-dropdown-trigger svg {
+    transition: transform 0.2s;
+    opacity: 0.7;
+  }
+
+  .nav-dropdown.open .nav-dropdown-trigger svg {
+    transform: rotate(180deg);
+  }
+
+  .nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 0.75rem);
+    left: 50%;
+    transform: translateX(-50%) translateY(-4px);
+    min-width: 240px;
+    padding: 0.5rem;
+    background: rgba(22, 24, 28, 0.98);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s, transform 0.15s var(--ease-smooth), visibility 0.15s;
+  }
+
+  .nav-dropdown.open .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .dropdown-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.625rem 0.875rem;
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: var(--radius-md);
+    transition: background 0.15s;
+  }
+
+  .dropdown-item:hover {
+    background: rgba(29, 155, 240, 0.1);
+  }
+
+  .dropdown-title {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .dropdown-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ================= Mobile Hamburger ================= */
+  .mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    transition: background 0.15s;
+  }
+
+  .mobile-menu-btn:hover { background: rgba(255, 255, 255, 0.05); }
+
+  /* ================= Mobile Drawer ================= */
+  .mobile-drawer {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+  }
+
+  .mobile-drawer-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .mobile-drawer.open .mobile-drawer-backdrop { opacity: 1; }
+
+  .mobile-drawer-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(320px, 85vw);
+    background: rgba(18, 20, 24, 0.98);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border-left: 1px solid var(--border);
+    transform: translateX(100%);
+    transition: transform 0.25s var(--ease-smooth);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .mobile-drawer.open .mobile-drawer-panel { transform: translateX(0); }
+
+  .drawer-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .drawer-logo {
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: -0.02em;
+  }
+
+  .drawer-close {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-md);
+    display: inline-flex;
+    transition: color 0.15s, background 0.15s;
+  }
+  .drawer-close:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
+
+  .drawer-nav {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 1;
+  }
+
+  .drawer-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .drawer-heading {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.25rem;
+  }
+
+  .drawer-link {
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    text-decoration: none;
     transition: color 0.15s;
   }
 
-  .nav-link:hover {
-    color: var(--text-primary);
+  .drawer-link:hover { color: var(--accent-light); }
+
+  .drawer-cta {
+    margin-top: auto;
+    text-align: center;
   }
 
-  @media (max-width: 640px) {
-    .hide-mobile-nav {
-      display: none;
-    }
+  /* ================= Responsive Breakpoints ================= */
+  @media (max-width: 860px) {
+    .desktop-nav { display: none; }
+    .mobile-menu-btn { display: inline-flex; }
   }
 
   @media (max-width: 480px) {
-    .header-nav {
-      gap: 0.75rem;
-    }
-    .nav-link {
-      font-size: 0.8125rem;
-    }
+    .launch-banner-inner { padding: 0.5rem 2.5rem 0.5rem 0.75rem; font-size: 0.75rem; }
+    .banner-text { line-height: 1.3; }
   }
 </style>

@@ -14,21 +14,32 @@ const year = new Date().getFullYear();
         This is an <strong>unofficial</strong> community project. Not affiliated with X Corp or Elon Musk.
         All trademarks belong to their respective owners.
       </p>
-      <div class="footer-links">
-        <a href="/">Home</a>
-        <span class="dot">·</span>
-        <a href="/groups">Groups</a>
-        <span class="dot">·</span>
-        <a href="/list-your-group">List Your Group</a>
-        <span class="dot">·</span>
-        <a href="/about">About</a>
-        <span class="dot">·</span>
-        <a href="/privacy">Privacy</a>
-        <span class="dot">·</span>
-        <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Channel</a>
-        <span class="dot">·</span>
-        <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">Community</a>
-      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        <div class="footer-col">
+          <span class="footer-heading">Main</span>
+          <a href="/">Home</a>
+          <a href="/groups">Groups</a>
+          <a href="/faq">FAQ</a>
+          <a href="/launch-countdown">Launch Countdown</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-heading">Compare</span>
+          <a href="/vs/whatsapp">XChat vs WhatsApp</a>
+          <a href="/vs/signal">XChat vs Signal</a>
+          <a href="/vs/telegram">XChat vs Telegram</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-heading">For Owners</span>
+          <a href="/list-your-group">List Your Group</a>
+          <a href="/about">About</a>
+          <a href="/privacy">Privacy</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-heading">Community</span>
+          <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Telegram Channel</a>
+          <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">Telegram Community</a>
+        </div>
+      </nav>
       <p class="copyright">&copy; {year} XChat Hub. Built for the community.</p>
     </div>
   </div>
@@ -48,35 +59,68 @@ const year = new Date().getFullYear();
     color: var(--text-muted);
     font-size: 0.8125rem;
     max-width: 600px;
-    margin: 0 auto 1rem;
+    margin: 0 auto 2rem;
     line-height: 1.6;
   }
 
-  .footer-links {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+  /* ---- 4-column footer nav ---- */
+  .footer-nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    max-width: 920px;
+    margin: 0 auto 2rem;
+    text-align: left;
   }
 
-  .footer-links a {
+  .footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .footer-heading {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 0.375rem;
+  }
+
+  .footer-col a {
     color: var(--text-secondary);
     font-size: 0.875rem;
+    line-height: 1.4;
     transition: color 0.15s;
   }
 
-  .footer-links a:hover {
-    color: var(--text-primary);
-  }
-
-  .dot {
-    color: var(--text-muted);
-    font-size: 0.75rem;
+  .footer-col a:hover {
+    color: var(--accent-light);
   }
 
   .copyright {
     color: var(--text-muted);
     font-size: 0.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Responsive: 2 columns on tablet, single scroll-friendly layout on mobile */
+  @media (max-width: 720px) {
+    .footer-nav {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.75rem;
+      text-align: left;
+      max-width: 440px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .footer-nav {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+      max-width: 260px;
+    }
   }
 </style>
