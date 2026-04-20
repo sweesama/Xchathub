@@ -2,19 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "www.xchat.directory"
-        }
-      ],
-      "destination": "https://xchat.directory/:path*",
-      "permanent": true
-    }
-  ],
+  "redirects": [],
   "headers": [
     {
       "source": "/(.*)",
