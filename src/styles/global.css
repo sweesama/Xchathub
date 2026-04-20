@@ -349,6 +349,18 @@ details summary:hover {
 details summary::-webkit-details-marker { display: none; }
 details summary::marker { display: none; }
 
+/* FAQ question h3 reset：保持和之前 summary 文字一致的视觉，仅用于语义化 */
+details summary .faq-q-title,
+details summary h3 {
+  display: inline;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  margin: 0;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
 details summary::after {
   content: '+';
   font-size: 1.25rem;

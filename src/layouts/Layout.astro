@@ -124,9 +124,12 @@ import Footer from '../components/Footer.astro';
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   )}
 
-  <!-- Google Analytics 4 (gtag.js) -->
-  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-3J5D4C9DPK"></script>
-  <script is:inline>
+  <!--
+    Google Analytics 4 (gtag.js) via Partytown
+    type="text/partytown" 让脚本跑在 Web Worker，不阻塞主线程、不计入 "unused JS"
+  -->
+  <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-3J5D4C9DPK"></script>
+  <script type="text/partytown">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
