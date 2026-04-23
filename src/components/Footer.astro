@@ -3,6 +3,7 @@
  * Footer.astro — 全站底部
  * 包含免责声明、版权信息和快速链接
  */
+import { XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
 const year = new Date().getFullYear();
 ---
 
@@ -36,8 +37,8 @@ const year = new Date().getFullYear();
         </div>
         <div class="footer-col">
           <span class="footer-heading">Community</span>
-          <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Telegram Channel</a>
-          <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">Telegram Community</a>
+          <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer">Telegram Channel</a>
+          <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">Telegram Community</a>
         </div>
       </nav>
       <p class="copyright">&copy; {year} XChat Hub. Built for the community.</p>

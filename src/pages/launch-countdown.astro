@@ -4,16 +4,21 @@
  *
  * SEO 战略：
  * 主打 "xchat launch date / release date / april 23 / countdown" 等即时性关键词。
- * 发布当天（4/23 之后）这一页会自动切换为 "LIVE NOW" 状态，并继续吃 "xchat launched"
+ * 发布当天（4/25 之后）这一页会自动切换为 "LIVE NOW" 状态，并继续吃 "xchat launched"
  * "is xchat out" 等后续搜索词。
  *
  * 技术：倒计时逻辑在客户端 JS 实时运行，SSG 预渲染的 HTML 带静态兜底文案。
  */
 import Layout from '../layouts/Layout.astro';
+import {
+  XCHAT_APP_STORE_URL,
+  XCHAT_LAUNCH_DISPLAY,
+  XCHAT_LAUNCH_ISO,
+  XCHAT_TELEGRAM_CHANNEL_URL,
+} from '../data/xchat';
 
-/** 发布目标时刻：2026-04-23 00:00:00 UTC（Apple App Store 全球统一发布时刻） */
-const LAUNCH_ISO = '2026-04-23T00:00:00Z';
-const launchDate = new Date(LAUNCH_ISO);
+/** 发布目标时刻：2026-04-25 00:00:00 UTC（按当前 App Store 列表显示） */
+const launchDate = new Date(XCHAT_LAUNCH_ISO);
 const now = new Date();
 const msLeft = launchDate.getTime() - now.getTime();
 const isLaunched = msLeft <= 0;
@@ -29,16 +34,16 @@ const eventJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Event',
   name: 'XChat Public Launch',
-  startDate: LAUNCH_ISO,
+  startDate: XCHAT_LAUNCH_ISO,
   eventStatus: isLaunched
     ? 'https://schema.org/EventScheduled'
     : 'https://schema.org/EventScheduled',
   eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
   location: {
     '@type': 'VirtualLocation',
-    url: 'https://apps.apple.com/us/app/xchat/id6760873038',
+    url: XCHAT_APP_STORE_URL,
   },
-  description: 'XChat, X Corp\'s standalone end-to-end encrypted messenger, launches publicly on the iOS App Store on April 23, 2026. iPhone and iPad only on day one; Android timing unannounced.',
+  description: `XChat, X Corp's standalone end-to-end encrypted messenger, is currently listed to launch publicly on the iOS App Store on ${XCHAT_LAUNCH_DISPLAY}. iPhone and iPad only on day one; Android timing unannounced.`,
   organizer: {
     '@type': 'Organization',
     name: 'X Corp',
@@ -49,8 +54,8 @@ const eventJsonLd = {
 ---
 
 <Layout
-  title="XChat Launch Countdown — Official Release April 23, 2026 | XChat Hub"
-  description="Real-time countdown to XChat's public launch on April 23, 2026. Pre-order on the App Store now so the app installs automatically the moment it goes live."
+  title="XChat Launch Countdown — Expected Release April 25, 2026 | XChat Hub"
+  description="Real-time countdown to XChat's currently listed public launch on April 25, 2026. Pre-order on the App Store now so the app installs automatically the moment it goes live."
   jsonLd={eventJsonLd}
   canonicalPath="/launch-countdown"
   breadcrumbs={[
@@ -69,17 +74,17 @@ const eventJsonLd = {
         {isLaunched ? (
           <>XChat <span class="text-gradient">Is Live.</span></>
         ) : (
-          <>XChat Launches<br /><span class="text-gradient">April 23, 2026.</span></>
+          <>XChat Launches<br /><span class="text-gradient">{XCHAT_LAUNCH_DISPLAY}.</span></>
         )}
       </h1>
       <p class="lead text-secondary prose-body">
         {isLaunched
           ? 'The wait is over. XChat is now available on the iOS App Store — tap below to download, or read our day-one coverage.'
-          : 'X Corp\'s standalone end-to-end encrypted messenger drops globally at 00:00 UTC on April 23, 2026 — iPhone and iPad only on day one.'}
+          : 'X Corp\'s standalone end-to-end encrypted messenger is currently listed to drop globally at 00:00 UTC on April 25, 2026 — iPhone and iPad only on day one.'}
       </p>
 
       <!-- 倒计时盘 -->
-      <div class="countdown" id="countdown" data-target={LAUNCH_ISO}>
+      <div class="countdown" id="countdown" data-target={XCHAT_LAUNCH_ISO}>
         <div class="count-unit">
           <span class="count-num" id="count-days">{String(daysLeft).padStart(2, '0')}</span>
           <span class="count-label">Days</span>
@@ -100,13 +105,13 @@ const eventJsonLd = {
 
       <!-- CTA 按钮 -->
       <div class="cta-buttons">
-        <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+        <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
           </svg>
           {isLaunched ? 'Download on App Store' : 'Pre-order on App Store'}
         </a>
-        <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+        <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
           </svg>

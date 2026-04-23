@@ -13,6 +13,11 @@
  * - 截至日期会在下方通过 buildDate 自动注入
  */
 import Layout from '../layouts/Layout.astro';
+import {
+  XCHAT_APP_STORE_URL,
+  XCHAT_LAUNCH_DISPLAY,
+  XCHAT_TELEGRAM_CHANNEL_URL,
+} from '../data/xchat';
 
 const buildDate = new Date();
 const buildDateISO = buildDate.toISOString().split('T')[0];
@@ -29,17 +34,17 @@ const faqs = [
   },
   {
     q: 'Is XChat real? Is it actually launching?',
-    a: 'Yes, XChat is real. Elon Musk publicly announced it on X (formerly Twitter) in mid-2025. A pre-order listing went live on the Apple App Store in early 2026 under the name "XChat" (App ID 6760873038). The official launch date is <strong>April 23, 2026</strong>, iPhone and iPad only on day one.',
+    a: `Yes, XChat is real. Elon Musk publicly announced it on X (formerly Twitter) in mid-2025. A pre-order listing went live on the Apple App Store in early 2026 under the name "XChat" (App ID 6760873038). The current App Store listing shows an expected launch date of <strong>${XCHAT_LAUNCH_DISPLAY}</strong>, iPhone and iPad only on day one.`,
     keywords: ['is xchat real', 'is xchat fake', 'is xchat legit'],
   },
   {
     q: 'Has XChat launched yet?',
-    a: `As of <time datetime="${buildDateISO}">${buildDateDisplay}</time>, XChat is in pre-order status on the iOS App Store. The official public release is scheduled for <strong>April 23, 2026</strong>. If you pre-order now, the app will auto-install on your iPhone or iPad the moment it goes live.`,
+    a: `As of <time datetime="${buildDateISO}">${buildDateDisplay}</time>, XChat is in pre-order status on the iOS App Store. The current App Store listing shows an expected public release on <strong>${XCHAT_LAUNCH_DISPLAY}</strong>. If you pre-order now, the app will auto-install on your iPhone or iPad the moment it goes live.`,
     keywords: ['is xchat launched', 'has xchat launched', 'when was xchat launched'],
   },
   {
     q: 'When will XChat launch?',
-    a: 'The public launch date confirmed by X Corp is <strong>April 23, 2026</strong>, for iPhone and iPad. Android availability has <strong>not been announced</strong>. No pre-order, beta, or release window exists for Android users as of today.',
+    a: `The current App Store listing shows an expected public launch date of <strong>${XCHAT_LAUNCH_DISPLAY}</strong>, for iPhone and iPad. Android availability has <strong>not been announced</strong>. No pre-order, beta, or release window exists for Android users as of today.`,
     keywords: ['when will xchat launch', 'xchat launch date', 'xchat release date'],
   },
   {
@@ -74,17 +79,17 @@ const faqs = [
   },
   {
     q: 'How do I get XChat?',
-    a: 'Three steps: (1) Open the <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer">Apple App Store pre-order page</a> on your iPhone or iPad. (2) Tap "Get" to pre-order (it\'s free). (3) On April 23, 2026, XChat will automatically install on your device. Android users currently have no way to get XChat — the app does not exist on Google Play.',
+    a: `Three steps: (1) Open the <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">Apple App Store pre-order page</a> on your iPhone or iPad. (2) Tap "Get" to pre-order (it\'s free). (3) On ${XCHAT_LAUNCH_DISPLAY}, XChat should automatically install on your device if the listing does not move again. Android users currently have no way to get XChat — the app does not exist on Google Play.`,
     keywords: ['how to get xchat', 'where to download xchat', 'xchat download'],
   },
   {
     q: 'How to change your XChat PIN?',
-    a: 'After launch, the PIN-change flow will be inside the XChat app under <strong>Settings → Security → Change PIN</strong>. Since the app is not yet live, the exact menu path may vary. We will update this answer with screenshots the moment the app goes public on April 23, 2026. Subscribe to our <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Telegram channel</a> to get the walkthrough the day it drops.',
+    a: `After launch, the PIN-change flow will be inside the XChat app under <strong>Settings → Security → Change PIN</strong>. Since the app is not yet live, the exact menu path may vary. We will update this answer with screenshots the moment the app goes public on ${XCHAT_LAUNCH_DISPLAY}. Subscribe to our <a href="${XCHAT_TELEGRAM_CHANNEL_URL}" target="_blank" rel="noopener noreferrer">Telegram channel</a> to get the walkthrough the day it drops.`,
     keywords: ['how to change xchat pin', 'xchat pin reset'],
   },
   {
     q: 'How to delete messages in XChat?',
-    a: 'Like most modern messengers, XChat is expected to support both "Delete for me" and "Delete for everyone" on individual messages. Full deletion of chat history will likely be available under Settings. Exact UI will be confirmed after April 23, 2026 launch.',
+    a: `Like most modern messengers, XChat is expected to support both "Delete for me" and "Delete for everyone" on individual messages. Full deletion of chat history will likely be available under Settings. Exact UI will be confirmed after the ${XCHAT_LAUNCH_DISPLAY} launch, if that date holds.`,
     keywords: ['how to delete xchat messages', 'xchat delete chat'],
   },
   {

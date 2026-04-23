@@ -1,32 +1,24 @@
 ---
-/**
- * groups.astro — 群组导航页
- * 核心目标：截获 "XChat group links" 等长尾搜索流量
- * 三大模块：搜索 + 群组卡片 + UGC 提交表单
- */
 import Layout from '../layouts/Layout.astro';
+import { XCHAT_GROUP_LIMIT, XCHAT_LAUNCH_DATE, XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
+import {
+  GROUP_CATEGORIES,
+  GROUP_DIRECTORY,
+  GROUP_DISCOVERY_SIGNALS,
+} from '../data/groups';
 
-/* ---- 分类标签 ---- */
-const categories = ['All', 'Crypto', 'Tech', 'AI', 'News', 'Sports', 'Gaming', 'Business', 'Entertainment', 'Education', 'Local', 'Other'];
-
-/* ---- 群组数据（XChat 尚未上线，暂无真实数据） ---- */
-/* tags 数组预留多标签能力：主分类 + 未来子标签（如 ['Crypto', 'DeFi']）
-   当前 UI 仍按 category（第一个 tag）筛选，规模化后可启用多标签筛选 */
-const groups: { name: string; desc: string; category: string; tags: string[]; members: number; icon: string; link: string }[] = [];
-
-/* 群组分类列表数据 JSON-LD */
 const groupsJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'XChat Groups Directory',
-  description: 'Discover and join the best public XChat groups and communities. Browse by category — Crypto, AI, Tech, Gaming, and more.',
+  description: 'Discover and join public XChat groups and communities once invite links are available.',
   url: 'https://xchat.directory/groups',
 };
 ---
 
 <Layout
   title="XChat Groups Directory — Find & Share Group Links | XChat Hub"
-  description="The first community-powered directory for XChat group links. XChat expected April 23, 2026. Submit your group and help others find your community."
+  description={`The first community-powered directory for XChat group links. XChat expected ${XCHAT_LAUNCH_DISPLAY}. Submit your group and help others find your community.`}
   jsonLd={groupsJsonLd}
   canonicalPath="/groups"
   breadcrumbs={[
@@ -34,7 +26,6 @@ const groupsJsonLd = {
     { name: 'Groups Directory', url: 'https://xchat.directory/groups/' },
   ]}
 >
-  <!-- ==================== SEARCH & FILTER ==================== -->
   <section class="section groups-hero" id="search">
     <div class="container">
       <h1 class="groups-title">
@@ -42,10 +33,9 @@ const groupsJsonLd = {
         <span class="text-gradient">XChat Groups &amp; Communities</span>
       </h1>
       <p class="groups-subtitle text-secondary prose-body">
-        XChat launches <strong><time datetime="2026-04-23">April 23, 2026</time></strong> without built-in group search — this directory will be the first place to discover and share public XChat invite links.
+        XChat is currently listed to launch <strong><time datetime={XCHAT_LAUNCH_DATE}>{XCHAT_LAUNCH_DISPLAY}</time></strong> without built-in group search — this directory is designed to become the first place to discover and share public XChat invite links.
       </p>
 
-      <!-- 搜索框 -->
       <div class="search-box">
         <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="8"/>
@@ -59,9 +49,8 @@ const groupsJsonLd = {
         />
       </div>
 
-      <!-- 分类标签 -->
       <div class="tags-row" role="tablist" aria-label="Filter groups by category">
-        {categories.map((cat, i) => (
+        {GROUP_CATEGORIES.map((cat, i) => (
           <button
             class={`tag ${i === 0 ? 'active' : ''}`}
             role="tab"
@@ -75,29 +64,34 @@ const groupsJsonLd = {
     </div>
   </section>
 
-  <!-- ==================== GROUP CARDS GRID / COMING SOON ==================== -->
   <section class="section-sm" id="groups-grid">
     <div class="container">
-      {groups.length > 0 ? (
+      {GROUP_DIRECTORY.length > 0 ? (
         <div class="grid">
-          {groups.map((group) => (
+          {GROUP_DIRECTORY.map((group) => (
             <article class="card group-card" data-category={group.category}>
               <div class="group-card-header">
                 <span class="group-icon">{group.icon}</span>
                 <div>
                   <h3 class="group-name">{group.name}</h3>
-                  <span class="tag btn-sm" style="padding: 0.125rem 0.5rem; font-size: 0.6875rem;">{group.category}</span>
+                  <div class="group-meta">
+                    <span class="tag btn-sm group-category">{group.category}</span>
+                    {group.featured && <span class="group-badge">Featured</span>}
+                  </div>
                 </div>
               </div>
-              <p class="group-desc text-secondary">{group.desc}</p>
+              <p class="group-desc text-secondary">{group.description}</p>
+              <div class="group-tag-list">
+                {group.tags.map((tag) => <span class="mini-tag">{tag}</span>)}
+              </div>
               <div class="group-card-footer">
                 <div class="members-info">
                   <div class="members-bar">
-                    <div class="members-fill" style={`width: ${(group.members / 481) * 100}%`}></div>
+                    <div class="members-fill" style={`width: ${(group.members / XCHAT_GROUP_LIMIT) * 100}%`}></div>
                   </div>
-                  <span class="members-count text-muted">{group.members} / 481</span>
+                  <span class="members-count text-muted">{group.members} / {XCHAT_GROUP_LIMIT}</span>
                 </div>
-                <a href={group.link} class="btn btn-primary btn-sm" rel="noopener noreferrer">
+                <a href={group.inviteUrl} class="btn btn-primary btn-sm" rel="noopener noreferrer">
                   Join
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                     <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -116,31 +110,46 @@ const groupsJsonLd = {
               <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
             </svg>
           </div>
-          <h3>Directory Opens on Launch Day</h3>
+          <h3>Directory Opens When Real Invite Links Exist</h3>
           <p class="text-secondary prose-body">
-            XChat launches <strong>April 23, 2026</strong>. Once live, community-submitted groups will populate this page — sorted by category and searchable instantly.
+            There are no verified public XChat groups listed yet. Once the app launches and invite links can be confirmed, this page will switch from placeholder state to a searchable live directory.
           </p>
           <p class="coming-soon-hint text-muted">
-            Want to be among the first listed? <a href="/list-your-group">Submit your group</a> and it goes live on launch day.
+            Want to help seed it? <a href="/list-your-group">Submit your group</a> or share what you find after launch.
           </p>
         </div>
       )}
 
-      <!-- 搜索空状态 -->
       <div class="empty-state" id="empty-state" style="display: none;">
         <p class="text-muted">No groups found. Try a different search or category.</p>
       </div>
     </div>
   </section>
 
-  <!-- ==================== SUBMIT / JOIN SECTION ==================== -->
+  <section class="section-sm">
+    <div class="container">
+      <div class="card discovery-card">
+        <h2>How We’ll Find Real XChat Groups</h2>
+        <p class="text-secondary prose-body">
+          Until XChat is live, the directory is prepared but intentionally empty. We’ll only publish groups after we can verify how invites actually work.
+        </p>
+        <ul class="discovery-list">
+          {GROUP_DISCOVERY_SIGNALS.map((signal) => <li>{signal}</li>)}
+        </ul>
+        <p class="text-muted discovery-note">
+          We expect discovery to come first from public posts, owner submissions, screenshots, and manual in-app testing after launch.
+        </p>
+      </div>
+    </div>
+  </section>
+
   <section class="section" id="submit">
     <div class="container">
       <div class="submit-section">
         <div class="submit-header">
           <h2>Want to List Your Group?</h2>
           <p class="text-secondary prose-body">
-            Submit your XChat group for free, or pay once to pin it at the top of its category. Live within 24 hours.
+            Submit your XChat group for free, or pay once to pin it at the top of its category. Once live data exists, this page is ready to publish it.
           </p>
         </div>
         <div class="submit-cta">
@@ -158,7 +167,6 @@ const groupsJsonLd = {
 </Layout>
 
 <style>
-  /* ---- Groups Hero ---- */
   .groups-hero {
     text-align: center;
     padding-bottom: 2rem;
@@ -168,7 +176,6 @@ const groupsJsonLd = {
     margin-bottom: 1.25rem;
   }
 
-  /* "Discover Top" 和渐变标题分两行显示，但用 display:block 让现代浏览器自动平衡 */
   .groups-title .text-gradient {
     display: block;
     margin-top: 0.15em;
@@ -179,7 +186,6 @@ const groupsJsonLd = {
     max-width: 600px;
     margin: 0 auto 2.25rem;
     line-height: 1.55;
-    /* 让浏览器均衡首尾换行，避免孤子字 */
     text-wrap: pretty;
   }
 
@@ -188,7 +194,6 @@ const groupsJsonLd = {
     font-weight: 600;
   }
 
-  /* ---- Search ---- */
   .search-box {
     position: relative;
     max-width: 560px;
@@ -212,7 +217,6 @@ const groupsJsonLd = {
     height: 3rem;
   }
 
-  /* ---- Tags ---- */
   .tags-row {
     display: flex;
     flex-wrap: wrap;
@@ -220,14 +224,12 @@ const groupsJsonLd = {
     justify-content: center;
   }
 
-  /* ---- Grid ---- */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
     gap: 1rem;
   }
 
-  /* ---- Group Card ---- */
   .group-card {
     display: flex;
     flex-direction: column;
@@ -259,10 +261,49 @@ const groupsJsonLd = {
     margin-bottom: 0.25rem;
   }
 
+  .group-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .group-category {
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+  }
+
+  .group-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.12);
+    color: var(--accent-light);
+    font-size: 0.6875rem;
+    font-weight: 600;
+  }
+
   .group-desc {
     font-size: 0.875rem;
     line-height: 1.6;
     flex: 1;
+  }
+
+  .group-tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .mini-tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-full);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-muted);
+    font-size: 0.75rem;
   }
 
   .group-card-footer {
@@ -298,7 +339,6 @@ const groupsJsonLd = {
     font-family: var(--font-mono);
   }
 
-  /* ---- Submit Section ---- */
   .submit-section {
     max-width: 640px;
     margin: 0 auto;
@@ -329,15 +369,14 @@ const groupsJsonLd = {
     flex-shrink: 0;
   }
 
-  /* ---- Coming Soon State (Apple 风空状态) ---- */
-  .coming-soon-state {
+  .coming-soon-state,
+  .discovery-card {
     text-align: center;
     padding: 4.5rem 2rem;
     border: 1px solid var(--border);
     border-radius: var(--radius-xl);
-    max-width: 560px;
+    max-width: 720px;
     margin: 0 auto;
-    /* 极淡的径向渐变 + 顶部高光，避免虚线框的廉价感 */
     background:
       radial-gradient(ellipse at top, rgba(29, 155, 240, 0.04), transparent 60%),
       var(--bg-card);
@@ -361,7 +400,6 @@ const groupsJsonLd = {
     position: relative;
   }
 
-  /* 圆点脉冲指示器：表示"正在等待" */
   .coming-soon-icon::before {
     content: '';
     position: absolute;
@@ -376,13 +414,14 @@ const groupsJsonLd = {
     100% { transform: scale(1.6); opacity: 0; }
   }
 
-  .coming-soon-state h3 {
+  .coming-soon-state h3,
+  .discovery-card h2 {
     margin-bottom: 0.75rem;
-    font-size: 1.25rem;
   }
 
-  .coming-soon-state p {
-    max-width: 420px;
+  .coming-soon-state p,
+  .discovery-card p {
+    max-width: 520px;
     margin-left: auto;
     margin-right: auto;
   }
@@ -397,33 +436,48 @@ const groupsJsonLd = {
     font-weight: 500;
   }
 
-  /* ---- Empty State ---- */
+  .discovery-list {
+    margin: 1.5rem auto 0;
+    max-width: 520px;
+    text-align: left;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding-left: 1.25rem;
+  }
+
+  .discovery-list li + li {
+    margin-top: 0.5rem;
+  }
+
+  .discovery-note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+  }
+
   .empty-state {
     text-align: center;
     padding: 3rem 0;
   }
 
-  /* ---- Responsive ---- */
   @media (max-width: 640px) {
     .grid {
       grid-template-columns: 1fr;
     }
 
-    .form-grid {
-      grid-template-columns: 1fr;
+    .coming-soon-state,
+    .discovery-card {
+      padding: 3rem 1.25rem;
     }
   }
 </style>
 
 <script>
-  /* ---- 分类筛选逻辑 ---- */
   const tags = document.querySelectorAll<HTMLButtonElement>('.tag');
   const cards = document.querySelectorAll<HTMLElement>('.group-card');
   const emptyState = document.getElementById('empty-state');
 
   tags.forEach((tag) => {
     tag.addEventListener('click', () => {
-      /* 切换 active 状态 */
       tags.forEach((t) => {
         t.classList.remove('active');
         t.setAttribute('aria-selected', 'false');
@@ -446,15 +500,12 @@ const groupsJsonLd = {
     });
   });
 
-  /* ---- 搜索逻辑 ---- */
   const searchInput = document.getElementById('group-search') as HTMLInputElement;
-
-  /* 从 URL ?q= 参数预填搜索框（支持从 404 页或其他入口跳转过来） */
   const urlParams = new URLSearchParams(window.location.search);
   const initialQuery = urlParams.get('q');
+
   if (initialQuery && searchInput) {
     searchInput.value = initialQuery;
-    // 触发一次搜索
     searchInput.dispatchEvent(new Event('input'));
   }
 
@@ -469,7 +520,6 @@ const groupsJsonLd = {
       if (match) visibleCount++;
     });
 
-    /* 重置分类高亮到 All */
     tags.forEach((t) => {
       t.classList.remove('active');
       t.setAttribute('aria-selected', 'false');

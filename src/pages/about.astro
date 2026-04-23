@@ -4,6 +4,7 @@
  * 建立信任感、满足 E-E-A-T、为 AdSense 审核加分
  */
 import Layout from '../layouts/Layout.astro';
+import { XCHAT_APP_STORE_URL, XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
 
 const aboutJsonLd = {
   '@context': 'https://schema.org',
@@ -54,7 +55,7 @@ const aboutJsonLd = {
       <h2>Editorial Standards</h2>
       <p>Every fact on this site is traceable to one of:</p>
       <ul>
-        <li>The official <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer">XChat App Store listing</a></li>
+        <li>The official <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer">XChat App Store listing</a></li>
         <li>Public posts from Elon Musk or the official @chat account on X</li>
         <li>Direct inspection of the app's public metadata (size, language count, iOS requirements, etc.)</li>
       </ul>
@@ -70,8 +71,8 @@ const aboutJsonLd = {
       <h2>Contact & Community</h2>
       <p>The fastest way to reach us or contribute:</p>
       <ul>
-        <li><strong>Telegram Channel</strong> (announcements): <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">@xchathubdirectory</a></li>
-        <li><strong>Telegram Community</strong> (discussion & group submissions): <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a></li>
+        <li><strong>Telegram Channel</strong> (announcements): <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer">@xchathubdirectory</a></li>
+        <li><strong>Telegram Community</strong> (discussion & group submissions): <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a></li>
       </ul>
       <p>
         Found an error, have a correction, or want to suggest a feature? Drop a message in the community group — we read everything and typically respond within 48 hours.

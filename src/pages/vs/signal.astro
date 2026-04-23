@@ -6,10 +6,11 @@
  * Signal 在 privacy-conscious 用户群里是"金标准"，我们坦诚对比。
  */
 import Layout from '../../layouts/Layout.astro';
+import { XCHAT_LAUNCH_EXPECTED_LABEL } from '../../data/xchat';
 
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (for-profit)',           other: 'Signal Foundation (nonprofit)' },
-  { label: 'Launched',                 xchat: 'April 23, 2026',                other: '2014' },
+  { label: 'Launched',                 xchat: XCHAT_LAUNCH_EXPECTED_LABEL,     other: '2014' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '~40 million' },
   { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default (Signal Protocol)' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },

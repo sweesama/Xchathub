@@ -1,16 +1,14 @@
 ---
-/**
- * Layout.astro — 全站公用 HTML 骨架
- * 包含完整的 SEO Meta 标签、Open Graph、JSON-LD 结构化数据
- */
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
+
 interface Props {
   title: string;
   description: string;
-  /** JSON-LD 结构化数据对象（可选） */
   jsonLd?: Record<string, any>;
-  /** 页面的 canonical URL 路径，如 /groups */
   canonicalPath?: string;
-  /** 面包屑导航（可选） */
   breadcrumbs?: { name: string; url: string }[];
 }
 
@@ -22,7 +20,6 @@ const {
   breadcrumbs = [],
 } = Astro.props;
 
-/* 面包屑 JSON-LD */
 const breadcrumbSchema = breadcrumbs.length > 0 ? {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
@@ -37,23 +34,18 @@ const breadcrumbSchema = breadcrumbs.length > 0 ? {
 const siteUrl = 'https://xchat.directory';
 const canonicalUrl = `${siteUrl}${canonicalPath}`;
 
-/* 全站通用的 Organization JSON-LD */
 const orgSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'XChat Hub',
   url: siteUrl,
-  description: 'Unofficial community hub for XChat — track Android availability, browse the group directory, and get verified information about the app expected April 23, 2026.',
+  description: `Unofficial community hub for XChat — track Android availability, browse the group directory, and get verified information about the app expected ${XCHAT_LAUNCH_DISPLAY}.`,
   potentialAction: {
     '@type': 'SearchAction',
     target: `${siteUrl}/groups?q={search_term_string}`,
     'query-input': 'required name=search_term_string',
   },
 };
-
-import '../styles/global.css';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
 ---
 
 <!DOCTYPE html>
@@ -71,23 +63,19 @@ import Footer from '../components/Footer.astro';
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 
-  <!-- PWA: 可添加到主屏幕，启动画面使用 theme_color/background_color -->
   <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="XChat Hub" />
 
-  <!-- DNS Prefetch / Preconnect: 提升首屏外链性能 -->
   <link rel="dns-prefetch" href="https://t.me" />
   <link rel="dns-prefetch" href="https://apps.apple.com" />
   <link rel="preconnect" href="https://t.me" crossorigin />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
 
-  <!-- LLM / AI 搜索引擎提示文件 -->
   <link rel="alternate" type="text/plain" title="LLMs.txt" href="/llms.txt" />
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website" />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
@@ -99,35 +87,23 @@ import Footer from '../components/Footer.astro';
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="XChat Hub — Unofficial community resource for XChat users" />
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
 
-  <!-- 搜索引擎与 AI 抓取优化 -->
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
-  <!-- Google AdSense（拿到审批后取消注释，替换 ca-pub-XXXXXXX 为你的 Publisher ID） -->
-  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
-
-  <!-- JSON-LD: 全站 WebSite Schema -->
   <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
 
-  <!-- JSON-LD: 页面级 Schema（如 FAQPage） -->
   {jsonLd && (
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   )}
 
-  <!-- JSON-LD: 面包屑导航 -->
   {breadcrumbSchema && (
     <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   )}
 
-  <!--
-    Google Analytics 4 (gtag.js) via Partytown
-    type="text/partytown" 让脚本跑在 Web Worker，不阻塞主线程、不计入 "unused JS"
-  -->
   <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-3J5D4C9DPK"></script>
   <script type="text/partytown">
     window.dataLayer = window.dataLayer || [];
@@ -143,7 +119,6 @@ import Footer from '../components/Footer.astro';
   </main>
   <Footer />
 
-  <!-- 返回顶部按钮（全站通用，滚动超过一屏才显示） -->
   <button
     id="back-to-top"
     class="back-to-top"
@@ -192,7 +167,6 @@ import Footer from '../components/Footer.astro';
   </style>
 
   <script>
-    /* 返回顶部按钮：滚动超过一屏显示 */
     const btn = document.getElementById('back-to-top');
     if (btn) {
       const toggle = () => {

@@ -4,6 +4,7 @@
  * AdSense 审批前置条件 + GDPR 合规
  */
 import Layout from '../layouts/Layout.astro';
+import { XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
 
 /* 动态生成 "最后更新" 日期，避免站点看起来没人维护 */
 const today = new Date();
@@ -30,7 +31,7 @@ const lastUpdatedDisplay = today.toLocaleDateString('en-US', {
 
       <h2>What Data We Collect</h2>
       <h3>Telegram Channel &amp; Community Group</h3>
-      <p>We operate a public Telegram channel (<a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">@xchathubdirectory</a>) for XChat updates and a community group (<a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a>) for discussion. Both are handled entirely by Telegram — we do not collect or store your Telegram account information.</p>
+      <p>We operate a public Telegram channel (<a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer">@xchathubdirectory</a>) for XChat updates and a community group (<a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a>) for discussion. Both are handled entirely by Telegram — we do not collect or store your Telegram account information.</p>
 
       <h3>Group Submissions</h3>
       <p>If you submit a group to our directory, we collect the group name, invite link, category, and optional description you provide. This information will be displayed publicly on the Groups Directory page.</p>

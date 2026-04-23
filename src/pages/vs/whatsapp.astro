@@ -7,11 +7,12 @@
  * 大表格 + pros/cons + when-to-use 推荐，同时满足 Google Featured Snippet 抓取。
  */
 import Layout from '../../layouts/Layout.astro';
+import { XCHAT_LAUNCH_EXPECTED_LABEL } from '../../data/xchat';
 
 /** 对比维度数据 */
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (Elon Musk)',            other: 'Meta Platforms' },
-  { label: 'Launched',                 xchat: 'April 23, 2026',                other: '2009' },
+  { label: 'Launched',                 xchat: XCHAT_LAUNCH_EXPECTED_LABEL,     other: '2009' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '2+ billion' },
   { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },

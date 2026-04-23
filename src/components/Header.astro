@@ -1,22 +1,12 @@
 ---
-/**
- * Header.astro — 全站顶部导航栏（增强版）
- *
- * 设计：
- * 1. 顶部发布倒计时横幅（可关闭，localStorage 记忆）
- * 2. 桌面主导航 — Tracker / Groups / FAQ / Compare▾ / List + Join Community
- * 3. 移动端汉堡菜单 → 全屏抽屉（分组展示所有链接）
- * 4. Compare 下拉：vs WhatsApp / vs Signal / vs Telegram
- */
+import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
 ---
 
-<!-- ============ 顶部发布倒计时横幅（可关闭） ============ -->
 <div id="launch-banner" class="launch-banner" hidden>
   <div class="container launch-banner-inner">
     <span class="banner-pulse" aria-hidden="true"></span>
     <span class="banner-text">
-      XChat launches <strong>April 23, 2026</strong> —
-      <a href="/launch-countdown" class="banner-cta">see countdown →</a>
+      XChat launches <strong>{XCHAT_LAUNCH_DISPLAY}</strong> — <a href="/launch-countdown" class="banner-cta">see countdown →</a>
     </span>
     <button id="launch-banner-close" class="banner-close" aria-label="Dismiss">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
@@ -28,7 +18,6 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <!-- Logo -->
     <a href="/" class="logo" aria-label="XChat Hub Home">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <path d="M13.544 10.456L20.364 2h-1.616l-5.92 6.736L8.02 2H2l7.152 10.192L2 21h1.616l6.252-7.112L14.98 21H21L13.544 10.456zM10.74 12.896l-.724-1.016L4.26 3.232h2.48l4.652 6.52.724 1.016L18.748 19.8h-2.48L10.74 12.896z" fill="#e7e9ea"/>
@@ -36,13 +25,11 @@
       <span class="logo-text">Chat<span class="logo-accent">Hub</span></span>
     </a>
 
-    <!-- ======= Desktop Navigation ======= -->
     <nav class="header-nav desktop-nav" aria-label="Main navigation">
       <a href="/" class="nav-link">Tracker</a>
       <a href="/groups" class="nav-link">Groups</a>
       <a href="/faq" class="nav-link">FAQ</a>
 
-      <!-- Compare dropdown -->
       <div class="nav-dropdown" data-dropdown>
         <button class="nav-link nav-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
           Compare
@@ -70,7 +57,6 @@
       <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm nav-cta">Join Community</a>
     </nav>
 
-    <!-- ======= Mobile: hamburger ======= -->
     <button class="mobile-menu-btn" id="mobile-menu-btn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-drawer">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
         <path d="M3 6h18M3 12h18M3 18h18" />
@@ -79,7 +65,6 @@
   </div>
 </header>
 
-<!-- ======= Mobile drawer (outside header for full-viewport overlay) ======= -->
 <div id="mobile-drawer" class="mobile-drawer" hidden>
   <div class="mobile-drawer-backdrop" data-drawer-close></div>
   <aside class="mobile-drawer-panel" aria-label="Mobile navigation">
@@ -119,10 +104,8 @@
   </aside>
 </div>
 
-<!-- ======= Interactive behavior (vanilla, small) ======= -->
 <script is:inline>
   (function () {
-    /* 1. Launch banner show/dismiss with localStorage */
     try {
       var banner = document.getElementById('launch-banner');
       var closeBtn = document.getElementById('launch-banner-close');
@@ -140,7 +123,6 @@
       }
     } catch (e) {}
 
-    /* 2. Desktop Compare dropdown (click toggle + close on outside) */
     var dropdown = document.querySelector('[data-dropdown]');
     var dropdownBtn = document.querySelector('[data-dropdown-btn]');
     if (dropdown && dropdownBtn) {
@@ -163,7 +145,6 @@
       });
     }
 
-    /* 3. Mobile drawer open/close */
     var menuBtn = document.getElementById('mobile-menu-btn');
     var drawer = document.getElementById('mobile-drawer');
     function openDrawer() {
@@ -196,7 +177,6 @@
 </script>
 
 <style>
-  /* ================= Launch Banner ================= */
   .launch-banner {
     position: sticky;
     top: 0;
@@ -236,8 +216,8 @@
   }
 
   @keyframes banner-pulse {
-    0%   { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.7); }
-    70%  { box-shadow: 0 0 0 8px rgba(29, 155, 240, 0); }
+    0% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(29, 155, 240, 0); }
     100% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0); }
   }
 
@@ -251,6 +231,7 @@
     margin-left: 0.125rem;
     white-space: nowrap;
   }
+
   .banner-cta:hover { text-decoration: underline; }
 
   .banner-close {
@@ -267,12 +248,12 @@
     border-radius: var(--radius-full);
     transition: color 0.15s, background 0.15s;
   }
+
   .banner-close:hover {
     color: var(--text-primary);
     background: rgba(255, 255, 255, 0.05);
   }
 
-  /* ================= Site Header ================= */
   .site-header {
     position: sticky;
     top: 0;
@@ -283,7 +264,6 @@
     border-bottom: 1px solid var(--border);
   }
 
-  /* When banner is visible, header stacks below it */
   :global(body.has-launch-banner) .site-header { top: 34px; }
 
   .header-inner {
@@ -307,7 +287,6 @@
   .logo-text { letter-spacing: -0.02em; }
   .logo-accent { color: var(--accent); }
 
-  /* ================= Desktop Nav ================= */
   .header-nav {
     display: flex;
     align-items: center;
@@ -331,19 +310,14 @@
 
   .nav-link:hover { color: var(--text-primary); }
 
-  /* ================= Compare Dropdown ================= */
-  .nav-dropdown {
-    position: relative;
-  }
+  .nav-dropdown { position: relative; }
 
   .nav-dropdown-trigger svg {
     transition: transform 0.2s;
     opacity: 0.7;
   }
 
-  .nav-dropdown.open .nav-dropdown-trigger svg {
-    transform: rotate(180deg);
-  }
+  .nav-dropdown.open .nav-dropdown-trigger svg { transform: rotate(180deg); }
 
   .nav-dropdown-menu {
     position: absolute;
@@ -382,9 +356,7 @@
     transition: background 0.15s;
   }
 
-  .dropdown-item:hover {
-    background: rgba(29, 155, 240, 0.1);
-  }
+  .dropdown-item:hover { background: rgba(29, 155, 240, 0.1); }
 
   .dropdown-title {
     font-size: 0.9375rem;
@@ -396,7 +368,6 @@
     color: var(--text-muted);
   }
 
-  /* ================= Mobile Hamburger ================= */
   .mobile-menu-btn {
     display: none;
     background: transparent;
@@ -410,7 +381,6 @@
 
   .mobile-menu-btn:hover { background: rgba(255, 255, 255, 0.05); }
 
-  /* ================= Mobile Drawer ================= */
   .mobile-drawer {
     position: fixed;
     inset: 0;
@@ -470,7 +440,11 @@
     display: inline-flex;
     transition: color 0.15s, background 0.15s;
   }
-  .drawer-close:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
+
+  .drawer-close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.05);
+  }
 
   .drawer-nav {
     padding: 1.25rem;
@@ -511,14 +485,17 @@
     text-align: center;
   }
 
-  /* ================= Responsive Breakpoints ================= */
   @media (max-width: 860px) {
     .desktop-nav { display: none; }
     .mobile-menu-btn { display: inline-flex; }
   }
 
   @media (max-width: 480px) {
-    .launch-banner-inner { padding: 0.5rem 2.5rem 0.5rem 0.75rem; font-size: 0.75rem; }
+    .launch-banner-inner {
+      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+      font-size: 0.75rem;
+    }
+
     .banner-text { line-height: 1.3; }
   }
 </style>
