@@ -157,6 +157,7 @@ Detailed checklist:
 - [docs/launch-checklist.md](f:\windsurf\xchat\docs\launch-checklist.md)
 - [docs/app-store-monitoring.md](f:\windsurf\xchat\docs\app-store-monitoring.md)
 - [docs/group-research-workflow.md](f:\windsurf\xchat\docs\group-research-workflow.md)
+- [docs/group-publishing-workflow.md](f:\windsurf\xchat\docs\group-publishing-workflow.md)
 
 When shared copy or metadata changes:
 

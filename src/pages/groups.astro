@@ -3,9 +3,13 @@ import Layout from '../layouts/Layout.astro';
 import { XCHAT_GROUP_LIMIT, XCHAT_LAUNCH_DATE, XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
 import {
   GROUP_CATEGORIES,
-  GROUP_DIRECTORY,
   GROUP_DISCOVERY_SIGNALS,
+  SORTED_GROUP_DIRECTORY,
+  getGroupListingBadge,
+  getGroupListingTier,
 } from '../data/groups';
+
+const groups = SORTED_GROUP_DIRECTORY;
 
 const groupsJsonLd = {
   '@context': 'https://schema.org',
@@ -66,17 +70,32 @@ const groupsJsonLd = {
 
   <section class="section-sm" id="groups-grid">
     <div class="container">
-      {GROUP_DIRECTORY.length > 0 ? (
+      {groups.length > 0 ? (
         <div class="grid">
-          {GROUP_DIRECTORY.map((group) => (
-            <article class="card group-card" data-category={group.category}>
+          {groups.map((group) => {
+            const listingBadge = getGroupListingBadge(group);
+            const listingTier = getGroupListingTier(group);
+            const searchText = [
+              group.name,
+              group.description,
+              group.category,
+              ...group.tags,
+            ].join(' ');
+
+            return (
+            <article
+              class={`card group-card group-card-${listingTier}`}
+              data-category={group.category}
+              data-search={searchText}
+            >
               <div class="group-card-header">
                 <span class="group-icon">{group.icon}</span>
                 <div>
                   <h3 class="group-name">{group.name}</h3>
                   <div class="group-meta">
                     <span class="tag btn-sm group-category">{group.category}</span>
-                    {group.featured && <span class="group-badge">Featured</span>}
+                    {listingBadge && <span class={`group-badge group-badge-${listingTier}`}>{listingBadge}</span>}
+                    {group.verifiedAt && <span class="group-verified">Verified</span>}
                   </div>
                 </div>
               </div>
@@ -99,7 +118,8 @@ const groupsJsonLd = {
                 </a>
               </div>
             </article>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div class="coming-soon-state">
@@ -273,15 +293,29 @@ const groupsJsonLd = {
     font-size: 0.6875rem;
   }
 
-  .group-badge {
+  .group-badge,
+  .group-verified {
     display: inline-flex;
     align-items: center;
     padding: 0.2rem 0.5rem;
     border-radius: var(--radius-full);
-    background: rgba(29, 155, 240, 0.12);
-    color: var(--accent-light);
     font-size: 0.6875rem;
     font-weight: 600;
+  }
+
+  .group-badge-featured {
+    background: rgba(29, 155, 240, 0.12);
+    color: var(--accent-light);
+  }
+
+  .group-badge-lifetime {
+    background: rgba(245, 158, 11, 0.14);
+    color: #fbbf24;
+  }
+
+  .group-verified {
+    background: rgba(34, 197, 94, 0.12);
+    color: #4ade80;
   }
 
   .group-desc {
@@ -472,9 +506,33 @@ const groupsJsonLd = {
 </style>
 
 <script>
-  const tags = document.querySelectorAll<HTMLButtonElement>('.tag');
+  const tags = document.querySelectorAll<HTMLButtonElement>('.tags-row .tag');
   const cards = document.querySelectorAll<HTMLElement>('.group-card');
   const emptyState = document.getElementById('empty-state');
+  const searchInput = document.getElementById('group-search') as HTMLInputElement | null;
+  let activeCategory = 'All';
+
+  function updateVisibleGroups() {
+    const query = searchInput?.value.toLowerCase().trim() || '';
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const categoryMatch = activeCategory === 'All' || card.dataset.category === activeCategory;
+      const text = card.dataset.search?.toLowerCase() || card.textContent?.toLowerCase() || '';
+      const searchMatch = !query || text.includes(query);
+      const match = categoryMatch && searchMatch;
+
+      card.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+
+    if (emptyState) {
+      emptyState.style.display = cards.length > 0 && visibleCount === 0 ? 'block' : 'none';
+    }
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialQuery = urlParams.get('q');
 
   tags.forEach((tag) => {
     tag.addEventListener('click', () => {
@@ -484,51 +542,15 @@ const groupsJsonLd = {
       });
       tag.classList.add('active');
       tag.setAttribute('aria-selected', 'true');
-
-      const category = tag.dataset.category;
-      let visibleCount = 0;
-
-      cards.forEach((card) => {
-        const match = category === 'All' || card.dataset.category === category;
-        card.style.display = match ? '' : 'none';
-        if (match) visibleCount++;
-      });
-
-      if (emptyState) {
-        emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-      }
+      activeCategory = tag.dataset.category || 'All';
+      updateVisibleGroups();
     });
   });
 
-  const searchInput = document.getElementById('group-search') as HTMLInputElement;
-  const urlParams = new URLSearchParams(window.location.search);
-  const initialQuery = urlParams.get('q');
+  searchInput?.addEventListener('input', updateVisibleGroups);
 
   if (initialQuery && searchInput) {
     searchInput.value = initialQuery;
-    searchInput.dispatchEvent(new Event('input'));
+    updateVisibleGroups();
   }
-
-  searchInput?.addEventListener('input', () => {
-    const query = searchInput.value.toLowerCase().trim();
-    let visibleCount = 0;
-
-    cards.forEach((card) => {
-      const text = card.textContent?.toLowerCase() || '';
-      const match = text.includes(query);
-      card.style.display = match ? '' : 'none';
-      if (match) visibleCount++;
-    });
-
-    tags.forEach((t) => {
-      t.classList.remove('active');
-      t.setAttribute('aria-selected', 'false');
-    });
-    tags[0]?.classList.add('active');
-    tags[0]?.setAttribute('aria-selected', 'true');
-
-    if (emptyState) {
-      emptyState.style.display = visibleCount === 0 ? 'block' : 'none';
-    }
-  });
 </script>

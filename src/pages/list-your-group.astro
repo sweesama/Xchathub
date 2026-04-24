@@ -186,6 +186,31 @@ const pageJsonLd = {
     </div>
   </section>
 
+  <section class="section-sm">
+    <div class="container">
+      <div class="submit-template">
+        <h2>After Checkout</h2>
+        <p class="text-secondary prose-body">
+          Send one Telegram message with your group details. Paid listings should include the Buy Me a Coffee receipt email or order reference so we can match the payment before pinning.
+        </p>
+        <div class="template-box" aria-label="Group submission template">
+          <span>Plan: Free / Featured / Lifetime</span>
+          <span>Group name:</span>
+          <span>Invite link:</span>
+          <span>Category:</span>
+          <span>Tags:</span>
+          <span>Short description:</span>
+          <span>Current member count:</span>
+          <span>Owner X handle:</span>
+          <span>BMC receipt email or order reference:</span>
+        </div>
+        <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+          Send Details on Telegram
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ==================== FAQ ==================== -->
   <section class="section">
     <div class="container">
@@ -394,6 +419,36 @@ const pageJsonLd = {
 
   .pricing-cta {
     width: 100%;
+  }
+
+  .submit-template {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+    text-align: center;
+  }
+
+  .submit-template p {
+    max-width: 560px;
+    margin: 0.75rem auto 0;
+  }
+
+  .template-box {
+    display: grid;
+    gap: 0.5rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    text-align: left;
   }
 
   /* ---- How It Works ---- */
