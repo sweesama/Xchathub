@@ -120,6 +120,12 @@ npm run images
 npm run llms
 ```
 
+### Check App Store launch metadata
+
+```bash
+npm run check:appstore
+```
+
 ## Important Pages
 
 - `/` : Android tracker + main conversion page
@@ -149,6 +155,8 @@ When launch details change:
 Detailed checklist:
 
 - [docs/launch-checklist.md](f:\windsurf\xchat\docs\launch-checklist.md)
+- [docs/app-store-monitoring.md](f:\windsurf\xchat\docs\app-store-monitoring.md)
+- [docs/group-research-workflow.md](f:\windsurf\xchat\docs\group-research-workflow.md)
 
 When shared copy or metadata changes:
 
