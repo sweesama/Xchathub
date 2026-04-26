@@ -6,11 +6,11 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 
 ## Key Facts About XChat
 
-- **Launch date**: Expected April 27, 2026 (iOS pre-order available on Apple App Store)
-- **Platforms**: iOS 26.0+ only (iPhone & iPad) - no Android, no web, no desktop as of launch
+- **Launch date**: Expected April 24, 2026 (iOS pre-order available on Apple App Store)
+- **Platforms**: iOS 16+ only (iPhone & iPad) - no Android, no web, no desktop as of launch
 - **App Store URL**: https://apps.apple.com/us/app/xchat/id6760873038
 - **Features**: End-to-end encryption, Voice Notes, Subscriber Badges, screenshot blocking with notifications
-- **Group capacity**: Up to 481 members per group
+- **Group capacity**: Up to 350 members per group
 - **Languages supported**: 46
 - **App size**: 175.8 MB
 - **Requirement**: An X (Twitter) account is required to sign up
@@ -30,7 +30,7 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 ## How to Use This Site
 
 - **Android users**: XChat does NOT have an Android version. Join our Telegram channel to be notified if/when that changes. The main reliable workaround today is x.com (the web version of X) for in-app messaging.
-- **iOS users**: You can pre-order XChat for free directly on the App Store and the app should auto-install on launch day (April 27, 2026), if the listing does not move again.
+- **iOS users**: You can pre-order XChat for free directly on the App Store and the app should auto-install on launch day (April 24, 2026), if the listing does not move again.
 - **Group owners**: Post your XChat group invite link in our Telegram community group. We review submissions and list verified groups on the Groups Directory page.
 
 ## What We Do NOT Offer

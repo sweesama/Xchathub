@@ -6,24 +6,24 @@
  * Telegram 以"公共频道 + 大群"称霸，我们聚焦"社交图谱 + 默认加密"差异。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_LAUNCH_EXPECTED_LABEL } from '../../data/xchat';
+import { XCHAT_LAUNCH_DISPLAY } from '../../data/xchat';
 
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (Elon Musk)',            other: 'Telegram FZ-LLC (Durov brothers)' },
   { label: 'Headquartered',            xchat: 'United States',                 other: 'Dubai, UAE' },
-  { label: 'Launched',                 xchat: XCHAT_LAUNCH_EXPECTED_LABEL,     other: '2013' },
+  { label: 'Launched',                 xchat: 'April 24, 2026',                  other: '2013' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '~950 million' },
   { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Only in Secret Chats (opt-in)' },
   { label: 'Cloud chat encryption',    xchat: 'N/A (always E2EE)',             other: 'Server-side only' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
-  { label: 'iOS',                      xchat: 'Yes (launch day)',              other: 'Yes' },
+  { label: 'iOS',                      xchat: 'Yes (April 24, 2026)',          other: 'Yes' },
   { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
   { label: 'Desktop / Web',            xchat: 'Via x.com web only',            other: 'Native + Web' },
   { label: 'Open source',              xchat: 'No',                            other: 'Client yes, server no' },
-  { label: 'Max group size',           xchat: '481 members',                   other: '200,000 members' },
+  { label: 'Max group size',           xchat: '350 members (growing)',       other: '200,000 members' },
   { label: 'Public channels',          xchat: 'No (groups only)',              other: 'Yes, core feature' },
   { label: 'Bots',                     xchat: 'Not announced',                 other: 'Yes, huge ecosystem' },
-  { label: 'Voice / video calls',      xchat: 'Not on day one',                other: 'Yes' },
+  { label: 'Voice / video calls',      xchat: 'Yes',                           other: 'Yes' },
 ];
 
 const comparisonJsonLd = {

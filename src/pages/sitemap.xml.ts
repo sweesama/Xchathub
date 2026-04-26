@@ -12,6 +12,7 @@ const pages = [
   { path: '/groups/', priority: 0.9, changefreq: 'daily' },
   { path: '/faq/', priority: 0.85, changefreq: 'weekly' },
   { path: '/launch-countdown/', priority: 0.9, changefreq: 'daily' },
+  { path: '/communities-shutdown/', priority: 0.85, changefreq: 'weekly' },
   { path: '/vs/whatsapp/', priority: 0.75, changefreq: 'monthly' },
   { path: '/vs/signal/', priority: 0.75, changefreq: 'monthly' },
   { path: '/vs/telegram/', priority: 0.75, changefreq: 'monthly' },

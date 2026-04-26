@@ -6,22 +6,22 @@
  * Signal 在 privacy-conscious 用户群里是"金标准"，我们坦诚对比。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_LAUNCH_EXPECTED_LABEL } from '../../data/xchat';
+import { XCHAT_LAUNCH_DISPLAY } from '../../data/xchat';
 
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (for-profit)',           other: 'Signal Foundation (nonprofit)' },
-  { label: 'Launched',                 xchat: XCHAT_LAUNCH_EXPECTED_LABEL,     other: '2014' },
+  { label: 'Launched',                 xchat: 'April 24, 2026',                  other: '2014' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '~40 million' },
   { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default (Signal Protocol)' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
-  { label: 'iOS',                      xchat: 'Yes (launch day)',              other: 'Yes' },
+  { label: 'iOS',                      xchat: 'Yes (April 24, 2026)',          other: 'Yes' },
   { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
   { label: 'Desktop apps',             xchat: 'Via x.com web only',            other: 'Yes (Win / Mac / Linux)' },
   { label: 'Open source',              xchat: 'No',                            other: 'Yes, fully (server & client)' },
   { label: 'Independent audits',       xchat: 'None published yet',            other: 'Multiple, ongoing' },
-  { label: 'Max group size',           xchat: '481 members',                   other: '1,000 members' },
-  { label: 'Disappearing messages',    xchat: 'Expected',                      other: 'Yes (custom timers)' },
-  { label: 'Voice / video calls',      xchat: 'Not on day one',                other: 'Yes, E2EE' },
+  { label: 'Max group size',           xchat: '350 members (growing)',       other: '1,000 members' },
+  { label: 'Disappearing messages',    xchat: 'Yes',                           other: 'Yes (custom timers)' },
+  { label: 'Voice / video calls',      xchat: 'Yes',                           other: 'Yes, E2EE' },
   { label: 'Metadata collected',       xchat: 'Tied to X profile',             other: 'Minimal (best in class)' },
   { label: 'Advertising revenue',      xchat: 'Yes (X platform)',              other: 'No — donation funded' },
 ];

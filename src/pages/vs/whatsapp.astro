@@ -7,23 +7,23 @@
  * 大表格 + pros/cons + when-to-use 推荐，同时满足 Google Featured Snippet 抓取。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_LAUNCH_EXPECTED_LABEL } from '../../data/xchat';
+import { XCHAT_LAUNCH_DISPLAY } from '../../data/xchat';
 
 /** 对比维度数据 */
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (Elon Musk)',            other: 'Meta Platforms' },
-  { label: 'Launched',                 xchat: XCHAT_LAUNCH_EXPECTED_LABEL,     other: '2009' },
+  { label: 'Launched',                 xchat: 'April 24, 2026',                  other: '2009' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '2+ billion' },
   { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
-  { label: 'iOS',                      xchat: 'Yes (launch day)',              other: 'Yes' },
+  { label: 'iOS',                      xchat: 'Yes (April 24, 2026)',          other: 'Yes' },
   { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
   { label: 'Desktop / Web',            xchat: 'Via x.com web only',            other: 'Native + Web' },
   { label: 'Independent security audit', xchat: 'Not published yet',           other: 'Signal Protocol (audited)' },
   { label: 'Open source',              xchat: 'No',                            other: 'Partial (Signal Protocol)' },
-  { label: 'Max group size',           xchat: '481 members',                   other: '1,024 members' },
-  { label: 'Disappearing messages',    xchat: 'Expected',                      other: 'Yes (24h / 7d / 90d)' },
-  { label: 'Voice / video calls',      xchat: 'Not on day one',                other: 'Yes' },
+  { label: 'Max group size',           xchat: '350 members (growing to 1,000)', other: '1,024 members' },
+  { label: 'Disappearing messages',    xchat: 'Yes',                           other: 'Yes (24h / 7d / 90d)' },
+  { label: 'Voice / video calls',      xchat: 'Yes',                           other: 'Yes' },
   { label: 'Metadata collected',       xchat: 'Tied to X profile',             other: 'Phone number + contacts' },
   { label: 'Owned by advertising co.', xchat: 'Yes (X Ads)',                   other: 'Yes (Meta Ads)' },
 ];

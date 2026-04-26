@@ -36,7 +36,7 @@ const faqs = [
   {
     question: 'How many members can join an XChat group?',
     answer:
-      'According to the App Store listing, each XChat group supports up to <strong>481 members</strong>. This is notably smaller than WhatsApp (1,024 members) or Telegram channels (200,000 subscribers).',
+      `According to X Corp's official announcement, each XChat group supports up to <strong>${XCHAT_GROUP_LIMIT} members</strong> at launch, with plans to expand toward 1,000. This is smaller than WhatsApp (1,024 members) or Telegram channels (200,000 subscribers).`,
   },
   {
     question: 'Can I search for XChat groups inside the app?',
@@ -49,9 +49,9 @@ const faqs = [
       `According to the <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">App Store listing</a> and official @xchat posts, confirmed features include: <strong>end-to-end encrypted messaging</strong>, <strong>voice notes</strong>, <strong>audio & video calls</strong>, <strong>disappearing messages</strong>, <strong>screenshot blocking with attempt notifications</strong>, <strong>file & document sharing</strong>, <strong>message editing & deletion</strong>, <strong>subscriber badges</strong>, and <strong>group chats up to ${XCHAT_GROUP_LIMIT} members</strong>. The app requires an existing X account to sign in and <strong>${XCHAT_IOS_REQUIREMENT.replace('+', ' or later')}</strong>.`,
   },
   {
-    question: 'When will XChat launch?',
+    question: 'When did XChat launch?',
     answer:
-      `XChat is currently listed to launch on <strong><time datetime="${XCHAT_LAUNCH_DATE}">${XCHAT_LAUNCH_DISPLAY}</time></strong> on the iOS App Store. It is a free download and is already <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">available for pre-order</a>. The app requires <strong>${XCHAT_IOS_REQUIREMENT}</strong>, has been in internal testing since May 2025, and entered iOS public beta in March 2026. It supports <strong>46 languages</strong>. There is no confirmed date for Android.`,
+      `XChat officially launched on <strong><time datetime="${XCHAT_LAUNCH_DATE}">${XCHAT_LAUNCH_DISPLAY}</time></strong> on the iOS App Store. It is a free download — <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">get it here</a>. The app requires <strong>${XCHAT_IOS_REQUIREMENT}</strong>, has been in internal testing since May 2025, and entered iOS public beta in March 2026. It supports <strong>46 languages</strong>. There is no confirmed date for Android.`,
   },
 ];
 
@@ -75,7 +75,7 @@ const pageJsonLd = {
       name: 'XChat vs WhatsApp vs Signal vs Telegram — Feature Comparison',
       description: 'Side-by-side comparison of XChat with leading encrypted messaging apps as of April 2026.',
       itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'XChat', description: 'E2E encrypted messenger by X Corp, iOS-only, 481-member groups, screenshot blocking, no Android support.' },
+        { '@type': 'ListItem', position: 1, name: 'XChat', description: 'E2E encrypted messenger by X Corp, iOS-only, 350-member groups (growing to 1,000), screenshot blocking, no Android support.' },
         { '@type': 'ListItem', position: 2, name: 'WhatsApp', description: 'E2E encrypted messenger by Meta, cross-platform, 1024-member groups, no screenshot blocking.' },
         { '@type': 'ListItem', position: 3, name: 'Signal', description: 'Open-source E2E encrypted messenger, cross-platform, 1000-member groups, no ads or tracking.' },
         { '@type': 'ListItem', position: 4, name: 'Telegram', description: 'Cross-platform messenger, 200k-subscriber channels, E2E only in Secret Chats.' },
@@ -87,7 +87,7 @@ const pageJsonLd = {
 
 <Layout
   title="XChat Android Status Tracker — Get Notified | XChat Hub"
-  description="Is XChat available for Android? Not yet. Track the official Android release, get notified via Telegram, and discover XChat group links. Updated April 2026."
+  description="Is XChat available for Android? Not yet — iOS launched April 24, 2026. Track the official Android release, get notified via Telegram, and discover XChat group links. Updated April 2026."
   jsonLd={pageJsonLd}
   canonicalPath=""
   breadcrumbs={[
@@ -103,7 +103,7 @@ const pageJsonLd = {
       <div class="status-bar">
         <span class="badge badge-live">
           <span class="pulse-dot pulse-dot-live"></span>
-          iOS: PRE-ORDER LIVE
+          iOS: LIVE NOW
         </span>
         <span class="badge badge-pending">
           <span class="pulse-dot pulse-dot-pending"></span>
@@ -117,7 +117,7 @@ const pageJsonLd = {
         <span class="text-gradient">is Not Here Yet.</span>
       </h1>
       <p class="hero-subtitle text-secondary prose-body">
-        X's standalone encrypted messenger is currently listed to launch <strong><time datetime="2026-04-25">April 25, 2026</time></strong> — iPhone &amp; iPad only. No Android date announced. Be the first to know when it changes.
+        X's standalone encrypted messenger launched on <strong><time datetime="2026-04-24">April 24, 2026</time></strong> — iPhone &amp; iPad only. <strong>No Android date announced.</strong> Be the first to know when it changes.
       </p>
 
       <!-- 双 CTA：App Store + Telegram -->
@@ -127,7 +127,7 @@ const pageJsonLd = {
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
             </svg>
-            Pre-order on App Store
+            Download on App Store
           </a>
           <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -136,7 +136,7 @@ const pageJsonLd = {
             Get Notified on Telegram
           </a>
         </div>
-        <p class="form-hint text-muted">iPhone? Pre-order free on the App Store. Android? Subscribe to our Telegram channel — we'll ping you the moment anything changes.</p>
+        <p class="form-hint text-muted">iPhone? <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">Download free</a> on the App Store. Android? Subscribe to our Telegram channel — we'll ping you the moment anything changes.</p>
       </div>
 
       <!-- 统计数字 -->
@@ -309,16 +309,16 @@ const pageJsonLd = {
   <section class="section final-cta-section">
     <div class="container">
       <div class="final-cta-card">
-        <h2 class="final-cta-title">Don't Miss XChat Launch Day</h2>
+        <h2 class="final-cta-title">Get XChat Now</h2>
         <p class="text-secondary final-cta-desc">
-          Pre-order on the App Store so the app auto-installs on <time datetime={XCHAT_LAUNCH_DATE}>{XCHAT_LAUNCH_SHORT_DISPLAY}</time>, or subscribe to our Telegram channel to be notified the instant Android news drops.
+          Download XChat free on the App Store, or subscribe to our Telegram channel to be notified the instant Android support drops.
         </p>
         <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
           <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
             </svg>
-            Pre-order on App Store
+            Download on App Store
           </a>
           <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
