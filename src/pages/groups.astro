@@ -8,6 +8,7 @@ import {
   getGroupListingBadge,
   getGroupListingTier,
 } from '../data/groups';
+import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
 
 const groups = SORTED_GROUP_DIRECTORY;
 
@@ -142,6 +143,24 @@ const groupsJsonLd = {
 
       <div class="empty-state" id="empty-state" style="display: none;">
         <p class="text-muted">No groups found. Try a different search or category.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-sm browse-categories">
+    <div class="container">
+      <div class="cat-header">
+        <h2>Browse XChat Groups by Category</h2>
+        <p class="text-secondary">Each category has its own page with groups, examples, and submission guidance.</p>
+      </div>
+      <div class="cat-grid">
+        {GROUP_CATEGORY_META.map((cat) => (
+          <a href={`/groups/${cat.slug}/`} class="cat-card">
+            <span class="cat-emoji" aria-hidden="true">{cat.emoji}</span>
+            <h3>{cat.label}</h3>
+            <p class="text-secondary">{cat.intro.split('.')[0]}.</p>
+          </a>
+        ))}
       </div>
     </div>
   </section>
@@ -371,6 +390,61 @@ const groupsJsonLd = {
   .members-count {
     font-size: 0.6875rem;
     font-family: var(--font-mono);
+  }
+
+  /* ---- Browse by Category ---- */
+  .browse-categories {
+    border-top: 1px solid var(--border);
+    padding-top: 3rem;
+  }
+
+  .cat-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .cat-header h2 {
+    margin-bottom: 0.5rem;
+  }
+
+  .cat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+  }
+
+  .cat-card {
+    display: block;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .cat-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .cat-emoji {
+    font-size: 1.75rem;
+    display: block;
+    margin-bottom: 0.375rem;
+    line-height: 1;
+  }
+
+  .cat-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+    color: var(--text-primary);
+  }
+
+  .cat-card p {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin: 0;
   }
 
   .submit-section {

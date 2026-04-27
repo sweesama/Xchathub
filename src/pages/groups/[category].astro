@@ -1,0 +1,448 @@
+---
+/**
+ * /groups/[category]/ — 群组分类着陆页（动态路由）
+ *
+ * 为 GROUP_CATEGORY_META 中每个分类生成独立 SEO 着陆页，捕获长尾流量。
+ * 即使群组数据为空，也展示 SEO 友好的占位内容 + 提交 CTA。
+ */
+import Layout from '../../layouts/Layout.astro';
+import {
+  SORTED_GROUP_DIRECTORY,
+  getGroupListingBadge,
+  getGroupListingTier,
+} from '../../data/groups';
+import { GROUP_CATEGORY_META, getCategoryMeta } from '../../data/groupCategoryMeta';
+
+export function getStaticPaths() {
+  return GROUP_CATEGORY_META.map((m) => ({
+    params: { category: m.slug },
+    props: { meta: m },
+  }));
+}
+
+const { meta } = Astro.props as { meta: typeof GROUP_CATEGORY_META[number] };
+
+/* 筛选属于这个分类的群组 */
+const groupsInCategory = SORTED_GROUP_DIRECTORY.filter(
+  (g) => g.category === meta.label
+);
+
+/* 其他相关分类（前 5 个，排除当前） */
+const relatedCategories = GROUP_CATEGORY_META
+  .filter((m) => m.slug !== meta.slug)
+  .slice(0, 6);
+
+/* JSON-LD: CollectionPage */
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: meta.h1,
+  description: meta.metaDescription,
+  url: `https://xchat.directory/groups/${meta.slug}/`,
+  isPartOf: {
+    '@type': 'WebSite',
+    name: 'XChat Hub',
+    url: 'https://xchat.directory',
+  },
+  about: meta.keywords.map((k) => ({ '@type': 'Thing', name: k })),
+};
+---
+
+<Layout
+  title={`${meta.metaTitle} | XChat Hub`}
+  description={meta.metaDescription}
+  jsonLd={collectionJsonLd}
+  canonicalPath={`/groups/${meta.slug}`}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'Groups', url: 'https://xchat.directory/groups/' },
+    { name: meta.label, url: `https://xchat.directory/groups/${meta.slug}/` },
+  ]}
+>
+  <!-- ==================== HERO ==================== -->
+  <section class="section hero">
+    <div class="container">
+      <a href="/groups" class="back-link">← All categories</a>
+      <span class="category-emoji" aria-hidden="true">{meta.emoji}</span>
+      <h1>{meta.h1}</h1>
+      <p class="lead text-secondary prose-body">{meta.intro}</p>
+      <div class="cta-buttons">
+        <a href="/list-your-group" class="btn btn-primary btn-lg">
+          Submit a {meta.label} Group →
+        </a>
+        <a href="/how-to-create-group-link" class="btn btn-secondary btn-lg">
+          How to Create Group Link
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== GROUPS LIST OR EMPTY STATE ==================== -->
+  <section class="section groups-section">
+    <div class="container">
+      {groupsInCategory.length > 0 ? (
+        <>
+          <h2 class="section-title">
+            {groupsInCategory.length} {meta.label} {groupsInCategory.length === 1 ? 'Group' : 'Groups'}
+          </h2>
+          <div class="grid">
+            {groupsInCategory.map((group) => {
+              const listingBadge = getGroupListingBadge(group);
+              const listingTier = getGroupListingTier(group);
+              return (
+                <article class={`group-card group-tier-${listingTier}`}>
+                  {listingBadge && <span class="group-badge">{listingBadge}</span>}
+                  <h3>{group.name}</h3>
+                  <p class="text-secondary">{group.description}</p>
+                  <div class="group-tags">
+                    {group.tags.map((tag) => <span class="group-tag">#{tag}</span>)}
+                  </div>
+                  <div class="group-meta">
+                    <span>{group.members.toLocaleString()} members</span>
+                  </div>
+                  <a
+                    href={group.inviteUrl}
+                    target="_blank"
+                    rel="noopener noreferrer nofollow"
+                    class="btn btn-primary btn-sm"
+                  >
+                    Open in XChat →
+                  </a>
+                </article>
+              );
+            })}
+          </div>
+        </>
+      ) : (
+        <div class="empty-card">
+          <span class="empty-emoji" aria-hidden="true">{meta.emoji}</span>
+          <h2>No {meta.label} groups listed yet.</h2>
+          <p class="text-secondary prose-body">
+            We're tracking <strong>{meta.label.toLowerCase()}</strong> communities as XChat group invite links surface on X.
+            Once owners share public links, this page will fill with verified groups.
+          </p>
+          <p class="text-secondary prose-body">
+            Run a {meta.label.toLowerCase()} group? <a href="/list-your-group">Submit your invite link</a> —
+            it's free, and we typically review within 24 hours.
+          </p>
+
+          <div class="example-types">
+            <h3>Examples of {meta.label} groups we'll list here:</h3>
+            <ul>
+              {meta.exampleTypes.map((t) => <li>{t}</li>)}
+            </ul>
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <!-- ==================== HOW IT WORKS ==================== -->
+  <section class="section how-section">
+    <div class="container">
+      <div class="how-grid">
+        <div class="how-card">
+          <span class="how-icon" aria-hidden="true">📱</span>
+          <h3>Open in XChat</h3>
+          <p class="text-secondary">Tap any group's invite link. XChat opens, you see the group preview, and you can request to join.</p>
+        </div>
+        <div class="how-card">
+          <span class="how-icon" aria-hidden="true">✓</span>
+          <h3>Admin Approves</h3>
+          <p class="text-secondary">Group admins review your request. Once approved, you can read messages, post, and use voice/video calls.</p>
+        </div>
+        <div class="how-card">
+          <span class="how-icon" aria-hidden="true">🔒</span>
+          <h3>Stay Encrypted</h3>
+          <p class="text-secondary">All messages are end-to-end encrypted. Up to {meta.label === 'Local' ? '1,000' : '350'} members per group, growing soon.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== RELATED CATEGORIES ==================== -->
+  <section class="section related-section">
+    <div class="container">
+      <h2 class="section-title">Other XChat Group Categories</h2>
+      <div class="related-grid">
+        {relatedCategories.map((rc) => (
+          <a href={`/groups/${rc.slug}/`} class="related-card">
+            <span class="related-emoji" aria-hidden="true">{rc.emoji}</span>
+            <h3>{rc.label}</h3>
+            <p class="text-secondary">{rc.intro.split('.')[0]}.</p>
+          </a>
+        ))}
+      </div>
+      <div class="see-all">
+        <a href="/groups" class="btn btn-secondary">See all categories →</a>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    text-align: center;
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    text-decoration: none;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+  }
+
+  .category-emoji {
+    display: block;
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+    line-height: 1;
+  }
+
+  .hero h1 {
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .lead {
+    font-size: 1.0625rem;
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  /* ---- Groups Section ---- */
+  .section-title {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+
+  .group-card {
+    position: relative;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .group-badge {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.15);
+    color: var(--accent-light);
+  }
+
+  .group-tier-lifetime .group-badge {
+    background: rgba(255, 215, 0, 0.15);
+    color: gold;
+  }
+
+  .group-card h3 {
+    font-size: 1.0625rem;
+    margin: 0;
+  }
+
+  .group-card p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .group-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  .group-tag {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  .group-meta {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    margin-top: auto;
+  }
+
+  /* ---- Empty State ---- */
+  .empty-card {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2.5rem 2rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .empty-emoji {
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  .empty-card h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .empty-card p {
+    margin-bottom: 1rem;
+  }
+
+  .example-types {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    text-align: left;
+  }
+
+  .example-types h3 {
+    font-size: 0.9375rem;
+    margin-bottom: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+  }
+
+  .example-types ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .example-types li {
+    padding: 0.375rem 0 0.375rem 1.5rem;
+    position: relative;
+    color: var(--text-secondary);
+    font-size: 0.9375rem;
+  }
+
+  .example-types li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* ---- How It Works ---- */
+  .how-section {
+    background: linear-gradient(180deg, transparent, rgba(29, 155, 240, 0.03), transparent);
+  }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 920px;
+    margin: 0 auto;
+  }
+
+  .how-card {
+    text-align: center;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+  }
+
+  .how-icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .how-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .how-card p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* ---- Related ---- */
+  .related-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .related-card {
+    display: block;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .related-emoji {
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.375rem;
+  }
+
+  .related-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+    color: var(--text-primary);
+  }
+
+  .related-card p {
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .see-all {
+    text-align: center;
+    margin-top: 2rem;
+  }
+</style>
