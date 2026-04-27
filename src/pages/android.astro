@@ -1,0 +1,695 @@
+---
+/**
+ * android.astro — XChat Android 状态追踪 + 解决方案页
+ *
+ * 关键事实（截至 2026-04-27）：
+ * - XChat 仅 iOS 上架（2026-04-24）
+ * - X Corp 未公布 Android 任何具体时间
+ * - "Expected soon" 是唯一官方表态（来源：metricool / 9to5mac）
+ * - 假冒 XChat.apk 流传严重，是真实安全风险
+ * - 唯一安全替代：chat.x.com 网页版
+ *
+ * SEO 战略：捕获最大量级 Android 相关流量：
+ * - "xchat android"（核心高量词）
+ * - "xchat for android", "xchat apk", "xchat android download"
+ * - "when will xchat be on android", "xchat android release date"
+ * - "is xchat available on android", "xchat android app"
+ *
+ * 同时承担安全教育功能：警告假冒 APK 风险。
+ */
+import Layout from '../layouts/Layout.astro';
+import { XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
+
+const CHAT_URL = 'https://chat.x.com';
+
+/* JSON-LD: Article + FAQPage */
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'XChat Android Release Status — No Official Date Yet (2026 Tracker)',
+  description: 'XChat launched on iOS April 24, 2026. Android timing has not been announced by X Corp. Track the status, avoid fake APKs, and use chat.x.com as the official workaround.',
+  author: { '@type': 'Organization', name: 'XChat Hub' },
+  publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
+  datePublished: '2026-04-24',
+  dateModified: new Date().toISOString().split('T')[0],
+};
+
+const timeline = [
+  { date: 'May 2025',     label: 'Internal beta',       desc: 'X starts internal testing of XChat with employees and select beta users.' },
+  { date: 'Dec 2025',     label: 'chat.x.com launches', desc: 'X quietly releases a standalone web version at chat.x.com — accessible from any browser including Android.' },
+  { date: 'Mar 2026',     label: 'Public iOS beta',     desc: 'XChat enters public TestFlight beta on iOS only. No Android beta.' },
+  { date: 'Apr 17, 2026', label: 'iOS launch delayed',  desc: 'Original launch date pushed back; speculation about Android delay too.' },
+  { date: 'Apr 24, 2026', label: 'iOS public launch',   desc: 'XChat officially launches on Apple App Store. Android: still no announcement.' },
+  { date: 'Apr 27, 2026', label: 'Today',               desc: 'X Corp has not publicly committed to an Android release date. Reporting from 9to5mac says "expected soon" without specifics.' },
+];
+
+const fakeApkRedFlags = [
+  'Domain is not x.com or apple.com',
+  'Asks you to enable "Install from Unknown Sources"',
+  'Requests permissions that messaging apps don\'t need (SMS, contacts export, accessibility services)',
+  'Has a slightly different name like "XChat Pro", "XChat+", "X Chat Plus"',
+  'Promises "early access" or "leaked version"',
+  'Has very few or only 5-star reviews on the source site',
+];
+
+const faqs = [
+  {
+    q: 'When will XChat launch on Android?',
+    a: 'There is no official Android release date as of April 27, 2026. X Corp has only said the Android version is "expected soon" without specifics. We update this page the moment any official statement is made.',
+  },
+  {
+    q: 'Is there a real XChat APK I can download?',
+    a: '<strong>No.</strong> X Corp has not released any official APK file. Any website offering "XChat.apk" is either fake or a clone of an unrelated app. The safe alternative is to use <a href="https://chat.x.com" target="_blank" rel="noopener noreferrer">chat.x.com</a> in your Android browser.',
+  },
+  {
+    q: 'There are apps called "XChat" on Google Play. Are those real?',
+    a: 'No — those are <strong>different apps with the same name</strong>. The most common one is a Nostr-protocol messenger unrelated to X Corp. There is currently <strong>no XChat by X Corp on Google Play</strong>.',
+  },
+  {
+    q: 'How do I use XChat on Android right now?',
+    a: 'Open <a href="https://chat.x.com" target="_blank" rel="noopener noreferrer">chat.x.com</a> in Chrome (or any browser) and sign in with your X account. All your XChat messages, group chats, and contacts work in the browser. The interface is desktop-optimized but functional on phones. <a href="/web">See full Android-on-web guide</a>.',
+  },
+  {
+    q: 'Why is XChat iOS-only at launch?',
+    a: 'X has not given a public reason. Industry speculation: iOS first lets the team validate encryption and product design with a smaller, more uniform device fleet before tackling Android\'s fragmentation. Apple\'s App Store review may also have been a forcing function for the launch deadline.',
+  },
+  {
+    q: 'Can I get notified when XChat for Android is released?',
+    a: `Yes. Subscribe to our Telegram channel — <a href="${XCHAT_TELEGRAM_CHANNEL_URL}" target="_blank" rel="noopener noreferrer">${XCHAT_TELEGRAM_CHANNEL_URL.replace('https://', '')}</a> — we post the moment X makes any Android announcement.`,
+  },
+  {
+    q: 'Will the Android version cost money?',
+    a: 'Almost certainly free. The iOS version is free with no ads. X CEO Elon Musk has publicly committed to keeping XChat free.',
+  },
+  {
+    q: 'Will my XChat messages sync across iOS, Android, and Web?',
+    a: 'Yes. All XChat surfaces (iOS app, chat.x.com web, X main app, and a future Android app) use the same X account backend. Once you log in, your messages and groups are everywhere.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a.replace(/<[^>]+>/g, ''),
+    },
+  })),
+};
+---
+
+<Layout
+  title="XChat for Android — Release Date Tracker & Safe Workaround | XChat Hub"
+  description="XChat is iOS-only as of April 27, 2026. No official Android release date. Avoid fake APKs and use the official chat.x.com web workaround. Live tracker with timeline, FAQs, and notification options."
+  jsonLd={[articleJsonLd, faqJsonLd]}
+  canonicalPath="/android"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'XChat for Android', url: 'https://xchat.directory/android/' },
+  ]}
+>
+  <!-- ==================== HERO ==================== -->
+  <section class="section hero">
+    <div class="container">
+      <span class="status-pill" aria-label="Android release status">
+        <span class="status-dot" aria-hidden="true"></span>
+        Not Released · Tracker Live
+      </span>
+      <h1>
+        XChat for Android:<br />
+        <span class="text-gradient">Status &amp; Safe Workaround.</span>
+      </h1>
+      <p class="lead text-secondary prose-body">
+        XChat launched on iOS April 24, 2026. <strong>X Corp has not announced an Android release date.</strong>
+        While you wait, the official replacement is <a href={CHAT_URL} target="_blank" rel="noopener noreferrer">chat.x.com</a>
+        in your Android browser — same encryption, same messages, no APK needed.
+      </p>
+      <div class="cta-buttons">
+        <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          Use chat.x.com on Android →
+        </a>
+        <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+          Get Release Alerts
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== STATUS CARD ==================== -->
+  <section class="section status-section">
+    <div class="container">
+      <div class="status-grid">
+        <article class="status-card">
+          <div class="status-icon" aria-hidden="true">📱</div>
+          <h3>iOS Status</h3>
+          <p class="status-value good">Live since April 24, 2026</p>
+          <p class="text-secondary">
+            Available on iPhone &amp; iPad, requires iOS 16+.
+          </p>
+        </article>
+        <article class="status-card">
+          <div class="status-icon" aria-hidden="true">🤖</div>
+          <h3>Android Status</h3>
+          <p class="status-value bad">Not released · No date announced</p>
+          <p class="text-secondary">
+            X has only said "expected soon". No public timeline.
+          </p>
+        </article>
+        <article class="status-card">
+          <div class="status-icon" aria-hidden="true">🌐</div>
+          <h3>Web Status</h3>
+          <p class="status-value good">Live · Works on Android</p>
+          <p class="text-secondary">
+            <a href={CHAT_URL} target="_blank" rel="noopener noreferrer">chat.x.com</a> works in Chrome on Android right now.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TIMELINE ==================== -->
+  <section class="section timeline-section">
+    <div class="container">
+      <h2 class="section-title">Timeline: Where Things Stand</h2>
+      <ol class="timeline">
+        {timeline.map((t, i) => (
+          <li class={`timeline-item ${i === timeline.length - 1 ? 'is-now' : ''}`}>
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-body">
+              <div class="timeline-date">{t.date}</div>
+              <h3>{t.label}</h3>
+              <p class="text-secondary">{t.desc}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- ==================== FAKE APK WARNING ==================== -->
+  <section class="section warning-section">
+    <div class="container">
+      <div class="warning-card">
+        <div class="warning-head">
+          <span class="warning-icon" aria-hidden="true">⚠️</span>
+          <h2>Warning: Fake XChat APKs Are Circulating</h2>
+        </div>
+        <p class="text-secondary prose-body">
+          Because Android users are searching for XChat in large numbers and no official APK exists,
+          scammers have published <strong>fake "XChat.apk" files</strong> on phishing sites.
+          These can contain malware, credential stealers, or crypto wallet drainers.
+        </p>
+        <h3 class="warning-subhead">Red flags to watch for:</h3>
+        <ul class="warning-list">
+          {fakeApkRedFlags.map((flag) => <li>{flag}</li>)}
+        </ul>
+        <h3 class="warning-subhead">Apps named "XChat" on Google Play are <em>not</em> the X Corp app</h3>
+        <p class="text-secondary">
+          Several unrelated apps share the "XChat" name (the most popular is a Nostr-based messenger).
+          As of April 27, 2026, <strong>X Corp has not published anything to Google Play</strong>.
+          If you see an "XChat" listing, check the developer name — only an "X Corp" listing would be legitimate.
+        </p>
+        <div class="cta-buttons" style="justify-content: flex-start; margin-top: 1.5rem;">
+          <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Use chat.x.com Instead
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== WORKAROUND ==================== -->
+  <section class="section workaround-section">
+    <div class="container">
+      <h2 class="section-title">The Official Android Workaround</h2>
+      <div class="workaround-grid">
+        <div class="workaround-text">
+          <p class="text-secondary prose-body">
+            X built <strong>chat.x.com</strong> as a standalone web messenger in December 2025 —
+            months before the iOS app launched. It works in any modern browser, including Chrome on Android.
+          </p>
+          <ul class="checklist">
+            <li>End-to-end encrypted (set passcode on first login)</li>
+            <li>Syncs all XChat messages from any device</li>
+            <li>Group chats and invite links work fully</li>
+            <li>No download — bookmark or "Add to Home Screen" as PWA</li>
+            <li>No APK risk, no third-party install</li>
+          </ul>
+          <div class="cta-buttons" style="justify-content: flex-start; margin-top: 1rem;">
+            <a href="/web" class="btn btn-primary">Full Web Setup Guide</a>
+            <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Open chat.x.com</a>
+          </div>
+        </div>
+        <div class="workaround-callout">
+          <h3>What you give up vs a native app</h3>
+          <ul class="parity-list">
+            <li><span class="check">✓</span> Text messaging</li>
+            <li><span class="check">✓</span> Group chats</li>
+            <li><span class="check">✓</span> Invite links</li>
+            <li><span class="check">✓</span> File sharing</li>
+            <li><span class="check">✓</span> Disappearing messages</li>
+            <li><span class="x">✗</span> Voice calls (iOS only)</li>
+            <li><span class="x">✗</span> Video calls (iOS only)</li>
+            <li><span class="x">✗</span> Native push notifications</li>
+            <li><span class="x">✗</span> Screenshot blocking</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== NOTIFY ==================== -->
+  <section class="section notify-section">
+    <div class="container">
+      <div class="notify-card">
+        <h2>Get the Android Release Alert First</h2>
+        <p class="text-secondary prose-body">
+          When X publishes anything about Android — beta, TestFlight-equivalent, Google Play listing, or general availability —
+          we post it the same day. Two ways to stay updated:
+        </p>
+        <div class="notify-options">
+          <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="notify-option">
+            <h3>Telegram Channel →</h3>
+            <p>Read-only channel. Push alerts on every Android development.</p>
+          </a>
+          <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer" class="notify-option">
+            <h3>Telegram Community →</h3>
+            <p>Discuss with other Android-waiting users, share what you find.</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section class="section faq-section">
+    <div class="container">
+      <h2 class="section-title">Android FAQ</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <p class="text-secondary" set:html={f.a} />
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #ff9966;
+    margin-bottom: 1rem;
+    padding: 0.4rem 0.875rem;
+    border: 1px solid rgba(255, 153, 102, 0.35);
+    border-radius: var(--radius-full);
+    background: rgba(255, 153, 102, 0.05);
+  }
+
+  .status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ff9966;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    max-width: 720px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    max-width: 660px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  /* ---- Status Cards ---- */
+  .status-section {
+    padding-top: 2rem;
+  }
+
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  .status-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-align: center;
+  }
+
+  .status-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .status-card h3 {
+    font-size: 0.9375rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+  }
+
+  .status-value {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .status-value.good { color: #4ade80; }
+  .status-value.bad { color: #ff9966; }
+
+  .status-card p:last-child {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  /* ---- Timeline ---- */
+  .timeline-section {
+    background: linear-gradient(180deg, transparent, rgba(29, 155, 240, 0.03), transparent);
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .timeline {
+    list-style: none;
+    padding: 0;
+    max-width: 720px;
+    margin: 0 auto;
+    position: relative;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 11px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: var(--border);
+  }
+
+  .timeline-item {
+    position: relative;
+    padding-left: 2.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .timeline-dot {
+    position: absolute;
+    left: 4px;
+    top: 6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--bg-primary);
+    border: 2px solid var(--border);
+  }
+
+  .timeline-item.is-now .timeline-dot {
+    border-color: var(--accent);
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(29, 155, 240, 0.15);
+  }
+
+  .timeline-date {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent-light);
+    margin-bottom: 0.25rem;
+  }
+
+  .timeline-body h3 {
+    font-size: 1.0625rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .timeline-body p {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  /* ---- Warning ---- */
+  .warning-section {
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .warning-card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2rem;
+    border: 1px solid rgba(255, 99, 71, 0.3);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(255, 99, 71, 0.06), transparent);
+  }
+
+  .warning-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+
+  .warning-icon {
+    font-size: 1.75rem;
+  }
+
+  .warning-card h2 {
+    margin: 0;
+    color: #ff6347;
+  }
+
+  .warning-subhead {
+    font-size: 1rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .warning-list {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  /* ---- Workaround ---- */
+  .workaround-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    max-width: 920px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .checklist {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0;
+  }
+
+  .checklist li {
+    padding: 0.4rem 0 0.4rem 1.5rem;
+    position: relative;
+    color: var(--text-secondary);
+  }
+
+  .checklist li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .workaround-callout {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+  }
+
+  .workaround-callout h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .parity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.9375rem;
+  }
+
+  .parity-list li {
+    padding: 0.375rem 0;
+    color: var(--text-secondary);
+  }
+
+  .parity-list .check {
+    color: #4ade80;
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+
+  .parity-list .x {
+    color: #ff6347;
+    font-weight: 700;
+    margin-right: 0.5rem;
+  }
+
+  /* ---- Notify ---- */
+  .notify-section {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+  }
+
+  .notify-card {
+    max-width: 760px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-primary);
+  }
+
+  .notify-card h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .notify-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .notify-option {
+    display: block;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    text-align: left;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .notify-option:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .notify-option h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+    color: var(--text-primary);
+  }
+
+  .notify-option p {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  /* ---- FAQ ---- */
+  .faq-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    padding-right: 1.5rem;
+    position: relative;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item p {
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  @media (max-width: 768px) {
+    .workaround-grid, .notify-options {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
