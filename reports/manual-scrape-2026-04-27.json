@@ -1,0 +1,45 @@
+{
+  "scrapedAt": "2026-04-27T15:50:00Z",
+  "queries": [
+    "\"x.com/i/chat/group_join\"  (Latest tab)",
+    "\"x.com/i/chat/group_join\" -filter:replies (Latest tab)",
+    "\"chat.x.com\" group (Latest tab)"
+  ],
+  "totalFound": 6,
+  "alreadyInDirectory": [
+    "https://x.com/i/chat/group_join/g2036550380318847402/Ja3L5HR7in",
+    "https://x.com/i/chat/group_join/g1949223600420208852/4U0P90rhuR"
+  ],
+  "newButLowQuality": [
+    {
+      "link": "https://x.com/i/chat/group_join/g2044842355275034713/1Tt5I6pW0Q",
+      "author": "@BisBisP06",
+      "tweetUrl": "https://x.com/BisBisP06/status/2044896574518546767",
+      "reason": "K-pop fandom one-liner, no group description"
+    },
+    {
+      "link": "https://x.com/i/chat/group_join/g2042518184851574838/AHmSPXEc5Y",
+      "author": "@shashaimnida_",
+      "tweetUrl": "https://x.com/shashaimnida_/status/2042623694951116925",
+      "reason": "Reply to K-pop fan account, no topical context"
+    },
+    {
+      "link": "https://x.com/i/chat/group_join/g2040193300259340454/d1T49k1b2p",
+      "author": "@Apple_Dan5158",
+      "tweetUrl": "https://x.com/Apple_Dan5158/status/2040287272344404091",
+      "reason": "Two-word reply 'Aquis ta', no description"
+    },
+    {
+      "link": "https://x.com/i/chat/group_join/g1945666567431495997/7jVDxJtE4Y",
+      "author": "@9GonzaloGodoy5",
+      "tweetUrl": "https://x.com/9GonzaloGodoy5/status/1945668084406292601",
+      "reason": "Bare reply with link, no context"
+    }
+  ],
+  "takeaways": [
+    "X's text search only matches the literal path 'x.com/i/chat/group_join' — keyword combos like 'crypto' or 'DeFi' return tweets that mention crypto AND happen to contain the substring, which yields 0 actual links.",
+    "Most invite tweets are short replies; original-tweet filter (-filter:replies) cuts the pool to almost nothing.",
+    "Best path forward to grow the directory: (1) submission form with light moderation, (2) targeted outreach to XChat-active creators in each category, (3) look for invite QR codes posted as images (different scraper)."
+  ],
+  "decision": "No new groups added in this round — all 4 unseeded candidates fail quality bar."
+}
