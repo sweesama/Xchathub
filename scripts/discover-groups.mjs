@@ -43,7 +43,9 @@ const SEARCH_QUERIES = [
 ];
 
 const PROFILE_DIR = path.resolve(__dirname, '../.playwright-profile');
-const OUTPUT_FILE = path.resolve(__dirname, '../discovered-groups.json');
+const OUTPUT_FILE = process.env.DISCOVERY_OUTPUT
+  ? path.resolve(process.cwd(), process.env.DISCOVERY_OUTPUT)
+  : path.resolve(__dirname, '../discovered-groups.json');
 const GROUPS_FILE = path.resolve(__dirname, '../src/data/groups.ts');
 
 /** 读现有 inviteUrl 集合 */
@@ -109,17 +111,56 @@ async function main() {
   const existingUrls = readExistingUrls();
   console.log(`已有 ${existingUrls.size} 条群组在 groups.ts，将自动过滤重复`);
 
-  if (!fs.existsSync(PROFILE_DIR)) {
-    console.error(`✗ Profile 目录不存在：${PROFILE_DIR}`);
-    console.error('  请先在 Playwright MCP 模式下登录 X 一次');
-    process.exit(1);
-  }
+  // CI 模式：用 env 注入 cookie；本地模式：用 persistent profile
+  const useCookieAuth = !!process.env.X_AUTH_TOKEN;
+  const isHeadless = process.env.HEADLESS === '1' || useCookieAuth;
+  let browser;
+  let page;
 
-  const browser = await chromium.launchPersistentContext(PROFILE_DIR, {
-    headless: false,
-    viewport: { width: 1280, height: 800 },
-  });
-  const page = browser.pages()[0] || await browser.newPage();
+  if (useCookieAuth) {
+    console.log('▶ CI 模式：使用 X_AUTH_TOKEN / X_CT0 注入 cookie');
+    browser = await chromium.launch({ headless: true });
+    const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+    await ctx.addCookies([
+      {
+        name: 'auth_token',
+        value: process.env.X_AUTH_TOKEN,
+        domain: '.x.com',
+        path: '/',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Lax',
+      },
+      {
+        name: 'ct0',
+        value: process.env.X_CT0 || '',
+        domain: '.x.com',
+        path: '/',
+        secure: true,
+        sameSite: 'Lax',
+      },
+    ]);
+    page = await ctx.newPage();
+    // 把 browser.close 指向 ctx 关闭
+    browser.close = (() => {
+      const orig = browser.close.bind(browser);
+      return async () => {
+        await ctx.close().catch(() => {});
+        return orig();
+      };
+    })();
+  } else {
+    if (!fs.existsSync(PROFILE_DIR)) {
+      console.error(`✗ Profile 目录不存在：${PROFILE_DIR}`);
+      console.error('  请先在 Playwright MCP 模式下登录 X 一次');
+      process.exit(1);
+    }
+    browser = await chromium.launchPersistentContext(PROFILE_DIR, {
+      headless: isHeadless,
+      viewport: { width: 1280, height: 800 },
+    });
+    page = browser.pages()[0] || await browser.newPage();
+  }
 
   const allFindings = new Map();
 
@@ -143,6 +184,7 @@ async function main() {
   const findings = Array.from(allFindings.values());
   console.log(`\n=== 共发现 ${findings.length} 条新链接 ===\n`);
 
+  fs.mkdirSync(path.dirname(OUTPUT_FILE), { recursive: true });
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify({
     discoveredAt: new Date().toISOString(),
     totalFound: findings.length,
