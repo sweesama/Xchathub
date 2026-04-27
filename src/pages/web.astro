@@ -1,0 +1,606 @@
+---
+/**
+ * web.astro — XChat Web 版（chat.x.com）专题页
+ *
+ * 关键事实（源：gHacks 2025-12-18 + Engadget 2026-04-24）：
+ * - chat.x.com 是 X Chat 的独立网页版，2025年12月上线
+ * - 桌面浏览器优化，需要设置 passcode（加密用）
+ * - 与 iOS App 完全同步消息
+ * - 跨平台可用：Windows / macOS / Linux / ChromeOS / Android 浏览器
+ * - 没有原生桌面/Android 应用，浏览器是唯一选择
+ *
+ * SEO 战略：捕获以下高量搜索词：
+ * - "xchat web", "chat.x.com", "xchat desktop"
+ * - "xchat for pc", "xchat for mac", "xchat for windows"
+ * - "xchat on android" (关键！Android 用户的解决方案)
+ * - "xchat without iphone", "xchat on computer", "xchat browser"
+ */
+import Layout from '../layouts/Layout.astro';
+import {
+  XCHAT_APP_STORE_URL,
+  XCHAT_TELEGRAM_CHANNEL_URL,
+} from '../data/xchat';
+
+const CHAT_URL = 'https://chat.x.com';
+
+/* JSON-LD: HowTo schema */
+const howToJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'HowTo',
+  name: 'How to Use XChat on Desktop, Mac, Windows, Linux, or Android Browser',
+  description: 'Step-by-step guide to access XChat on any device via chat.x.com without installing the iOS app.',
+  totalTime: 'PT2M',
+  step: [
+    {
+      '@type': 'HowToStep',
+      position: 1,
+      name: 'Open chat.x.com in any browser',
+      text: 'Visit chat.x.com on Chrome, Safari, Firefox, Edge, or any modern browser on Windows, macOS, Linux, ChromeOS, or Android.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 2,
+      name: 'Sign in with your X account',
+      text: 'Use the same username/email and password as your existing X (Twitter) account. No separate XChat account needed.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 3,
+      name: 'Set your encryption passcode',
+      text: 'On first visit, X prompts you to create a passcode. This unlocks end-to-end encrypted chats and is stored only on your device.',
+    },
+    {
+      '@type': 'HowToStep',
+      position: 4,
+      name: 'Start messaging',
+      text: 'Your existing chats sync immediately. Messages from the iOS XChat app appear here in real time.',
+    },
+  ],
+};
+
+const faqs = [
+  {
+    q: 'Is there an XChat app for Windows, Mac, or Linux?',
+    a: `<strong>No native desktop app.</strong> X has not released a Windows, macOS, or Linux app for XChat. The official solution is the web version at <a href="${CHAT_URL}" target="_blank" rel="noopener noreferrer"><strong>chat.x.com</strong></a> — it works in any modern browser.`,
+  },
+  {
+    q: 'Can I use XChat on Android?',
+    a: `<strong>No native Android app yet.</strong> The XChat iOS app launched April 24, 2026. Android timing has not been announced. <strong>The workaround:</strong> open <a href="${CHAT_URL}" target="_blank" rel="noopener noreferrer">chat.x.com</a> in Chrome on your Android phone. The mobile web experience is functional but optimized for desktop screens.`,
+  },
+  {
+    q: 'Do I need to install anything?',
+    a: 'No. chat.x.com runs entirely in your browser. You can also "install" it as a Progressive Web App (PWA) on Chrome, Edge, or Safari for a more app-like feel — click the install icon in your browser address bar.',
+  },
+  {
+    q: 'Are messages on chat.x.com end-to-end encrypted?',
+    a: 'Yes — when you set a passcode on first login. The passcode is the encryption key for accessing your chats. X claims messages are E2E encrypted, though independent security experts have raised concerns about the implementation. For comparison-grade security, see our <a href="/vs/signal">XChat vs Signal</a> page.',
+  },
+  {
+    q: 'Will chat.x.com sync with the iOS XChat app?',
+    a: 'Yes. Both interfaces share the same backend and your X account, so messages sent on the web instantly appear in the iOS app and vice versa.',
+  },
+  {
+    q: 'Can I make voice or video calls on chat.x.com?',
+    a: 'Voice and video calls are currently <strong>iOS-only</strong>. The web version supports text, file sharing, and group chats but not calls. Calls may come to web in a later update.',
+  },
+  {
+    q: 'Is chat.x.com the same as the X website DMs?',
+    a: 'Functionally yes — they are synchronized. The difference is presentation: chat.x.com is a dedicated, distraction-free interface focused only on messaging, while x.com mixes DMs with the main feed.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.a.replace(/<[^>]+>/g, ''),
+    },
+  })),
+};
+
+const platforms = [
+  { name: 'Windows',   icon: '🪟', supported: true,  note: 'Chrome, Edge, Firefox' },
+  { name: 'macOS',     icon: '🍏', supported: true,  note: 'Safari, Chrome, Firefox' },
+  { name: 'Linux',     icon: '🐧', supported: true,  note: 'Any modern browser' },
+  { name: 'ChromeOS',  icon: '💻', supported: true,  note: 'Chrome (built-in)' },
+  { name: 'Android',   icon: '🤖', supported: 'partial', note: 'Chrome browser (no native app yet)' },
+  { name: 'iPhone/iPad', icon: '📱', supported: 'native', note: 'Native XChat app available' },
+];
+---
+
+<Layout
+  title="XChat Web (chat.x.com) — Use XChat on Desktop, Mac, Windows & Android | XChat Hub"
+  description="No iPhone? No problem. Access XChat on any browser at chat.x.com — works on Windows, Mac, Linux, ChromeOS, and Android. Step-by-step guide, FAQs, and feature comparison vs the iOS app."
+  jsonLd={[howToJsonLd, faqJsonLd]}
+  canonicalPath="/web"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'XChat Web', url: 'https://xchat.directory/web/' },
+  ]}
+>
+  <!-- ==================== HERO ==================== -->
+  <section class="section hero">
+    <div class="container">
+      <span class="eyebrow">XChat on Any Device · No iPhone Required</span>
+      <h1>
+        XChat Works on<br />
+        <span class="text-gradient">Every Browser.</span>
+      </h1>
+      <p class="lead text-secondary prose-body">
+        No iPhone? No Android app? Use <strong><a href={CHAT_URL} target="_blank" rel="noopener noreferrer">chat.x.com</a></strong>
+        in any modern browser to access XChat from Windows, macOS, Linux, ChromeOS, or even your Android phone.
+        Messages sync instantly with the iOS app.
+      </p>
+      <div class="cta-buttons">
+        <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+          </svg>
+          Open chat.x.com
+        </a>
+        <a href="#how-to" class="btn btn-secondary btn-lg">
+          How to Set Up
+        </a>
+      </div>
+      <p class="hero-note text-muted">
+        Works with your existing X account · No download · End-to-end encrypted
+      </p>
+    </div>
+  </section>
+
+  <!-- ==================== PLATFORM GRID ==================== -->
+  <section class="section platform-section">
+    <div class="container">
+      <h2 class="section-title">Which Platforms Can Use XChat?</h2>
+      <div class="platform-grid">
+        {platforms.map((p) => (
+          <article class={`platform-card platform-${p.supported === true ? 'yes' : p.supported === 'native' ? 'native' : 'partial'}`}>
+            <span class="platform-icon" aria-hidden="true">{p.icon}</span>
+            <h3>{p.name}</h3>
+            <p class="platform-status">
+              {p.supported === true && '✓ Web (chat.x.com)'}
+              {p.supported === 'native' && '✓ Native app + Web'}
+              {p.supported === 'partial' && '◐ Web only'}
+            </p>
+            <p class="text-secondary platform-note">{p.note}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== HOW TO ==================== -->
+  <section class="section how-to-section" id="how-to">
+    <div class="container">
+      <h2 class="section-title">Set Up XChat Web in 4 Steps</h2>
+      <div class="steps">
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">1</div>
+          <div class="step-body">
+            <h3>Open chat.x.com</h3>
+            <p class="text-secondary">
+              Go to <a href={CHAT_URL} target="_blank" rel="noopener noreferrer"><strong>chat.x.com</strong></a>
+              in Chrome, Safari, Firefox, Edge, or any modern browser.
+              Works on <strong>Windows, macOS, Linux, ChromeOS, and Android</strong>.
+            </p>
+          </div>
+        </article>
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">2</div>
+          <div class="step-body">
+            <h3>Sign in with your X account</h3>
+            <p class="text-secondary">
+              Use the same login as your X (formerly Twitter) account.
+              No separate XChat account needed.
+              Two-factor authentication is supported.
+            </p>
+          </div>
+        </article>
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">3</div>
+          <div class="step-body">
+            <h3>Set an encryption passcode</h3>
+            <p class="text-secondary">
+              On first visit, X prompts you to create a passcode. This unlocks your
+              <strong>end-to-end encrypted chats</strong> and is stored only on your device —
+              not on X's servers. Don't lose it: there is no recovery.
+            </p>
+          </div>
+        </article>
+        <article class="step-card">
+          <div class="step-num" aria-hidden="true">4</div>
+          <div class="step-body">
+            <h3>Start messaging</h3>
+            <p class="text-secondary">
+              All your existing chats sync immediately. Messages sent from the iOS app
+              appear here in real time, and vice versa.
+              You can also <strong>create groups, share invite links</strong>, and edit/delete messages.
+            </p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FEATURE PARITY ==================== -->
+  <section class="section parity-section">
+    <div class="container">
+      <h2 class="section-title">Web vs iOS App — Feature Comparison</h2>
+      <div class="parity-table-wrap">
+        <table class="parity-table">
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>chat.x.com (Web)</th>
+              <th>XChat iOS App</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Text messaging</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>End-to-end encryption</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Group chats</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Group invite links</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>File sharing</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Edit / delete messages</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Disappearing messages</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>Voice calls</td><td>❌ No</td><td>✅ Yes</td></tr>
+            <tr><td>Video calls</td><td>❌ No</td><td>✅ Yes</td></tr>
+            <tr><td>Push notifications</td><td>◐ Browser-dependent</td><td>✅ Native</td></tr>
+            <tr><td>Screenshot blocking</td><td>❌ Not supported</td><td>✅ Yes</td></tr>
+            <tr><td>Available platforms</td><td>Win / Mac / Linux / Android / ChromeOS</td><td>iPhone / iPad only</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== ANDROID CALLOUT ==================== -->
+  <section class="section android-section">
+    <div class="container">
+      <div class="callout">
+        <h2>Android Users: This Is Your Workaround</h2>
+        <p class="text-secondary prose-body">
+          XChat does not have a native Android app yet. While you wait, <strong>chat.x.com works on Android Chrome</strong>.
+          The interface is desktop-optimized, so it's not ideal on small phones, but every messaging feature works.
+          For voice and video calls, you'll need to wait for the Android app — or borrow an iPhone.
+        </p>
+        <div class="cta-buttons" style="justify-content: center;">
+          <a href="/android" class="btn btn-secondary btn-lg">XChat Android Status</a>
+          <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+            Get Android Release Alerts
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FAQ ==================== -->
+  <section class="section faq-section">
+    <div class="container">
+      <h2 class="section-title">Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqs.map((f) => (
+          <details class="faq-item">
+            <summary>{f.q}</summary>
+            <p class="text-secondary" set:html={f.a} />
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FINAL CTA ==================== -->
+  <section class="section final-section">
+    <div class="container">
+      <div class="final-card">
+        <h2>Skip the App Store. Just Open a Browser.</h2>
+        <p class="text-secondary prose-body">
+          chat.x.com is the fastest way to try XChat — no install, no waitlist, works on every device you already own.
+        </p>
+        <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
+          <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            Open chat.x.com →
+          </a>
+          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+            Or Get the iOS App
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  /* ---- Hero ---- */
+  .hero {
+    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .hero h1 {
+    max-width: 720px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .lead {
+    font-size: 1.125rem;
+    max-width: 660px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .hero-note {
+    margin-top: 1rem;
+    font-size: 0.8125rem;
+  }
+
+  /* ---- Platform Grid ---- */
+  .platform-section {
+    padding-top: 3rem;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .platform-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  .platform-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .platform-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .platform-yes { border-color: rgba(29, 155, 240, 0.25); }
+  .platform-native {
+    border-color: rgba(29, 155, 240, 0.4);
+    background: linear-gradient(135deg, rgba(29, 155, 240, 0.08), transparent);
+  }
+  .platform-partial {
+    border-color: rgba(255, 165, 0, 0.25);
+    background: rgba(255, 165, 0, 0.03);
+  }
+
+  .platform-icon {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .platform-card h3 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .platform-status {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--accent-light);
+    margin-bottom: 0.375rem;
+  }
+
+  .platform-partial .platform-status {
+    color: orange;
+  }
+
+  .platform-note {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  /* ---- How To Steps ---- */
+  .how-to-section {
+    background: linear-gradient(180deg, transparent, rgba(29, 155, 240, 0.03), transparent);
+  }
+
+  .steps {
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .step-card {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  .step-body h3 {
+    font-size: 1.0625rem;
+    margin-bottom: 0.5rem;
+    margin-top: 0.375rem;
+  }
+
+  .step-body p {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+  }
+
+  /* ---- Parity Table ---- */
+  .parity-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .parity-table-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+
+  .parity-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+
+  .parity-table th, .parity-table td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .parity-table th {
+    background: var(--bg-card);
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+  }
+
+  .parity-table tr:hover {
+    background: rgba(29, 155, 240, 0.03);
+  }
+
+  /* ---- Android Callout ---- */
+  .android-section {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+  }
+
+  .callout {
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 2rem;
+    border: 1px solid rgba(255, 165, 0, 0.25);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, rgba(255, 165, 0, 0.05), rgba(29, 155, 240, 0.03));
+  }
+
+  .callout h2 {
+    margin-bottom: 0.75rem;
+  }
+
+  .callout p {
+    margin-bottom: 1.25rem;
+  }
+
+  /* ---- FAQ ---- */
+  .faq-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list {
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    list-style: none;
+    padding-right: 1.5rem;
+    position: relative;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--accent);
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item p {
+    margin-top: 0.75rem;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+
+  /* ---- Final CTA ---- */
+  .final-section {
+    padding-top: 2rem;
+  }
+
+  .final-card {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 2.5rem;
+    text-align: center;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.08), transparent 60%),
+      var(--bg-card);
+  }
+
+  .final-card h2 {
+    margin-bottom: 0.75rem;
+  }
+</style>

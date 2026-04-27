@@ -14,6 +14,7 @@ const pages = [
   { path: '/launch-countdown/', priority: 0.9, changefreq: 'daily' },
   { path: '/communities-shutdown/', priority: 0.9, changefreq: 'daily' },
   { path: '/how-to-create-group-link/', priority: 0.9, changefreq: 'weekly' },
+  { path: '/web/', priority: 0.9, changefreq: 'weekly' },
   { path: '/vs/whatsapp/', priority: 0.75, changefreq: 'monthly' },
   { path: '/vs/signal/', priority: 0.75, changefreq: 'monthly' },
   { path: '/vs/telegram/', priority: 0.75, changefreq: 'monthly' },
