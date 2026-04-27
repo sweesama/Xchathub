@@ -167,32 +167,62 @@ const pageJsonLd = {
       </div>
       <div class="resources-grid">
         <a href="/android" class="resource-card resource-hot">
-          <span class="resource-emoji" aria-hidden="true">🤖</span>
+          <span class="resource-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18"/>
+            </svg>
+          </span>
           <h3>I'm on Android</h3>
           <p class="text-secondary">No native app yet. Use chat.x.com or wait — here's the live status tracker and how to avoid fake APKs.</p>
         </a>
         <a href="/web" class="resource-card">
-          <span class="resource-emoji" aria-hidden="true">🌐</span>
+          <span class="resource-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+            </svg>
+          </span>
           <h3>I want XChat on Mac/PC</h3>
           <p class="text-secondary">No desktop app exists. chat.x.com works on Windows, Mac, Linux, ChromeOS, and Android browsers.</p>
         </a>
         <a href="/how-to-create-group-link" class="resource-card">
-          <span class="resource-emoji" aria-hidden="true">🔗</span>
+          <span class="resource-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+            </svg>
+          </span>
           <h3>I want to start a group</h3>
           <p class="text-secondary">6-step tutorial to create a public group invite link and share it on X, Discord, or anywhere.</p>
         </a>
         <a href="/groups" class="resource-card">
-          <span class="resource-emoji" aria-hidden="true">🔍</span>
+          <span class="resource-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </span>
           <h3>I want to find groups</h3>
           <p class="text-secondary">Browse the community-powered XChat group directory by category: crypto, tech, AI, news, sports, and more.</p>
         </a>
         <a href="/communities-shutdown" class="resource-card resource-urgent">
-          <span class="resource-emoji" aria-hidden="true">⚠️</span>
+          <span class="resource-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </span>
           <h3>I run an X Community</h3>
           <p class="text-secondary">X Communities closes May 30, 2026. Migrate your members to XChat groups before the deadline.</p>
         </a>
         <a href="/list-your-group" class="resource-card">
-          <span class="resource-emoji" aria-hidden="true">📢</span>
+          <span class="resource-icon" aria-hidden="true">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="3 11 22 2 13 21 11 13 3 11"/>
+            </svg>
+          </span>
           <h3>I want to promote my group</h3>
           <p class="text-secondary">List your XChat group on this directory — free or featured tier with pinned placement.</p>
         </a>
@@ -512,11 +542,36 @@ const pageJsonLd = {
     box-shadow: 0 10px 30px -15px rgba(29, 155, 240, 0.3);
   }
 
-  .resource-emoji {
-    font-size: 1.75rem;
-    display: block;
-    margin-bottom: 0.5rem;
-    line-height: 1;
+  .resource-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+  }
+
+  .resource-card:hover .resource-icon {
+    color: var(--accent);
+    background: rgba(29, 155, 240, 0.08);
+    border-color: rgba(29, 155, 240, 0.3);
+  }
+
+  .resource-hot .resource-icon {
+    color: var(--accent);
+    background: rgba(29, 155, 240, 0.08);
+    border-color: rgba(29, 155, 240, 0.3);
+  }
+
+  .resource-urgent .resource-icon {
+    color: #ff9966;
+    background: rgba(255, 153, 102, 0.08);
+    border-color: rgba(255, 153, 102, 0.3);
   }
 
   .resource-card h3 {

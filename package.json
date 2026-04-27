@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "images": "node scripts/build-images.mjs",
     "llms": "node scripts/build-llms.mjs",
-    "check:appstore": "node scripts/check-app-store.mjs"
+    "check:appstore": "node scripts/check-app-store.mjs",
+    "group:add": "node scripts/add-group.mjs"
   },
   "dependencies": {
     "@astrojs/partytown": "^2.1.7",
