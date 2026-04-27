@@ -49,6 +49,13 @@ svgToPng(
   1200,
 );
 
+// 1c) Guide 长文专用 OG 卡（what-is-xchat / how-to-create-group-link 等）
+svgToPng(
+  join(PUBLIC, 'og-guide.svg'),
+  join(PUBLIC, 'og-guide.png'),
+  1200,
+);
+
 // 2) PWA 图标（从 favicon.svg 生成）
 svgToPng(join(PUBLIC, 'favicon.svg'), join(PUBLIC, 'icon-192.png'), 192);
 svgToPng(join(PUBLIC, 'favicon.svg'), join(PUBLIC, 'icon-512.png'), 512);
