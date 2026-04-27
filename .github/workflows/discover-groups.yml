@@ -1,10 +1,10 @@
 name: Discover XChat Groups
 
-# 定时任务：每周一 00:00 UTC 跑一次，抓 X 上公开的 XChat 群邀请链接
+# 定时任务：每月 1 号 00:00 UTC 跑一次（X 搜索产出低，月频足够）
 # 也可以手动触发 (workflow_dispatch)
 on:
   schedule:
-    - cron: '0 0 * * 1'
+    - cron: '0 0 1 * *'
   workflow_dispatch:
 
 jobs:
@@ -38,22 +38,29 @@ jobs:
           DISCOVERY_OUTPUT: reports/discovered-groups.json
         run: node scripts/discover-groups.mjs
 
-      - name: Show findings
-        if: always()
+      - name: Check findings
+        id: findings
         run: |
-          if [ -f reports/discovered-groups.json ]; then
-            echo "=== Discovered groups ==="
-            head -c 5000 reports/discovered-groups.json
-          else
+          if [ ! -f reports/discovered-groups.json ]; then
+            echo "has_new=false" >> $GITHUB_OUTPUT
             echo "No report produced"
+            exit 0
+          fi
+          COUNT=$(node -e "console.log(JSON.parse(require('fs').readFileSync('reports/discovered-groups.json','utf8')).totalFound || 0)")
+          echo "Found $COUNT new candidate links"
+          head -c 3000 reports/discovered-groups.json
+          if [ "$COUNT" -gt 0 ]; then
+            echo "has_new=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_new=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Create Pull Request
-        if: success()
+        if: steps.findings.outputs.has_new == 'true'
         uses: peter-evans/create-pull-request@v6
         with:
-          commit-message: 'chore: weekly group discovery report'
-          title: '[auto] Weekly XChat group discovery'
+          commit-message: 'chore: monthly group discovery report'
+          title: '[auto] Monthly XChat group discovery'
           body: |
             ## Automated group discovery report
 

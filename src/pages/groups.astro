@@ -9,6 +9,7 @@ import {
   getGroupListingTier,
 } from '../data/groups';
 import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
+import CategoryIcon from '../components/CategoryIcon.astro';
 
 const groups = SORTED_GROUP_DIRECTORY;
 
@@ -162,7 +163,7 @@ const groupsJsonLd = {
       <div class="cat-grid">
         {GROUP_CATEGORY_META.map((cat) => (
           <a href={`/groups/${cat.slug}/`} class="cat-card">
-            <span class="cat-emoji" aria-hidden="true">{cat.emoji}</span>
+            <span class="cat-icon" aria-hidden="true"><CategoryIcon slug={cat.slug} size={28} /></span>
             <h3>{cat.label}</h3>
             <p class="text-secondary">{cat.intro.split('.')[0]}.</p>
           </a>
@@ -452,10 +453,16 @@ const groupsJsonLd = {
     transform: translateY(-2px);
   }
 
-  .cat-emoji {
-    font-size: 1.75rem;
-    display: block;
-    margin-bottom: 0.375rem;
+  .cat-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 0.5rem;
+    border-radius: 10px;
+    background: rgba(29, 155, 240, 0.12);
+    color: var(--accent);
     line-height: 1;
   }
 
