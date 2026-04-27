@@ -34,6 +34,7 @@ build-log.txt
 
 # Generated PNGs (these are re-created by prebuild hook from SVG sources)
 public/og-image.png
+public/og-groups.png
 public/icon-192.png
 public/icon-512.png
 public/apple-touch-icon.png

@@ -10,6 +10,10 @@ interface Props {
   jsonLd?: Record<string, any>;
   canonicalPath?: string;
   breadcrumbs?: { name: string; url: string }[];
+  /** 主动指定本页 OG 卡路径（以 / 开头，不带域名），默认 /og-image.png */
+  ogImage?: string;
+  /** OG 卡 alt，默认主仓库 alt */
+  ogImageAlt?: string;
 }
 
 const {
@@ -18,6 +22,8 @@ const {
   jsonLd,
   canonicalPath = '',
   breadcrumbs = [],
+  ogImage = '/og-image.png',
+  ogImageAlt = 'XChat Hub — Public XChat groups directory & launch tracker',
 } = Astro.props;
 
 const breadcrumbSchema = breadcrumbs.length > 0 ? {
@@ -90,16 +96,17 @@ const orgSchema = {
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonicalUrl} />
   <meta property="og:site_name" content="XChat Hub" />
-  <meta property="og:image" content={`${siteUrl}/og-image.png`} />
+  <meta property="og:image" content={`${siteUrl}${ogImage}`} />
   <meta property="og:image:type" content="image/png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="XChat Hub — Unofficial community resource for XChat users" />
+  <meta property="og:image:alt" content={ogImageAlt} />
 
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={`${siteUrl}/og-image.png`} />
+  <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
+  <meta name="twitter:image:alt" content={ogImageAlt} />
 
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 

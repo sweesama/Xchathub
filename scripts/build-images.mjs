@@ -42,6 +42,13 @@ svgToPng(
   1200,
 );
 
+// 1b) Groups 目录专用 OG 卡
+svgToPng(
+  join(PUBLIC, 'og-groups.svg'),
+  join(PUBLIC, 'og-groups.png'),
+  1200,
+);
+
 // 2) PWA 图标（从 favicon.svg 生成）
 svgToPng(join(PUBLIC, 'favicon.svg'), join(PUBLIC, 'icon-192.png'), 192);
 svgToPng(join(PUBLIC, 'favicon.svg'), join(PUBLIC, 'icon-512.png'), 512);
