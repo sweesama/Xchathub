@@ -1,0 +1,515 @@
+---
+/**
+ * what-is-xchat.astro — XChat 完整科普长文
+ *
+ * SEO 战略：捕获最大量级的 top-of-funnel 信息检索
+ *   "what is xchat", "xchat app", "elon musk messenger", "xchat encrypted",
+ *   "xchat by x", "xchat ios", "xchat explained"
+ *
+ * 内部链接策略：作为入口枢纽，把用户分发到 /groups, /android, /web,
+ * /vs/whatsapp, /how-to-create-group-link, /list-your-group
+ */
+import Layout from '../layouts/Layout.astro';
+import {
+  XCHAT_APP_STORE_URL,
+  XCHAT_GROUP_LIMIT,
+  XCHAT_LAUNCH_DISPLAY,
+  XCHAT_TELEGRAM_CHANNEL_URL,
+} from '../data/xchat';
+
+const datePublished = '2026-04-25';
+const dateModified = '2026-04-27';
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'What Is XChat? The Complete Guide to Elon Musk\'s Encrypted Messenger',
+  description:
+    'XChat is X Corp\'s end-to-end encrypted messaging app, launched April 24, 2026. Learn what it does, how it differs from WhatsApp and Signal, who can use it, and how to join groups.',
+  author: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
+  publisher: {
+    '@type': 'Organization',
+    name: 'XChat Hub',
+    url: 'https://xchat.directory',
+  },
+  datePublished,
+  dateModified,
+  mainEntityOfPage: 'https://xchat.directory/what-is-xchat/',
+  image: 'https://xchat.directory/og-image.png',
+};
+
+const faqs = [
+  {
+    q: 'Is XChat free to use?',
+    a: 'Yes. XChat is a free download on the Apple App Store and there are no per-message fees. Some features such as paid-subscriber badges depend on having an X Premium subscription.',
+  },
+  {
+    q: 'Is XChat the same as Twitter DMs?',
+    a: 'No. XChat is a separate, dedicated app that replaces and extends the old Twitter/X Direct Messages experience with end-to-end encryption, voice notes, and public group invite links. Existing X DMs are accessible inside XChat after sign-in.',
+  },
+  {
+    q: 'Is XChat available on Android?',
+    a: 'No. As of the launch on April 24, 2026 there is no official Android app, no APK, and no announced timeline. Any download claiming to be "XChat for Android" outside the Apple App Store is unsafe. <a href="/android">See our Android tracker</a> for the latest status.',
+  },
+  {
+    q: 'Can I use XChat without an X account?',
+    a: 'No. An X (formerly Twitter) account is required to sign in. XChat reuses your existing X identity, blocks list, and contact graph.',
+  },
+  {
+    q: 'How is XChat encrypted?',
+    a: 'XChat uses end-to-end encryption (E2E) for one-on-one and group messages, meaning the messages are encrypted on your device and only the intended recipients can decrypt them. The exact protocol has not been publicly audited yet.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') },
+  })),
+};
+---
+
+<Layout
+  title="What Is XChat? Elon Musk's End-to-End Encrypted Messenger Explained"
+  description="XChat is X Corp's E2E encrypted messaging app, launched April 24, 2026. Learn what it does, who can use it, and how it compares to WhatsApp, Signal, and Telegram."
+  jsonLd={articleJsonLd}
+  canonicalPath="/what-is-xchat"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'What Is XChat?', url: 'https://xchat.directory/what-is-xchat/' },
+  ]}
+>
+  <article>
+    <!-- HERO -->
+    <section class="section hero">
+      <div class="container">
+        <span class="eyebrow">Guide · Updated {dateModified}</span>
+        <h1>What Is XChat? The Complete Guide to Elon Musk's Encrypted Messenger</h1>
+        <p class="lead text-secondary prose-body">
+          XChat is X Corp's standalone end-to-end encrypted messaging app, built to replace
+          Twitter Direct Messages with private, encrypted, group-friendly chat.
+          It launched on iPhone and iPad on <strong>{XCHAT_LAUNCH_DISPLAY}</strong>.
+          Here is exactly what it does, who can use it, and how it compares to WhatsApp,
+          Signal and Telegram.
+        </p>
+        <div class="cta-buttons">
+          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            Download XChat (iOS) →
+          </a>
+          <a href="/groups" class="btn btn-secondary btn-lg">Browse Public Groups</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TL;DR -->
+    <section class="section-sm">
+      <div class="container">
+        <div class="tldr-card">
+          <h2>TL;DR — XChat in 30 seconds</h2>
+          <ul>
+            <li><strong>What:</strong> A standalone, end-to-end encrypted messaging app from X Corp (formerly Twitter).</li>
+            <li><strong>Who built it:</strong> Engineers at X under Elon Musk's direction; not the same team as WhatsApp or Signal.</li>
+            <li><strong>Platforms:</strong> iOS 16+ only at launch (iPhone &amp; iPad). A web version lives at <a href="/web">chat.x.com</a>. <a href="/android">No Android app exists</a>.</li>
+            <li><strong>Group size:</strong> Up to {XCHAT_GROUP_LIMIT} members at launch, expanding toward 1,000 members per group.</li>
+            <li><strong>Account:</strong> Requires an existing X (Twitter) account.</li>
+            <li><strong>Cost:</strong> Free. No ads inside the messenger.</li>
+            <li><strong>Headline features:</strong> E2E encryption, public group invite links, voice notes, screenshot blocking with notifications, paid-subscriber badges.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- TOC -->
+    <section class="section-sm">
+      <div class="container">
+        <nav class="toc" aria-label="Table of contents">
+          <strong>On this page</strong>
+          <ol>
+            <li><a href="#origins">Where XChat came from</a></li>
+            <li><a href="#features">What XChat actually does</a></li>
+            <li><a href="#platforms">Platforms &amp; how to install</a></li>
+            <li><a href="#groups">Public groups and invite links</a></li>
+            <li><a href="#vs">XChat vs WhatsApp, Signal, Telegram</a></li>
+            <li><a href="#privacy">Privacy &amp; encryption notes</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ol>
+        </nav>
+      </div>
+    </section>
+
+    <!-- ORIGINS -->
+    <section class="section-sm content-section" id="origins">
+      <div class="container">
+        <h2>Where XChat Came From</h2>
+        <p class="prose-body text-secondary">
+          XChat was first teased by Elon Musk in mid-2024 as part of X's broader move to
+          become an "everything app". The product was previewed under the codename
+          <em>XChat</em> in late 2025, opened iOS pre-orders in early April 2026, and went
+          generally available on <strong>{XCHAT_LAUNCH_DISPLAY}</strong>.
+        </p>
+        <p class="prose-body text-secondary">
+          XChat replaces the legacy Twitter/X DM experience. After sign-in, all of your
+          existing direct-message threads carry over and gain encryption, while new
+          features like voice notes and public group links sit on top.
+        </p>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="section-sm content-section" id="features">
+      <div class="container">
+        <h2>What XChat Actually Does</h2>
+        <ul class="feature-list">
+          <li><strong>End-to-end encrypted DMs &amp; group chats</strong> — messages are encrypted on your device; not even X can read them in transit.</li>
+          <li><strong>Public group invite links</strong> — group admins can flip a toggle to generate a sharable URL. <a href="/how-to-create-group-link">Step-by-step tutorial</a>.</li>
+          <li><strong>Group capacity {XCHAT_GROUP_LIMIT} → 1,000 members</strong> — currently ramped to {XCHAT_GROUP_LIMIT}, with X publicly committing to expand.</li>
+          <li><strong>Voice notes</strong> — record and send short audio clips inside any chat.</li>
+          <li><strong>Screenshot blocking with notifications</strong> — when someone screenshots a sensitive thread, the other side is informed.</li>
+          <li><strong>Paid-subscriber badges</strong> — X Premium users carry their badge into XChat groups, useful for verifying admins.</li>
+          <li><strong>Disappearing messages and video calls</strong> — both supported in 1:1 and group threads.</li>
+          <li><strong>Bring your X identity</strong> — your handle, profile photo, blocks and mutes carry over automatically.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- PLATFORMS -->
+    <section class="section-sm content-section" id="platforms">
+      <div class="container">
+        <h2>Platforms &amp; How to Install XChat</h2>
+        <p class="prose-body text-secondary">
+          XChat is currently available on:
+        </p>
+        <ul class="feature-list">
+          <li><strong>iPhone &amp; iPad</strong> — iOS 16+ via the <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer">Apple App Store</a>. Free download, ~179 MB.</li>
+          <li><strong>Web (any device)</strong> — <a href="/web">chat.x.com</a> in any modern browser, including Android phones. Sign in with your X account.</li>
+          <li><strong>Android</strong> — <a href="/android">no native app, no APK, no timeline</a>. Use the web version above as a fallback.</li>
+          <li><strong>Desktop</strong> — no native macOS/Windows app. Web version works.</li>
+        </ul>
+        <div class="callout callout-warning">
+          <strong>Warning:</strong> Any "XChat APK" or "XChat for Android" download outside the official channels is unsafe. There is no legitimate Android build as of {dateModified}.
+        </div>
+      </div>
+    </section>
+
+    <!-- GROUPS -->
+    <section class="section-sm content-section" id="groups">
+      <div class="container">
+        <h2>Public Groups and Invite Links</h2>
+        <p class="prose-body text-secondary">
+          The single biggest practical change versus old Twitter DMs is <strong>public
+          group invite links</strong>. Any admin can generate a URL that lets anyone with
+          an X account request to join. This is the building block for communities,
+          fan groups, trading rooms, dev circles, study chats, and more.
+        </p>
+        <ul class="feature-list">
+          <li><a href="/how-to-create-group-link">How to create an XChat group invite link</a> — full 6-step tutorial for group owners.</li>
+          <li><a href="/groups">Browse the public XChat groups directory</a> — community-curated, sorted by category and activity.</li>
+          <li><a href="/list-your-group">List your group for free</a> — submission is reviewed within 24 hours.</li>
+          <li><a href="/communities-shutdown">Migrating from X Communities</a> — Communities are being deprecated; XChat groups are the replacement path.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- VS -->
+    <section class="section-sm content-section" id="vs">
+      <div class="container">
+        <h2>XChat vs WhatsApp, Signal, and Telegram</h2>
+        <p class="prose-body text-secondary">
+          The short version: XChat trades cross-platform reach for tight integration with
+          your existing X social graph. The dedicated comparison pages below break down
+          each rival side by side.
+        </p>
+        <div class="vs-grid">
+          <a href="/vs/whatsapp" class="vs-card">
+            <h3>XChat vs WhatsApp →</h3>
+            <p class="text-secondary">Encryption parity, but XChat skips phone numbers and Meta entirely.</p>
+          </a>
+          <a href="/vs/signal" class="vs-card">
+            <h3>XChat vs Signal →</h3>
+            <p class="text-secondary">Signal still leads on auditability; XChat wins on social-graph onboarding.</p>
+          </a>
+          <a href="/vs/telegram" class="vs-card">
+            <h3>XChat vs Telegram →</h3>
+            <p class="text-secondary">XChat is encrypted by default; Telegram keeps cloud chats unencrypted.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRIVACY -->
+    <section class="section-sm content-section" id="privacy">
+      <div class="container">
+        <h2>Privacy and Encryption Notes</h2>
+        <p class="prose-body text-secondary">
+          XChat applies end-to-end encryption to one-on-one and group messages. The
+          encryption protocol has not yet been independently audited. If your threat
+          model requires a peer-reviewed protocol, Signal remains the gold standard.
+        </p>
+        <p class="prose-body text-secondary">
+          XChat ties identity to your X account. That account itself is governed by
+          X's standard data practices, which are separate from message contents.
+          We recommend reviewing your X privacy settings (blocks, muted accounts,
+          two-factor authentication) before using XChat with anyone you do not already
+          interact with on the timeline.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq-section" id="faq">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          {faqs.map((f) => (
+            <details class="faq-item">
+              <summary>{f.q}</summary>
+              <p class="text-secondary" set:html={f.a} />
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section related-section">
+      <div class="container">
+        <h2 class="section-title">Next Steps</h2>
+        <div class="related-grid">
+          <a href="/groups" class="related-card">
+            <h3>Browse XChat Groups Directory →</h3>
+            <p class="text-secondary">Crypto, tech, AI, sports, news — find a group worth joining today.</p>
+          </a>
+          <a href="/how-to-create-group-link" class="related-card">
+            <h3>Create a Group Invite Link →</h3>
+            <p class="text-secondary">Six steps from new group to a sharable public URL.</p>
+          </a>
+          <a href="/web" class="related-card">
+            <h3>XChat on the Web →</h3>
+            <p class="text-secondary">Use chat.x.com on Android, Windows or any browser.</p>
+          </a>
+          <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="related-card">
+            <h3>Get Updates on Telegram →</h3>
+            <p class="text-secondary">Every new feature, every group, every Android rumour — pushed when it happens.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .hero h1 {
+    max-width: 820px;
+    margin: 0 auto 1.25rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .lead {
+    font-size: 1.0625rem;
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .tldr-card,
+  .toc {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .tldr-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .tldr-card ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+  }
+
+  .tldr-card li + li {
+    margin-top: 0.375rem;
+  }
+
+  .toc strong {
+    display: block;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .toc ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.9;
+  }
+
+  .toc a {
+    color: var(--text-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .toc a:hover {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .content-section h2 {
+    max-width: 760px;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+  }
+
+  .content-section .prose-body,
+  .content-section .feature-list {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .feature-list li + li {
+    margin-top: 0.5rem;
+  }
+
+  .feature-list a {
+    color: var(--accent-light);
+  }
+
+  .callout {
+    max-width: 760px;
+    margin: 1.5rem auto 0;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+  }
+
+  .callout-warning {
+    background: rgba(245, 197, 24, 0.06);
+    border-color: rgba(245, 197, 24, 0.25);
+    color: #f5c518;
+  }
+
+  .vs-grid {
+    max-width: 1080px;
+    margin: 1.5rem auto 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .vs-card,
+  .related-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .vs-card:hover,
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .vs-card h3,
+  .related-card h3 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .vs-card p,
+  .related-card p {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .faq-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .faq-item p {
+    margin-top: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+</style>

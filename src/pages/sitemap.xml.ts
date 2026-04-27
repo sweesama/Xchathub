@@ -15,6 +15,8 @@ const corePages = [
   { path: '/launch-countdown/', priority: 0.9, changefreq: 'daily' },
   { path: '/communities-shutdown/', priority: 0.9, changefreq: 'daily' },
   { path: '/how-to-create-group-link/', priority: 0.9, changefreq: 'weekly' },
+  { path: '/how-to-join-xchat-group/', priority: 0.9, changefreq: 'weekly' },
+  { path: '/what-is-xchat/', priority: 0.85, changefreq: 'weekly' },
   { path: '/web/', priority: 0.9, changefreq: 'weekly' },
   { path: '/android/', priority: 0.95, changefreq: 'daily' },
   { path: '/vs/whatsapp/', priority: 0.75, changefreq: 'monthly' },

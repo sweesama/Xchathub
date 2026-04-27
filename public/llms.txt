@@ -23,6 +23,8 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 - [Home](https://xchat.directory/): Overview hub linking to all tools — launch status, group directory, web access guide, Android tracker, comparisons.
 - [Groups Directory](https://xchat.directory/groups/): Curated, searchable list of public XChat group invite links submitted by group owners. Browsable by category (Crypto, Tech, AI, News, Sports, Gaming, Business, Entertainment, Education, Local).
 - [Groups by category](https://xchat.directory/groups/crypto/): Each of the 10 categories has its own SEO-optimised landing page with examples of group types, intro copy, and a submission CTA. Pattern: `/groups/{slug}/` for slugs crypto, tech, ai, news, sports, gaming, business, entertainment, education, local.
+- [What Is XChat? (Complete Guide)](https://xchat.directory/what-is-xchat/): Long-form intro — origin story, full feature list, platforms, comparisons, FAQ. Best entry point for users new to XChat.
+- [How to Join an XChat Group](https://xchat.directory/how-to-join-xchat-group/): Step-by-step guide for joining via a public invite link, including troubleshooting (pending requests, expired links, full groups).
 - [Web Access Guide](https://xchat.directory/web/): How to use XChat in a desktop browser via chat.x.com — features supported, limitations vs the iOS app, FAQ.
 - [Android Tracker](https://xchat.directory/android/): Live status of any official XChat Android release plus warnings about fake APKs.
 - [How to Create a Group Link](https://xchat.directory/how-to-create-group-link/): Step-by-step tutorial for group owners to generate and share a public invite URL.
