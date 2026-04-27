@@ -2,10 +2,13 @@
 /**
  * communities-shutdown.astro — X Communities 关停专题页
  *
- * SEO 战略：
- * 捕获 "x communities shutting down", "x communities alternative", "migrate from x communities" 等流量。
- * X 于 2025-2026 年间逐步关闭 Communities 功能，大量社区管理员寻找替代方案。
- * 此页解释为何 XChat 是最佳迁移目标。
+ * 关键事实（源：TechCrunch / Nikita Bier on X / 2026-04-23）：
+ * - X 官布 Communities 功能将于 2026-05-30 关停
+ * - 原因：使用率 < 0.4%，占 80% 的 spam 举报
+ * - 迁移目标：XChat 群聊（当前 350 人，将扩到 500/1000）
+ *
+ * SEO 战略：捕获 "x communities shutting down", "x communities alternative",
+ * "migrate from x communities", "when do x communities close" 等流量。
  */
 import Layout from '../layouts/Layout.astro';
 import {
@@ -15,12 +18,21 @@ import {
   XCHAT_TELEGRAM_CHANNEL_URL,
 } from '../data/xchat';
 
+/* Communities 官方关停时间 */
+const SHUTDOWN_ISO = '2026-05-30T00:00:00Z';
+const SHUTDOWN_DISPLAY = 'May 30, 2026';
+const now = new Date();
+const shutdownDate = new Date(SHUTDOWN_ISO);
+const msLeft = shutdownDate.getTime() - now.getTime();
+const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
+const isShutDown = msLeft <= 0;
+
 /* JSON-LD: Article schema */
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'X Communities is Shutting Down — XChat is the Best Alternative',
-  description: 'X Communities closed in 2025. XChat groups are the natural replacement: encrypted, invite links, no algorithms, and owned by the same company.',
+  headline: `X Communities Shuts Down ${SHUTDOWN_DISPLAY} — Migrate to XChat`,
+  description: `X Communities will close on ${SHUTDOWN_DISPLAY}. XChat groups are the official replacement: encrypted, invite links, no algorithms, and owned by the same company.`,
   author: { '@type': 'Organization', name: 'XChat Hub' },
   publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
   datePublished: '2026-04-24',
@@ -61,8 +73,8 @@ const features = [
 ---
 
 <Layout
-  title="X Communities Shut Down — Best Alternative is XChat | XChat Hub"
-  description="X Communities closed in 2025. XChat is the natural replacement: encrypted groups, invite links, no algorithms, and owned by X Corp. Migrate your community today."
+  title={`X Communities Shutting Down ${SHUTDOWN_DISPLAY} — Migrate to XChat | XChat Hub`}
+  description={`X officially announced Communities will close on ${SHUTDOWN_DISPLAY}. XChat group chats are the replacement — encrypted, invite links, owned by X Corp. Migrate your community before the deadline.`}
   jsonLd={articleJsonLd}
   canonicalPath="/communities-shutdown"
   breadcrumbs={[
@@ -73,22 +85,34 @@ const features = [
   <!-- ==================== HERO ==================== -->
   <section class="section hero">
     <div class="container">
-      <span class="eyebrow">X Communities Alternative</span>
+      <span class="eyebrow">{isShutDown ? 'Communities Closed' : `${daysLeft} Days Until Shutdown`}</span>
       <h1>
-        X Communities is<br />
-        <span class="text-gradient">Shutting Down.</span>
+        X Communities Closes<br />
+        <span class="text-gradient">{SHUTDOWN_DISPLAY}.</span>
       </h1>
       <p class="lead text-secondary prose-body">
-        <strong>XChat is the official replacement.</strong> Built by the same company (X Corp), 
-        designed for private group communication. End-to-end encrypted, invite links, no algorithms — 
-        and it launched {XCHAT_LAUNCH_DISPLAY}.
+        On April 23, 2026, X head of product Nikita Bier announced Communities will be retired on
+        <strong> <time datetime="2026-05-30">{SHUTDOWN_DISPLAY}</time></strong>.
+        Reason: under 0.4% of users were active, but Communities generated 80% of spam reports.
+        <strong>XChat is the official replacement</strong> — encrypted group chats, invite links,
+        no algorithms. Migrate your members before the deadline.
       </p>
+
+      {!isShutDown && (
+        <div class="countdown-strip" aria-label="Days until X Communities shutdown">
+          <div class="count-box">
+            <span class="count-num">{daysLeft}</span>
+            <span class="count-label">Day{daysLeft === 1 ? '' : 's'} left to migrate</span>
+          </div>
+        </div>
+      )}
+
       <div class="cta-buttons">
         <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
           Download XChat Free
         </a>
-        <a href="/groups" class="btn btn-secondary btn-lg">
-          Browse Active Groups
+        <a href="/how-to-create-group-link" class="btn btn-secondary btn-lg">
+          How to Create Group Link
         </a>
       </div>
     </div>
@@ -136,7 +160,7 @@ const features = [
               <li>✅ E2E encrypted</li>
               <li>✅ Voice + video</li>
               <li>✅ Invite + approval</li>
-              <li>✅ <strong>Launching {XCHAT_LAUNCH_DISPLAY}</strong></li>
+              <li>✅ <strong>Live now (since {XCHAT_LAUNCH_DISPLAY})</strong></li>
             </ul>
           </div>
         </div>
@@ -239,6 +263,39 @@ const features = [
     flex-wrap: wrap;
     justify-content: center;
     gap: 0.875rem;
+  }
+
+  /* ---- Countdown Strip ---- */
+  .countdown-strip {
+    display: flex;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+  }
+
+  .count-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 2rem;
+    border: 1px solid rgba(255, 99, 71, 0.35);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, rgba(255, 99, 71, 0.08), rgba(29, 155, 240, 0.04));
+  }
+
+  .count-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #ff6347;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .count-label {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-top: 0.375rem;
   }
 
   /* ---- Two Column ---- */
