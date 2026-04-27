@@ -108,6 +108,12 @@ const collectionJsonLd = {
                   >
                     Open in XChat →
                   </a>
+                  <a
+                    class="owner-removal"
+                    href={`mailto:hello@xchat.directory?subject=${encodeURIComponent(`Remove group: ${group.name}`)}&body=${encodeURIComponent(`I am the owner of "${group.name}" (slug: ${group.slug}) and I want it removed from xchat.directory.\n\nPlease confirm by replying within 24h.\n\n— Sent from xchat.directory`)}`}
+                  >
+                    Owner? Request removal
+                  </a>
                 </article>
               );
             })}
@@ -294,6 +300,24 @@ const collectionJsonLd = {
     font-size: 0.8125rem;
     color: var(--text-muted);
     margin-top: auto;
+  }
+
+  .owner-removal {
+    display: block;
+    margin-top: 0.875rem;
+    padding-top: 0.625rem;
+    border-top: 1px dashed var(--border);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    text-decoration: none;
+    text-align: right;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+  }
+
+  .owner-removal:hover {
+    opacity: 1;
+    color: var(--text-secondary);
   }
 
   /* ---- Empty State ---- */

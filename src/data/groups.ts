@@ -59,7 +59,36 @@ export function getGroupListingBadge(group: GroupDirectoryEntry): string {
 
 // Keep this list empty until real XChat groups can be verified.
 // Once invite links exist, add reviewed entries here.
-export const GROUP_DIRECTORY: GroupDirectoryEntry[] = [];
+export const GROUP_DIRECTORY: GroupDirectoryEntry[] = [
+  {
+    slug: 'griiim-pod-business-podcast',
+    name: 'GRIIIM Pod — Business & Podcast',
+    description: 'Weekly business-focused Spaces and podcast discussion (#griiimpod). Hosted Sunday mornings and evenings by GRIIIMGAMER.',
+    category: 'Business',
+    tags: ['podcast', 'business', 'spaces'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2036550380318847402/Ja3L5HR7in',
+    sourceType: 'community-submitted',
+    sourceUrl: 'https://x.com/GRIIIMGAMER/status/2036560531176259984',
+    verifiedAt: '2026-04-27',
+    listingTier: 'free',
+  },
+  {
+    slug: 'goat-farming-101',
+    name: 'Goat Farming 101',
+    description: 'Learn-to-farm group for goat raising — breeding, feeding, hygiene, and farm management tips from active farmers.',
+    category: 'Education',
+    tags: ['farming', 'goats', 'agriculture', 'livestock'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g1949223600420208852/4U0P90rhuR',
+    sourceType: 'community-submitted',
+    sourceUrl: 'https://x.com/Zeezahgraphix/status/1949837669757800743',
+    verifiedAt: '2026-04-27',
+    listingTier: 'free',
+  },
+];
 
 export const SORTED_GROUP_DIRECTORY = [...GROUP_DIRECTORY].sort((a, b) => {
   const tierDiff = GROUP_LISTING_RANK[getGroupListingTier(a)] - GROUP_LISTING_RANK[getGroupListingTier(b)];

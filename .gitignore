@@ -37,3 +37,9 @@ public/og-image.png
 public/icon-192.png
 public/icon-512.png
 public/apple-touch-icon.png
+
+# Playwright isolated profile (do not commit)
+.playwright-profile/
+
+# Discovery output (auto-generated, review then delete)
+discovered-groups.json
