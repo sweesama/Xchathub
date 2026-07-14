@@ -18,6 +18,7 @@
  * 这是两者最大的安全差异，必须放大说明。
  */
 import Layout from '../../layouts/Layout.astro';
+import AppIcon from '../../components/AppIcon.astro';
 import { getAppBySlug } from '../../data/messagingApps';
 import {
   articleJsonLd,
@@ -136,13 +137,13 @@ const breadcrumbs = [
 
         <div class="hero-vs">
           <div class="vs-side vs-a">
-            <span class="vs-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+            <AppIcon app={signal} class="vs-monogram" />
             <div class="vs-name">{signal.name}</div>
             <div class="vs-score">{signal.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
           <div class="vs-divider"><span>vs</span></div>
           <div class="vs-side vs-b">
-            <span class="vs-monogram" style={`background:${telegram.brandColor}`}>{telegram.monogram}</span>
+            <AppIcon app={telegram} class="vs-monogram" />
             <div class="vs-name">{telegram.name}</div>
             <div class="vs-score">{telegram.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
@@ -204,7 +205,7 @@ const breadcrumbs = [
         <div class="pick-grid">
           <article class="pick-card pick-a">
             <header>
-              <span class="pick-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+              <AppIcon app={signal} class="pick-monogram" />
               <h3>Choose Signal if security is your priority</h3>
             </header>
             <ul>
@@ -219,7 +220,7 @@ const breadcrumbs = [
 
           <article class="pick-card pick-b">
             <header>
-              <span class="pick-monogram" style={`background:${telegram.brandColor}`}>{telegram.monogram}</span>
+              <AppIcon app={telegram} class="pick-monogram" />
               <h3>Choose Telegram if reach and features matter more</h3>
             </header>
             <ul>

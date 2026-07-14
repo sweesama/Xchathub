@@ -14,6 +14,7 @@
  * - 本页是"Signal vs WhatsApp 安全专题深挖"（聚焦 5 个安全维度）
  */
 import Layout from '../../layouts/Layout.astro';
+import AppIcon from '../../components/AppIcon.astro';
 import { getAppBySlug } from '../../data/messagingApps';
 import {
   articleJsonLd,
@@ -132,13 +133,13 @@ const breadcrumbs = [
 
         <div class="hero-vs">
           <div class="vs-side vs-a">
-            <span class="vs-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+            <AppIcon app={signal} class="vs-monogram" />
             <div class="vs-name">{signal.name}</div>
             <div class="vs-score">{signal.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
           <div class="vs-divider"><span>vs</span></div>
           <div class="vs-side vs-b">
-            <span class="vs-monogram" style={`background:${whatsapp.brandColor}`}>{whatsapp.monogram}</span>
+            <AppIcon app={whatsapp} class="vs-monogram" />
             <div class="vs-name">{whatsapp.name}</div>
             <div class="vs-score">{whatsapp.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
@@ -200,7 +201,7 @@ const breadcrumbs = [
         <div class="pick-grid">
           <article class="pick-card pick-a">
             <header>
-              <span class="pick-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+              <AppIcon app={signal} class="pick-monogram" />
               <h3>Choose Signal if security is your priority</h3>
             </header>
             <ul>
@@ -215,7 +216,7 @@ const breadcrumbs = [
 
           <article class="pick-card pick-b">
             <header>
-              <span class="pick-monogram" style={`background:${whatsapp.brandColor}`}>{whatsapp.monogram}</span>
+              <AppIcon app={whatsapp} class="pick-monogram" />
               <h3>Choose WhatsApp if reach matters more than purity</h3>
             </header>
             <ul>

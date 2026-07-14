@@ -21,6 +21,7 @@
  *  - Signal 跨平台、开源、metadata 最小化、群组加密
  */
 import Layout from '../../layouts/Layout.astro';
+import AppIcon from '../../components/AppIcon.astro';
 import { getAppBySlug } from '../../data/messagingApps';
 import {
   articleJsonLd,
@@ -146,7 +147,7 @@ const breadcrumbs = [
 
         <div class="hero-vs">
           <div class="vs-side vs-a">
-            <span class="vs-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+            <AppIcon app={signal} class="vs-monogram" />
             <div class="vs-name">{signal.name}</div>
             <div class="vs-score">{signal.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
@@ -214,7 +215,7 @@ const breadcrumbs = [
         <div class="pick-grid">
           <article class="pick-card pick-a">
             <header>
-              <span class="pick-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+              <AppIcon app={signal} class="pick-monogram" />
               <h3>Choose Signal if security and openness matter</h3>
             </header>
             <ul>

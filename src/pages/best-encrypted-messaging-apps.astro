@@ -13,6 +13,7 @@
  * other small review sites link to as a reference. Updated yearly.
  */
 import Layout from '../layouts/Layout.astro';
+import AppIcon from '../components/AppIcon.astro';
 import {
   getAppsRanked,
   formatPrice,
@@ -131,9 +132,7 @@ const breadcrumbs = [
             <span class="top-pick-badge">{topApp.editorScore.toFixed(1)} / 10</span>
           </div>
           <div class="top-pick-body">
-            <span class="top-pick-monogram" style={`background:${topApp.brandColor}`}>
-              {topApp.monogram}
-            </span>
+            <AppIcon app={topApp} class="top-pick-monogram" />
             <div class="top-pick-meta">
               <h2>{topApp.name}</h2>
               <p class="text-secondary">{topApp.tagline}</p>
@@ -168,7 +167,7 @@ const breadcrumbs = [
             return (
               <li class="rank-item card">
                 <div class="rank-num">{i + 1}</div>
-                <span class="rank-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+                <AppIcon app={app} class="rank-monogram" />
                 <div class="rank-body">
                   <div class="rank-head">
                     <h3>

@@ -12,6 +12,7 @@
  *   5. FAQ
  */
 import Layout from '../layouts/Layout.astro';
+import AppIcon from '../components/AppIcon.astro';
 import {
   XCHAT_ANDROID_STATUS,
   XCHAT_IOS_REQUIREMENT,
@@ -180,7 +181,7 @@ const pageJsonLd = {
         {topFive.map((app, i) => (
           <a href={`/reviews/${app.slug}/`} class="top-row">
             <span class="top-num">{i + 1}</span>
-            <span class="top-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+            <AppIcon app={app} class="top-monogram" />
             <div class="top-meta">
               <h3>{app.name}</h3>
               <p class="text-secondary">{app.tagline}</p>

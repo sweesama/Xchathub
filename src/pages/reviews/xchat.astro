@@ -15,6 +15,7 @@
  * 设计原则：和 Signal 评测页完全一致的结构，方便读者横向对比。
  */
 import Layout from '../../layouts/Layout.astro';
+import AppIcon from '../../components/AppIcon.astro';
 import {
   getAppBySlug,
   formatPrice,
@@ -193,9 +194,7 @@ const breadcrumbs = [
         </nav>
 
         <div class="hero-app">
-          <span class="hero-monogram" style={`background:${app.brandColor}`}>
-            {app.monogram}
-          </span>
+          <AppIcon app={app} class="hero-monogram" />
           <div class="hero-meta">
             <span class="eyebrow">App Review</span>
             <h1>
@@ -522,7 +521,7 @@ const breadcrumbs = [
         <div class="related-grid">
           {otherApps.map((other) => (
             <a href={`/reviews/${other.slug}/`} class="related-card">
-              <span class="related-monogram" style={`background:${other.brandColor}`}>{other.monogram}</span>
+              <AppIcon app={other} class="related-monogram" />
               <h3>{other.name} review</h3>
               <p class="text-secondary">{other.tagline}</p>
               <span class="related-score text-muted">{other.editorScore.toFixed(1)} / 10</span>

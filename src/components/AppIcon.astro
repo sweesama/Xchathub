@@ -1,0 +1,94 @@
+---
+/**
+ * AppIcon.astro — App 图标组件
+ *
+ * 优先级：
+ *   1. 从 app.website URL 提取 domain → 调用 Google Favicon 服务 (sz=128)
+ *   2. 图片加载失败 → 自动 remove <img>，回退到背景色 + monogram
+ *   3. website 字段无效 → 直接显示 monogram
+ *
+ * 使用方法：
+ *   <AppIcon app={app} class="hero-monogram" />
+ *   <AppIcon app={other} class="related-monogram" />
+ *
+ * `class` prop 透传给外层 span，沿用各页面现有的 scoped CSS（尺寸/圆角）
+ */
+
+interface App {
+  name: string;
+  monogram: string;
+  brandColor: string;
+  website: string;
+}
+
+interface Props {
+  app: App;
+  class?: string;
+}
+
+const { app, class: className = '' } = Astro.props;
+
+/**
+ * 从 website URL 提取纯域名（去掉协议、www、path）
+ * 例：https://www.signal.org/en/ → signal.org
+ */
+function getDomain(url: string): string {
+  try {
+    return new URL(url).hostname.replace(/^www\./, '');
+  } catch {
+    return '';
+  }
+}
+
+const domain = getDomain(app.website);
+const faviconUrl = domain
+  ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+  : '';
+---
+
+<span class={`app-icon ${className}`} style={`background:${app.brandColor}`}>
+  {faviconUrl && (
+    <img
+      src={faviconUrl}
+      alt={`${app.name} logo`}
+      loading="lazy"
+      decoding="async"
+      width="128"
+      height="128"
+      onerror="this.remove()"
+    />
+  )}
+  <span class="app-icon-monogram">{app.monogram}</span>
+</span>
+
+<style>
+  /* Container: inline-flex 让 monogram 默认 100% 居中；position+overflow 让 img 绝对定位 */
+  .app-icon {
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* <img> 绝对定位 + 内边距让 logo 不贴边 */
+  .app-icon img {
+    position: absolute;
+    inset: 12%;
+    width: 76%;
+    height: 76%;
+    object-fit: contain;
+    z-index: 1;
+    pointer-events: none;
+  }
+  /* monogram 占满整个图标，img 加载后会被盖住，img 加载失败时显示 */
+  .app-icon-monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-weight: 700;
+    color: white;
+    user-select: none;
+  }
+</style>

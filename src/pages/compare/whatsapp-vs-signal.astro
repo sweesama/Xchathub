@@ -8,6 +8,7 @@
  * 关键事实差异：两边都用 Signal Protocol，但 metadata 策略天差地别
  */
 import Layout from '../../layouts/Layout.astro';
+import AppIcon from '../../components/AppIcon.astro';
 import {
   getAppBySlug,
   formatPlatforms,
@@ -101,13 +102,13 @@ const breadcrumbs = [
 
         <div class="hero-vs">
           <div class="vs-side vs-a">
-            <span class="vs-monogram" style={`background:${a.brandColor}`}>{a.monogram}</span>
+            <AppIcon app={a} class="vs-monogram" />
             <div class="vs-name">{a.name}</div>
             <div class="vs-score">{a.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
           <div class="vs-divider"><span>vs</span></div>
           <div class="vs-side vs-b">
-            <span class="vs-monogram" style={`background:${b.brandColor}`}>{b.monogram}</span>
+            <AppIcon app={b} class="vs-monogram" />
             <div class="vs-name">{b.name}</div>
             <div class="vs-score">{b.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
           </div>
@@ -173,7 +174,7 @@ const breadcrumbs = [
         <div class="pick-grid">
           <article class="pick-card pick-a">
             <header>
-              <span class="pick-monogram" style={`background:${a.brandColor}`}>{a.monogram}</span>
+              <AppIcon app={a} class="pick-monogram" />
               <h3>Choose Signal if…</h3>
             </header>
             <ul>
@@ -188,7 +189,7 @@ const breadcrumbs = [
 
           <article class="pick-card pick-b">
             <header>
-              <span class="pick-monogram" style={`background:${b.brandColor}`}>{b.monogram}</span>
+              <AppIcon app={b} class="pick-monogram" />
               <h3>Stay on WhatsApp if…</h3>
             </header>
             <ul>
