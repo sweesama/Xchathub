@@ -2,23 +2,20 @@
 /**
  * AppIcon.astro — App 图标组件
  *
- * 视觉策略：统一转为「白色剪影 + 品牌色背景」
- *   - 这是 iOS App Store / Google Play 格栅语言，
- *     让不同尺寸/比例的 favicon 在卡片里看起来一致
- *   - Google Favicon 服务的返回可能是长方形 (Signal 含字) 或正方形
- *   - 我们不限定 logo 形状，让 contain 让其完整显示，纯白滤镜让色彩一致
- *   - 加载失败 → fallback 到 monogram（也是白色，视觉一致）
- *
- * 优先级：
- *   1. 从 app.website URL 提取 domain → 调用 Google Favicon 服务 (sz=128)
+ * 策略：
+ *   1. 从 app.website URL 提取 domain → 调用 Google Favicon 服务 (sz=256)
  *   2. 图片加载失败 → 自动 remove <img>，回退到背景色 + monogram
  *   3. website 字段无效 → 直接显示 monogram
+ *
+ * 呈现：
+ *   - 保留 favicon 原色（彩色让用户一眼认出 app）
+ *   - object-fit: contain 让任何比例 (Signal 长方形 logo / Threema 正方形) 完整显示
+ *   - 背景用 app.brandColor 作为「底色」让 logo 在品牌色里 100% 跳出来
+ *   - monogram fallback 与 logo 等大，加粗白色，保证 fallback 也不失效
  *
  * 使用方法：
  *   <AppIcon app={app} class="hero-monogram" />
  *   <AppIcon app={other} class="related-monogram" />
- *
- * `class` prop 透传给外层 span，沿用各页面现有的 scoped CSS（尺寸/圆角）
  */
 
 interface App {
@@ -35,10 +32,6 @@ interface Props {
 
 const { app, class: className = '' } = Astro.props;
 
-/**
- * 从 website URL 提取纯域名（去掉协议、www、path）
- * 例：https://www.signal.org/en/ → signal.org
- */
 function getDomain(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, '');
@@ -49,7 +42,7 @@ function getDomain(url: string): string {
 
 const domain = getDomain(app.website);
 const faviconUrl = domain
-  ? `https://www.google.com/s2/favicons?domain=${domain}&sz=128`
+  ? `https://www.google.com/s2/favicons?domain=${domain}&sz=256`
   : '';
 ---
 
@@ -60,8 +53,6 @@ const faviconUrl = domain
       alt={`${app.name} logo`}
       loading="lazy"
       decoding="async"
-      width="128"
-      height="128"
       onerror="this.remove()"
     />
   )}
@@ -70,7 +61,7 @@ const faviconUrl = domain
 
 <style>
   /* Container: 尊重外层 class 设置的 width/height/border-radius；
-     这里只负责让内容（img/monogram）在内部正确居中 */
+     内部 flex 让 img 与 monogram 均能在容器中完美居中 */
   .app-icon {
     position: relative;
     overflow: hidden;
@@ -80,35 +71,40 @@ const faviconUrl = domain
     flex-shrink: 0;
   }
 
-  /* <img> 绝对定位 + filter 将任何彩色 favicon 转为白色剪影，
-     这样不同比例 / 不同色彩的图标看起来一致 */
+  /* <img>: 去掉 inset（16%）带来的额外 padding，只用 8% 内边距让 logo 不贴边；
+     contain + max-height/max-width 保证长方形 logo 完整而不变形 */
   .app-icon img {
-    position: absolute;
-    inset: 16%;
-    width: 68%;
-    height: 68%;
-    max-width: 68%;
-    max-height: 68%;
+    display: block;
+    width: 84%;
+    height: 84%;
+    max-width: 100%;
+    max-height: 100%;
     object-fit: contain;
-    filter: brightness(0) invert(1);
     z-index: 1;
     pointer-events: none;
     user-select: none;
   }
 
-  /* monogram（fallback 或 letter-only cases）：占满整个容器，
-     白色字 / 加粗 / 居中，让 fallback 看起来和白色 logo 一致 */
+  /* monogram（fallback / 无 website）：占满整个容器，加粗白色。
+     使用 em 单位跟随容器 width 自适应 — 32px 容器上 ~14.4px，88px 上 ~40px */
   .app-icon-monogram {
+    position: absolute;
+    inset: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
     font-weight: 700;
     color: white;
-    font-size: 0.45em;          /* 跟随容器 width 自适应 */
+    font-size: 0.45em;
     line-height: 1;
     letter-spacing: -0.02em;
+    pointer-events: none;
     user-select: none;
+    z-index: 0;
+  }
+  /* img 加载后蒙住 monogram */
+  .app-icon img + .app-icon-monogram,
+  .app-icon img ~ .app-icon-monogram {
+    z-index: 0;
   }
 </style>
