@@ -3,19 +3,19 @@
  * AppIcon.astro — App 图标组件
  *
  * 策略：
- *   1. 从 app.website URL 提取 domain → 调用 Google Favicon 服务 (sz=256)
- *   2. 图片加载失败 → 自动 remove <img>，回退到背景色 + monogram
- *   3. website 字段无效 → 直接显示 monogram
+ *   1. 优先用 simple-icons.org 的 SVG（高质矢量）→ 通过 CSS mask 机制
+ *      把 SVG 当作 alpha 蒙版，再用 brandColor 当作填充色，得到「彩色块 + 白色 logo」
+ *   2. simpleIconsSlug 缺失（briar / xchat 不在库中）→ 回退到 brandColor 块 + 白色 monogram
+ *   3. 不再用 Google Favicon —— 它返回的是各家网站的浏览器 favicon，
+ *      长宽比 / 颜色 / 形状都不可控，导致"size 不一致"
  *
- * 呈现：
- *   - 保留 favicon 原色（彩色让用户一眼认出 app）
- *   - object-fit: contain 让任何比例 (Signal 长方形 logo / Threema 正方形) 完整显示
- *   - 背景用 app.brandColor 作为「底色」让 logo 在品牌色里 100% 跳出来
- *   - monogram fallback 与 logo 等大，加粗白色，保证 fallback 也不失效
+ * 视觉一致性：
+ *   - 同一个尺寸的容器内，logo 永远填到 100%
+ *   - 通过 mask 显示，永远是矢量渲染（任意缩放都清晰）
+ *   - 颜色永远由 brandColor 决定（不会出现 favicon 自带颜色破坏页面色系）
  *
- * 使用方法：
- *   <AppIcon app={app} class="hero-monogram" />
- *   <AppIcon app={other} class="related-monogram" />
+ * 用法：
+ *   <AppIcon app={app} class="top-monogram" />
  */
 
 interface App {
@@ -23,6 +23,7 @@ interface App {
   monogram: string;
   brandColor: string;
   website: string;
+  simpleIconsSlug?: string;
 }
 
 interface Props {
@@ -32,39 +33,52 @@ interface Props {
 
 const { app, class: className = '' } = Astro.props;
 
-function getDomain(url: string): string {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '');
-  } catch {
-    return '';
-  }
-}
-
-const domain = getDomain(app.website);
-const faviconUrl = domain
-  ? `https://www.google.com/s2/favicons?domain=${domain}&sz=256`
+const SIMPLE_ICONS_CDN = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons';
+const iconUrl = app.simpleIconsSlug
+  ? `${SIMPLE_ICONS_CDN}/${app.simpleIconsSlug}.svg`
   : '';
 ---
 
-<span class={`app-icon ${className}`}>
-  {faviconUrl && (
-    <img
-      src={faviconUrl}
-      alt={`${app.name} logo`}
-      loading="lazy"
-      decoding="async"
-      onerror="this.remove()"
-    />
+<span class={`app-icon ${className}`} data-has-svg={iconUrl ? 'true' : 'false'}>
+  {iconUrl && (
+    <span
+      class="app-icon-svg"
+      style={`background-color:${app.brandColor}; --mask:url(${iconUrl});`}
+      role="img"
+      aria-label={`${app.name} logo`}
+    ></span>
   )}
   <span class="app-icon-monogram" style={`background:${app.brandColor}; color:white;`}>{app.monogram}</span>
 </span>
 
+<style is:global>
+  /* 消除 Astro scoped CSS 跨组件的隔离问题：直接在 AppIcon 里定义所有 size variants
+     这样即便 `class="vs-monogram"` 写在 page 里，AppIcon 渲染的元素也会拿到 size。  */
+  .app-icon[class*="top-monogram"] {
+    width: 60px; height: 60px; border-radius: 14px;
+  }
+  .app-icon[class*="vs-monogram"] {
+    width: 48px; height: 48px; border-radius: 12px;
+  }
+  .app-icon[class*="related-monogram"] {
+    width: 44px; height: 44px; border-radius: 10px;
+  }
+  .app-icon[class*="pick-monogram"] {
+    width: 48px; height: 48px; border-radius: 12px;
+  }
+  .app-icon[class*="rank-monogram"] {
+    width: 40px; height: 40px; border-radius: 10px;
+  }
+  .app-icon[class*="hero-monogram"] {
+    width: 88px; height: 88px; border-radius: 20px;
+  }
+  .app-icon[class*="trio-monogram"] {
+    width: 56px; height: 56px; border-radius: 14px;
+  }
+</style>
+
 <style>
-  /* 容器：统一「白底卡片」让任何 logo 都能完整显示
-     - 浅色边框让浅色 logo（如 Signal 浅蓝）和白底可区分
-     - 8% padding 防止 logo 贴边
-     - flex 居中让 logo + monogram 都能完美对中
-  */
+  /* 容器：方形，白色背景卡片 —— 任何 size 都 100% 一致 */
   .app-icon {
     position: relative;
     display: inline-flex;
@@ -72,24 +86,32 @@ const faviconUrl = domain
     justify-content: center;
     flex-shrink: 0;
     background: white;
-    padding: 8%;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
     overflow: hidden;
+    /* 1px 半透明白边让卡片在深色背景下有边 */
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
-  /* logo: 在 flex 容器内填满 padding 之外的区域，contain 不变形 */
-  .app-icon img {
+  /* SVG 用 CSS mask 渲染：背景色 = brandColor，alpha mask = simple-icons SVG
+     这样不管 simple-icons 默认是黑是白，我们都能精确控制颜色 */
+  .app-icon-svg {
+    position: relative;
     display: block;
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    position: relative;
     z-index: 1;
     pointer-events: none;
     user-select: none;
+    -webkit-mask-image: var(--mask);
+            mask-image: var(--mask);
+    -webkit-mask-size: contain;
+            mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+            mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+            mask-position: center;
   }
 
-  /* monogram fallback / 无 website：品牌色背景填充，浮于 logo 之下作为 fallback */
+  /* monogram fallback：占满整个容器 */
   .app-icon-monogram {
     position: absolute;
     inset: 0;
@@ -103,5 +125,10 @@ const faviconUrl = domain
     letter-spacing: -0.02em;
     pointer-events: none;
     user-select: none;
+  }
+
+  /* 有 SVG 的容器完全隐藏 monogram（z-index 0 即可，但用 hidden 更稳）*/
+  .app-icon[data-has-svg="true"] .app-icon-monogram {
+    display: none;
   }
 </style>

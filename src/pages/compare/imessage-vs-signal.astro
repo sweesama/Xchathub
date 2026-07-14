@@ -34,7 +34,13 @@ const signal = getAppBySlug('signal');
 if (!signal) throw new Error('Signal app data missing');
 
 // iMessage 关键事实（hardcode - 不在中央数据中）
+// 同时为 AppIcon 提供一个最小 App 对象（iMessage 在 simple-icons 里有 logo）
 const imessage = {
+  name: 'iMessage',
+  monogram: 'iM',
+  brandColor: '#0066cc',
+  website: 'https://www.apple.com/imessage/',
+  simpleIconsSlug: 'imessage',
   owner: 'Apple Inc.',
   ownerCountry: 'United States (Cupertino, CA)',
   defaultE2EE: 'Yes — every iMessage chat, call, group is end-to-end encrypted between Apple devices',
@@ -153,7 +159,7 @@ const breadcrumbs = [
           </div>
           <div class="vs-divider"><span>vs</span></div>
           <div class="vs-side vs-b">
-            <span class="vs-monogram" style="background:#0066cc">iM</span>
+            <AppIcon app={imessage} class="vs-monogram" />
             <div class="vs-name">iMessage</div>
             <div class="vs-score">8.4 <span class="score-out">/ 10</span></div>
           </div>

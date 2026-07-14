@@ -216,9 +216,9 @@ const pageJsonLd = {
       <div class="compare-grid">
         <a href="/compare/signal-vs-threema/" class="compare-card">
           <div class="compare-vs">
-            <span class="vs-monogram" style="background:#2592e9">S</span>
+            <AppIcon app={ranked.find((a) => a.slug === 'signal')!} class="vs-monogram" />
             <span class="vs-text">vs</span>
-            <span class="vs-monogram" style="background:#23272a">T</span>
+            <AppIcon app={ranked.find((a) => a.slug === 'threema')!} class="vs-monogram" />
           </div>
           <h3>Signal vs Threema</h3>
           <p class="text-secondary">Free nonprofit vs paid Swiss app — which has stronger privacy?</p>
@@ -227,7 +227,7 @@ const pageJsonLd = {
 
         <a href="/reviews/signal/" class="compare-card">
           <div class="compare-vs">
-            <span class="vs-monogram" style="background:#2592e9">S</span>
+            <AppIcon app={ranked.find((a) => a.slug === 'signal')!} class="vs-monogram" />
             <span class="vs-text">Review</span>
           </div>
           <h3>Signal Review (2026)</h3>
@@ -237,7 +237,7 @@ const pageJsonLd = {
 
         <a href="/reviews/xchat/" class="compare-card compare-card-xchat">
           <div class="compare-vs">
-            <span class="vs-monogram" style="background:#1d9bf0">X</span>
+            <AppIcon app={ranked.find((a) => a.slug === 'xchat')!} class="vs-monogram" />
             <span class="vs-text">Review</span>
           </div>
           <h3>XChat Review (2026)</h3>

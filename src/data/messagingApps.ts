@@ -27,6 +27,11 @@ export interface MessagingApp {
   brandColor: string;
   /** 用于小 logo 的 emoji 或简短字符（无版权问题） */
   monogram: string;
+  /** simple-icons.org 上的品牌 SVG slug（如 'signal'、'threema'）。
+   *  设了这里就用 simple-icons CDN 渲染 logo（统一矢量、可着色）；
+   *  留空时回退到 monogram （briar / xchat 在 simple-icons 库中不存在）。
+   *  商用请遵守 simple-icons 商标政策。 */
+  simpleIconsSlug?: string;
   /** 官网 */
   website: string;
   /** 是否公开源代码（客户端 + 服务端） */
@@ -87,6 +92,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: 'Signal is the gold-standard encrypted messenger maintained by the nonprofit Signal Foundation, founded by privacy advocate Moxie Marlinspike and WhatsApp co-founder Brian Acton. The Signal Protocol (now in WhatsApp, Google Messages, and Skype) is the most peer-reviewed messaging crypto in the world. Signal collects almost no metadata, runs open-source servers and clients, and operates on donations rather than advertising or user tracking. Its Message Request safety numbers, sealed-sender routing, and disappearing messages remain unmatched by commercial competitors.',
     brandColor: '#2592e9',
     monogram: 'S',
+    simpleIconsSlug: 'signal',
     website: 'https://signal.org',
     openSource: true,
     encryptionDefault: 'always',
@@ -137,6 +143,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "Threema is the only well-known messenger that gives you a fully anonymous account from registration onward. Buy the app for a small one-time fee (~$4), generate a random Threema ID, and never share any personal identifier. Like Signal, Threema is fully open source, but it's hosted in Switzerland where strict privacy laws govern servers. Group size is smaller than most, but for privacy-pure use cases Threema routinely beats Signal. The app also offers Threema Work for enterprises and Threema Education for schools.",
     brandColor: '#23272a',
     monogram: 'T',
+    simpleIconsSlug: 'threema',
     website: 'https://threema.ch',
     openSource: true,
     encryptionDefault: 'always',
@@ -187,6 +194,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "Wire is built for businesses that need provably secure messaging — every message, call, and conference is end-to-end encrypted with the open-source Proteus protocol (also based on the Signal Protocol). Unlike Signal, Wire ships serious team collaboration features: rooms (persistent group spaces), file sharing with inline preview, guest rooms with cross-org access, and full SAML/SSO integrations. Personal messaging is free and unthrottled; business plans add admin controls. Wire is audited annually by independent firms and is fully GDPR compliant.",
     brandColor: '#1d2125',
     monogram: 'W',
+    simpleIconsSlug: 'wire',
     website: 'https://wire.com',
     openSource: true,
     encryptionDefault: 'always',
@@ -236,6 +244,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "Session is a fork of Signal that strips out the phone-number requirement and routes all messages through a decentralized onion-routing network. The result: nobody, not even Session's own servers, knows who is messaging whom. Session IDs are random and decoupled from any real identifier. Trade-offs: voice/video calls are less reliable than Signal because of the onion routing, and the user base is smaller. Session is the natural choice for activists, journalists, and high-risk users who'd otherwise use Signal but cannot give a phone number.",
     brandColor: '#cc1633',
     monogram: 'Se',
+    simpleIconsSlug: 'session',
     website: 'https://getsession.org',
     openSource: true,
     encryptionDefault: 'always',
@@ -283,6 +292,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "WhatsApp is the dominant global messenger with E2E encryption by default using the Signal Protocol. Two billion users is its killer feature: nearly everyone you know already has it. The trade-off is the Meta ownership — WhatsApp collects extensive metadata (who you talk to, when, how often) that it shares with the broader Meta family of products for advertising. Personal messages are E2EE so Meta can't read them. For everyday users talking to other everyday users, WhatsApp is still the practical encrypted messenger. For privacy-sensitive ones, it isn't.",
     brandColor: '#25d366',
     monogram: 'W',
+    simpleIconsSlug: 'whatsapp',
     website: 'https://whatsapp.com',
     openSource: false,
     encryptionDefault: 'always',
@@ -331,6 +341,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: 'Element is the reference client for the Matrix open standard — a federated protocol like email, where any organization can run its own server and all servers interoperate. E2EE is end-to-end via the Olm/Megolm protocol. Element runs a hosted service (element.io) but you can self-host. For communities, B2B, and open-source projects, federated Matrix is one of the few protocols designed for true interoperability without a single point of control. Bridge to other messengers (Telegram, Discord, Slack) is possible.',
     brandColor: '#0dbd8b',
     monogram: 'E',
+    simpleIconsSlug: 'element',
     website: 'https://element.io',
     openSource: true,
     encryptionDefault: 'opt-in',
@@ -378,6 +389,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "SimpleX takes anonymity further than anyone else: there are no user IDs, no phone numbers, no usernames — every conversation gets a unique disposable link. The protocol was designed so the operator (SimpleX Chat Ltd) cannot match users across conversations even if they wanted to. E2E encryption is mandatory. The trade-off: no contact list, no group chats in the same way as others (you manage invite links). The user base is small but devoted. For maximum-metadata-stripping use, this is the leader.",
     brandColor: '#0066cc',
     monogram: 'Sx',
+    simpleIconsSlug: 'simplex',
     website: 'https://simplex.chat',
     openSource: true,
     encryptionDefault: 'always',
@@ -425,6 +437,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "Telegram is the fastest and most flexible cloud messenger on the market: 200,000-member public channels, public usernames, bots, voice rooms, full cross-platform sync, and a polished UX. Almost everything is cloud-stored so you can read old chats on any device. The catch: most chats are not end-to-end encrypted. Telegram added the Signal Protocol-based \"Secret Chats\" feature years ago, but it has to be opted into per conversation. If you forget, your messages sit on Telegram's servers encrypted only to Telegram itself. For sharing but not for private conversation by default.",
     brandColor: '#0088cc',
     monogram: 'Tg',
+    simpleIconsSlug: 'telegram',
     website: 'https://telegram.org',
     openSource: false,
     encryptionDefault: 'opt-in',
