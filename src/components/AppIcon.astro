@@ -46,7 +46,7 @@ const faviconUrl = domain
   : '';
 ---
 
-<span class={`app-icon ${className}`} style={`background:${app.brandColor}`}>
+<span class={`app-icon ${className}`}>
   {faviconUrl && (
     <img
       src={faviconUrl}
@@ -56,55 +56,52 @@ const faviconUrl = domain
       onerror="this.remove()"
     />
   )}
-  <span class="app-icon-monogram">{app.monogram}</span>
+  <span class="app-icon-monogram" style={`background:${app.brandColor}; color:white;`}>{app.monogram}</span>
 </span>
 
 <style>
-  /* Container: 尊重外层 class 设置的 width/height/border-radius；
-     内部 flex 让 img 与 monogram 均能在容器中完美居中 */
+  /* 容器：统一「白底卡片」让任何 logo 都能完整显示
+     - 浅色边框让浅色 logo（如 Signal 浅蓝）和白底可区分
+     - 8% padding 防止 logo 贴边
+     - flex 居中让 logo + monogram 都能完美对中
+  */
   .app-icon {
     position: relative;
-    overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    background: white;
+    padding: 8%;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
+    overflow: hidden;
   }
 
-  /* <img>: 去掉 inset（16%）带来的额外 padding，只用 8% 内边距让 logo 不贴边；
-     contain + max-height/max-width 保证长方形 logo 完整而不变形 */
+  /* logo: 在 flex 容器内填满 padding 之外的区域，contain 不变形 */
   .app-icon img {
     display: block;
-    width: 84%;
-    height: 84%;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
+    position: relative;
     z-index: 1;
     pointer-events: none;
     user-select: none;
   }
 
-  /* monogram（fallback / 无 website）：占满整个容器，加粗白色。
-     使用 em 单位跟随容器 width 自适应 — 32px 容器上 ~14.4px，88px 上 ~40px */
+  /* monogram fallback / 无 website：品牌色背景填充，浮于 logo 之下作为 fallback */
   .app-icon-monogram {
     position: absolute;
     inset: 0;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
+    font-weight: 800;
     color: white;
-    font-size: 0.45em;
+    font-size: 0.5em;
     line-height: 1;
     letter-spacing: -0.02em;
     pointer-events: none;
     user-select: none;
-    z-index: 0;
-  }
-  /* img 加载后蒙住 monogram */
-  .app-icon img + .app-icon-monogram,
-  .app-icon img ~ .app-icon-monogram {
-    z-index: 0;
   }
 </style>
