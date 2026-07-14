@@ -2,6 +2,13 @@
 /**
  * AppIcon.astro — App 图标组件
  *
+ * 视觉策略：统一转为「白色剪影 + 品牌色背景」
+ *   - 这是 iOS App Store / Google Play 格栅语言，
+ *     让不同尺寸/比例的 favicon 在卡片里看起来一致
+ *   - Google Favicon 服务的返回可能是长方形 (Signal 含字) 或正方形
+ *   - 我们不限定 logo 形状，让 contain 让其完整显示，纯白滤镜让色彩一致
+ *   - 加载失败 → fallback 到 monogram（也是白色，视觉一致）
+ *
  * 优先级：
  *   1. 从 app.website URL 提取 domain → 调用 Google Favicon 服务 (sz=128)
  *   2. 图片加载失败 → 自动 remove <img>，回退到背景色 + monogram
@@ -62,25 +69,35 @@ const faviconUrl = domain
 </span>
 
 <style>
-  /* Container: inline-flex 让 monogram 默认 100% 居中；position+overflow 让 img 绝对定位 */
+  /* Container: 尊重外层 class 设置的 width/height/border-radius；
+     这里只负责让内容（img/monogram）在内部正确居中 */
   .app-icon {
     position: relative;
     overflow: hidden;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
   }
-  /* <img> 绝对定位 + 内边距让 logo 不贴边 */
+
+  /* <img> 绝对定位 + filter 将任何彩色 favicon 转为白色剪影，
+     这样不同比例 / 不同色彩的图标看起来一致 */
   .app-icon img {
     position: absolute;
-    inset: 12%;
-    width: 76%;
-    height: 76%;
+    inset: 16%;
+    width: 68%;
+    height: 68%;
+    max-width: 68%;
+    max-height: 68%;
     object-fit: contain;
+    filter: brightness(0) invert(1);
     z-index: 1;
     pointer-events: none;
+    user-select: none;
   }
-  /* monogram 占满整个图标，img 加载后会被盖住，img 加载失败时显示 */
+
+  /* monogram（fallback 或 letter-only cases）：占满整个容器，
+     白色字 / 加粗 / 居中，让 fallback 看起来和白色 logo 一致 */
   .app-icon-monogram {
     display: inline-flex;
     align-items: center;
@@ -89,6 +106,9 @@ const faviconUrl = domain
     height: 100%;
     font-weight: 700;
     color: white;
+    font-size: 0.45em;          /* 跟随容器 width 自适应 */
+    line-height: 1;
+    letter-spacing: -0.02em;
     user-select: none;
   }
 </style>
