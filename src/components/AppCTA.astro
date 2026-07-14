@@ -1,0 +1,131 @@
+---
+/**
+ * AppCTA.astro — Affiliate / app-store download CTA
+ *
+ * 当一个评测页对应的 app 有 appStoreId / playStorePackage 时，
+ * 在 prose 末尾 + FAQ 之前 / 评测页 footer 顶部插入 <AppCTA app={app} />
+ *
+ * 后续要加联盟参数（&at=...）的时候，只要在 buildAffiliateUrl 里加。
+ */
+
+import type { MessagingApp } from '../data/messagingApps';
+
+export interface Props {
+  app: MessagingApp;
+  /** 给评测页定制的副本 */
+  blurb?: string;
+}
+
+const { app, blurb } = Astro.props;
+
+const buildAffiliateUrl = (base: string): string => {
+  // 拿到联盟 ID 后：return `${base}&at=YOUR_AFFILIATE_ID`
+  return base;
+};
+
+const iosScheme = (id: string) => buildAffiliateUrl(`https://apps.apple.com/app/id${id}`);
+const androidScheme = (pkg: string) => buildAffiliateUrl(`https://play.google.com/store/apps/details?id=${pkg}`);
+
+const hasIos = !!app.appStoreId;
+const hasAndroid = !!app.playStorePackage;
+---
+
+<aside class="app-cta card" aria-label={`Download ${app.name}`}>
+  <div class="cta-head">
+    <span class="cta-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+    <div>
+      <h3>Try {app.name}</h3>
+      <p class="text-secondary">
+        {blurb ?? `Direct download links to ${app.name} on the official app stores — affiliate links, but we don't change the price.`}
+      </p>
+    </div>
+  </div>
+  <div class="cta-buttons">
+    {hasIos && (
+      <a href={iosScheme(app.appStoreId!)} class="btn btn-primary btn-sm" target="_blank" rel="nofollow noopener noreferrer sponsored">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M17.564 12.93c-.024-2.392 1.96-3.55 2.05-3.608-1.117-1.633-2.857-1.857-3.476-1.882-1.476-.149-2.882.868-3.633.868-.756 0-1.91-.847-3.146-.823-1.617.023-3.108.94-3.937 2.386-1.678 2.91-.428 7.205 1.205 9.555.798 1.146 1.751 2.435 3.001 2.39 1.205-.048 1.658-.78 3.11-.78 1.45 0 1.86.78 3.133.756 1.295-.024 2.111-1.165 2.913-2.314.916-1.327 1.295-2.615 1.318-2.682-.029-.013-2.524-.97-2.55-3.846zM15.354 5.31c.668-.812 1.118-1.94.996-3.064-.962.04-2.13.642-2.82 1.451-.619.717-1.16 1.866-1.014 2.967 1.075.083 2.171-.547 2.838-1.354z"/>
+        </svg>
+        App Store
+      </a>
+    )}
+    {hasAndroid && (
+      <a href={androidScheme(app.playStorePackage!)} class="btn btn-secondary btn-sm" target="_blank" rel="nofollow noopener noreferrer sponsored">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M3.609 1.814 13.792 12 3.61 22.186a.996.996 0 0 1-.61-.92V2.734a1 1 0 0 1 .609-.92zm10.89 10.893 2.302 2.302-10.937 6.333 8.635-8.635zm3.199-3.199 2.807 1.626a1 1 0 0 1 0 1.732l-2.808 1.626L15.397 12l2.302-2.492zM5.864 2.658 16.802 8.99l-2.303 2.303-8.635-8.635z"/>
+        </svg>
+        Google Play
+      </a>
+    )}
+    <a href={app.website} class="btn btn-secondary btn-sm" target="_blank" rel="nofollow noopener noreferrer">
+      Official site
+    </a>
+  </div>
+  <p class="cta-foot text-muted">
+    We may earn a commission if you download via these links. We never recommend apps in exchange for revenue.
+  </p>
+</aside>
+
+<style>
+  .app-cta {
+    max-width: 720px;
+    margin: 2.5rem auto;
+    padding: 1.5rem 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .cta-head {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .cta-monogram {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+
+  .cta-head h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1.125rem;
+  }
+
+  .cta-head p {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin-bottom: 0.875rem;
+  }
+
+  .cta-buttons .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    text-decoration: none;
+  }
+
+  .cta-foot {
+    font-size: 0.75rem;
+    margin: 0;
+    padding-top: 0.875rem;
+    border-top: 1px solid var(--border);
+    line-height: 1.55;
+  }
+</style>

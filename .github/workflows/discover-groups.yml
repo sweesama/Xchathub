@@ -1,10 +1,14 @@
-name: Discover XChat Groups
+name: Discover XChat Groups [PAUSED]
 
-# 定时任务：每月 1 号 00:00 UTC 跑一次（X 搜索产出低，月频足够）
-# 也可以手动触发 (workflow_dispatch)
+# 暂停原因（2026-07-08 战略反思）：
+#   - 2026-04-27 抓 6 个群组，4 个低质量、2 个入库；
+#     75 天过去，XChat 群组生态尚未成形
+#   - 战略 C 决定：群组目录降级为 SEO 资产，不主动运营
+#   - 6 个月后看 AdSense / 评测站 / 群组生态数据再决定激活
+#
+# 暂停做法：去掉 cron schedule，只保留手动触发（workflow_dispatch）
+# 重新激活：恢复下面的 schedule 块即可
 on:
-  schedule:
-    - cron: '0 0 1 * *'
   workflow_dispatch:
 
 jobs:

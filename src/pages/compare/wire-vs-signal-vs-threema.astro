@@ -1,0 +1,403 @@
+---
+/**
+ * compare/wire-vs-signal-vs-threema.astro
+ *
+ * 高价值 SEO 词（三连对比）：wire vs signal vs threema, signal vs wire vs threema,
+ *   threema vs wire vs signal, best secure messenger trio, swiss messengers compared
+ *
+ * 目标搜索意图：用户研究完加密通信评测，正在 3 个主流 E2EE app 里选；
+ *   这 3 个的共同点是：默认 E2EE、开源、不是 Meta/Telegram 阵营
+ *
+ * 设计原则（与 /compare/signal-vs-threema 一致）：
+ *   - 12 维对比表
+ *   - 3 个 pick 卡片（if-you-are-x-pick-y）
+ *   - 决策树
+ *   - 各 app 真实优缺点（不吹捧）
+ *   - 1500-2500 词，符合 SEO 内容规范
+ */
+import Layout from '../../layouts/Layout.astro';
+import { getAppBySlug } from '../../data/messagingApps';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
+import AdSlot from '../../components/AdSlot.astro';
+
+const signal = getAppBySlug('signal');
+const threema = getAppBySlug('threema');
+const wire = getAppBySlug('wire');
+if (!signal || !threema || !wire) throw new Error('Three-way comparison data missing');
+
+type App = typeof signal;
+const apps: App[] = [wire, signal, threema];
+const labels = ['Wire', 'Signal', 'Threema'] as const;
+
+interface Row {
+  label: string;
+  values: [string, string, string];
+  winners: [boolean, boolean, boolean];
+}
+
+const rows: Row[] = [
+  { label: 'Founded', values: [`${wire.foundedYear}`, `${signal.foundedYear}`, `${threema.foundedYear}`], winners: [false, false, false] },
+  { label: 'Owner', values: [wire.owner, signal.owner, threema.owner], winners: [false, false, false] },
+  { label: 'Owner country', values: [wire.ownerCountry, signal.ownerCountry, threema.ownerCountry], winners: [false, false, false] },
+  { label: 'Business model', values: [wire.pricing === 'freemium' ? 'Free personal / paid team plans' : wire.pricing, signal.pricing === 'free' ? 'Free, donation-funded' : signal.pricing, threema.pricing === 'paid-once' ? 'One-time $4.49' : threema.pricing], winners: [false, false, false] },
+  { label: 'Phone number required', values: [wire.phoneNumberRequired ? 'Yes' : 'No', signal.phoneNumberRequired ? 'Yes' : 'No', threema.phoneNumberRequired ? 'Yes' : 'No'], winners: [true, false, true] },
+  { label: 'End-to-end encryption', values: ['Default (Proteus / MLS)', 'Default (Signal Protocol)', 'Default (NaCl/libsodium)'], winners: [false, false, false] },
+  { label: 'Open source', values: [wire.openSource ? 'Yes — clients + server' : 'No', signal.openSource ? 'Yes — clients + server' : 'No', threema.openSource ? 'Yes — clients (server source available)' : 'No'], winners: [false, false, false] },
+  { label: 'Independent audits', values: ['Annual third-party audits', 'Multiple, ongoing', 'External review'], winners: [false, false, false] },
+  { label: 'Group size limit', values: [`${wire.groupLimit}`, `${signal.groupLimit}`, `${threema.groupLimit}`], winners: [false, true, false] },
+  { label: 'Voice / video calls (E2EE)', values: ['Yes', 'Yes', 'Yes'], winners: [false, false, false] },
+  { label: 'Disappearing messages', values: ['Yes', 'Yes, custom timers', 'Yes'], winners: [false, false, false] },
+  { label: 'Approx. monthly users', values: [`~${wire.monthlyActiveUsersMillions}M`, `~${signal.monthlyActiveUsersMillions}M`, `~${threema.monthlyActiveUsersMillions}M`], winners: [false, true, false] },
+  { label: 'Server location', values: [wire.ownerCountry, signal.ownerCountry, threema.ownerCountry], winners: [false, false, false] },
+  { label: 'Best fit', values: [wire.tagline, signal.tagline, threema.tagline], winners: [false, false, false] },
+];
+
+const wstFaqs = [
+  {
+    question: 'Is Wire, Signal, or Threema more secure?',
+    answer: 'All three are end-to-end encrypted by default, open source, and audited. The differences are in threat model and ownership: Signal is a US 501(c)(3) nonprofit running the Signal Protocol, donation-funded. Threema is a Swiss company, paid-once ($4.49), requiring no phone number or email, hosted in Switzerland under FDPIC jurisdiction. Wire is a Swiss company with a strong focus on team / enterprise features, freemium, audited annually, and runs on Proteus (Signal-derived) and MLS. For most everyday users, Signal is the practical winner; for enterprise teams, Wire; for true anonymity, Threema.',
+  },
+  {
+    question: 'Which is best for business: Wire, Signal, or Threema?',
+    answer: 'Wire is the best for business of the three. It ships rooms (persistent group spaces), guest rooms with cross-org access, file sharing with inline preview, full SAML/SSO integrations, and admin controls. Personal messaging on Wire is free; business plans add team management. Signal and Threema are personal-first products and do not have the same enterprise tooling. If you are a team of 5-5000 that needs provable E2EE plus collaboration features, Wire is the right pick.',
+  },
+  {
+    question: 'Which is the best free option: Wire, Signal, or Threema?',
+    answer: 'Signal is the best free option. It is donation-funded, has the largest user base of the three, and runs the Signal Protocol. Wire\'s personal tier is also free but has a much smaller user base. Threema is paid-once ($4.49) — not free, but a one-time payment, not a subscription.',
+  },
+  {
+    question: 'Do I need a phone number for Wire, Signal, or Threema?',
+    answer: 'Threema does NOT require a phone number or email — you can register with a random Threema ID only. Wire does NOT require a phone number (you can sign up with email). Signal DOES require a phone number at registration (though since 2024 you can use a username to hide it from other users). If avoiding phone number collection is critical to your threat model, Threema is the most private of the three.',
+  },
+];
+
+const jsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'Wire vs Signal vs Threema (2026) — Which E2EE Messenger Should You Pick?',
+    description: 'Three-way comparison of Wire, Signal, and Threema on encryption, ownership, business model, group limits, and threat-model fit. All three are open-source and E2EE by default — the right pick depends on whether you want teams, mass user base, or true anonymity.',
+    datePublished: '2026-07-08',
+    dateModified: '2026-07-08',
+    url: '/compare/wire-vs-signal-vs-threema',
+  }),
+  faqPageJsonLd(wstFaqs),
+);
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Compare', url: 'https://xchat.directory/reviews/' },
+  { name: 'Wire vs Signal vs Threema', url: 'https://xchat.directory/compare/wire-vs-signal-vs-threema/' },
+];
+---
+
+<Layout
+  title="Wire vs Signal vs Threema (2026) — Three E2EE Compared"
+  description="Wire vs Signal vs Threema on encryption, audits, ownership, and threat-model fit. All three are open-source and E2EE — here's who should pick which."
+  jsonLd={jsonLd}
+  canonicalPath="/compare/wire-vs-signal-vs-threema"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="Wire vs Signal vs Threema comparison"
+>
+  <article class="compare">
+    <!-- ============== HERO ============== -->
+    <section class="compare-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Compare</a> <span class="crumb-sep">/</span>
+          <span>Wire vs Signal vs Threema</span>
+        </nav>
+
+        <h1>Wire vs Signal vs Threema (2026)</h1>
+        <p class="lead text-secondary">Three end-to-end-encrypted, open-source messengers. All three default to E2EE. The differences are ownership, business model, group limits, and threat-model fit — not cryptography. Pick the one whose trade-offs match what you're protecting.</p>
+
+        <div class="trio-vs">
+          {apps.map((app, i) => (
+            <div class={`trio-side trio-${i}`}>
+              <span class="trio-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+              <div class="trio-name">{app.name}</div>
+              <div class="trio-score">{app.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
+              <div class="trio-meta">{app.tagline}</div>
+            </div>
+          ))}
+        </div>
+
+        <AdSlot slot="review-top" label="Sponsored" />
+      </div>
+    </section>
+
+    <!-- ============== TL;DR ============== -->
+    <section class="container section-sm">
+      <h2>The 30-second answer</h2>
+      <ul class="tldr">
+        <li><strong>Pick Signal</strong> if you want the best balance of <em>audited encryption</em>, <em>massive user base</em>, and <em>zero cost</em>. Phone number required at signup.</li>
+        <li><strong>Pick Threema</strong> if <em>true anonymity from registration</em> (no phone, no email) matters more than network size. You pay $4.49 once.</li>
+        <li><strong>Pick Wire</strong> if you want <em>E2EE for teams</em> (rooms, guest access, SAML SSO) plus a Swiss-hosted data path. Personal use is free.</li>
+      </ul>
+    </section>
+
+    <AdSlot slot="review-mid" label="Sponsored" />
+
+    <!-- ============== COMPARISON TABLE ============== -->
+    <section class="container section-sm">
+      <h2>Side-by-side: 14 dimensions</h2>
+      <p class="text-secondary">Where one option is meaningfully better, its cell is highlighted. "Tied" cells are dimmed.</p>
+      <div class="table-wrap">
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th scope="col">Dimension</th>
+              <th scope="col">Wire</th>
+              <th scope="col">Signal</th>
+              <th scope="col">Threema</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                {row.values.map((v, i) => (
+                  <td class={row.winners[i] ? 'winner' : ''}>{v}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============== DEEP-DIVE PER APP ============== -->
+    <section class="container section-sm">
+      <h2>What each one is actually best at</h2>
+
+      <article class="app-card">
+        <header class="app-card-head">
+          <span class="trio-monogram" style={`background:${wire.brandColor}`}>W</span>
+          <h3>Wire — best for teams</h3>
+          <span class="trio-score">{wire.editorScore.toFixed(1)} / 10</span>
+        </header>
+        <p>Wire is the only one of the three with first-class team collaboration. Rooms (persistent group spaces), guest rooms for cross-company access, file sharing with inline previews, and SAML/SSO admin controls — all E2EE, all open source. For a 5–5,000 person org that wants to replace Slack or Teams without leaking metadata to a hyperscaler, Wire is the only credible open-source pick.</p>
+        <div class="pros-cons">
+          <div>
+            <h4>Strengths</h4>
+            <ul>{wire.pros.map((p) => <li>{p}</li>)}</ul>
+          </div>
+          <div>
+            <h4>Honest weaknesses</h4>
+            <ul>{wire.cons.map((c) => <li>{c}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cite"><strong>Sources:</strong> {wire.sources.map((s, i) => (
+          <>{i > 0 && ', '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></>
+        ))}</p>
+      </article>
+
+      <article class="app-card">
+        <header class="app-card-head">
+          <span class="trio-monogram" style={`background:${signal.brandColor}`}>S</span>
+          <h3>Signal — best for everyday E2EE</h3>
+          <span class="trio-score">{signal.editorScore.toFixed(1)} / 10</span>
+        </header>
+        <p>Signal is the de facto reference for what "good end-to-end encryption" looks like: open-source clients and server, sealed-sender metadata minimization, multiple ongoing third-party audits, and a nonprofit funding model that means no investor pressure to monetize. With ~70 million users it has the largest E2EE-only network, which means your contacts are most likely already on it.</p>
+        <div class="pros-cons">
+          <div>
+            <h4>Strengths</h4>
+            <ul>{signal.pros.map((p) => <li>{p}</li>)}</ul>
+          </div>
+          <div>
+            <h4>Honest weaknesses</h4>
+            <ul>{signal.cons.map((c) => <li>{c}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cite"><strong>Sources:</strong> {signal.sources.map((s, i) => (
+          <>{i > 0 && ', '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></>
+        ))}</p>
+      </article>
+
+      <article class="app-card">
+        <header class="app-card-head">
+          <span class="trio-monogram" style={`background:${threema.brandColor}`}>T</span>
+          <h3>Threema — best for true anonymity</h3>
+          <span class="trio-score">{threema.editorScore.toFixed(1)} / 10</span>
+        </header>
+        <p>Threema is the only one of the three that does not require a phone number <em>or</em> an email. You buy the app once, generate a random Threema ID, and never share a personal identifier. Combined with Swiss data centers and open-source clients, this is the most anonymity-respecting mainstream messenger. The trade-off is a smaller user base and a one-time purchase that gates onboarding.</p>
+        <div class="pros-cons">
+          <div>
+            <h4>Strengths</h4>
+            <ul>{threema.pros.map((p) => <li>{p}</li>)}</ul>
+          </div>
+          <div>
+            <h4>Honest weaknesses</h4>
+            <ul>{threema.cons.map((c) => <li>{c}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cite"><strong>Sources:</strong> {threema.sources.map((s, i) => (
+          <>{i > 0 && ', '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></>
+        ))}</p>
+      </article>
+    </section>
+
+    <AdSlot slot="review-mid" label="Sponsored" />
+
+    <!-- ============== DECISION TREE ============== -->
+    <section class="container section-sm">
+      <h2>Decision tree: which one should you actually install?</h2>
+      <ol class="decision-tree">
+        <li><strong>Do you need to message people who are not on E2EE messengers yet?</strong><br/>→ Start with <strong>Signal</strong>. Your contacts are most likely already there or willing to install it.</li>
+        <li><strong>Do you run a team of 5+ that needs rooms, guest access, admin controls?</strong><br/>→ Use <strong>Wire</strong>. Personal messages are free; business plans add the team features that Signal simply does not have.</li>
+        <li><strong>Is "no phone number, no email, no linkable identifier" non-negotiable?</strong><br/>→ Use <strong>Threema</strong>. It is the only mainstream messenger that respects this from signup onward.</li>
+        <li><strong>Do you live in Switzerland / DACH and care about FDPIC jurisdiction?</strong><br/>→ <strong>Wire</strong> and <strong>Threema</strong> are both Swiss-hosted. Signal is US-hosted, which matters for some threat models.</li>
+        <li><strong>Are you a journalist working with high-risk sources?</strong><br/>→ <strong>Threema</strong> for anonymity + <strong>Signal</strong> for verified contacts is a common pairing. (For maximum-metadata-stripping, also consider SimpleX Chat.)</li>
+      </ol>
+    </section>
+
+    <!-- ============== FAQ ============== -->
+    <section class="container section-sm">
+      <h2>Frequently asked questions</h2>
+      <details>
+        <summary><h3 class="faq-q-title">Which has the strongest encryption?</h3></summary>
+        <div class="faq-body">
+          <p>All three are E2EE by default on every chat, call, and file transfer. Wire uses the Proteus protocol (Signal-derived) plus MLS for multi-party. Signal uses the original Signal Protocol (Double Ratchet) with sealed-sender metadata minimization. Threema uses NaCl (libsodium). Cryptographically, all three are strong and have been independently reviewed. The differences are not in cipher strength — they are in metadata handling, ownership, and business model.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Which has the most users?</h3></summary>
+        <div class="faq-body">
+          <p>Signal by a wide margin — roughly 70 million monthly active users. Wire and Threema are each around 1 million. If your goal is "reach people without asking them to install something new," Signal wins on install base. If your goal is "limit metadata collection" or "team collaboration," the smaller networks are not a disadvantage.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Can I run Wire or Threema on a server I control?</h3></summary>
+        <div class="faq-body">
+          <p>No. Wire and Threema are managed services — you cannot self-host the official servers, although their client and (in Threema's case) some server code is open source for review. If self-hosting is a requirement, look at Element (Matrix) instead — it is the only fully federated option in this space.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Is Signal really safer than WhatsApp?</h3></summary>
+        <div class="faq-body">
+          <p>Yes, on three counts. First, Signal collects almost no metadata, while Meta (WhatsApp's owner) keeps who-you-talk-to, when, and how-often. Second, Signal's clients and server are open source — anyone can audit them. WhatsApp's clients are partially closed. Third, Signal's business model is donations; WhatsApp's is feeding Meta's advertising graph. The encryption on individual messages is identical (Signal Protocol).</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">I just want a private messenger for chatting with friends — which?</h3></summary>
+        <div class="faq-body">
+          <p>Signal. It is free, has the largest E2EE user base, and your friends are most likely already there. The phone number requirement is the only friction; if that is a deal-breaker, Threema is the next-best choice.</p>
+        </div>
+      </details>
+    </section>
+
+    <AdSlot slot="review-bottom" label="Sponsored" />
+
+    <!-- ============== RELATED COMPARISONS ============== -->
+    <section class="container section-sm">
+      <h2>Keep digging</h2>
+      <ul class="related">
+        <li><a href="/compare/signal-vs-threema/">Signal vs Threema — closer two-way comparison</a></li>
+        <li><a href="/compare/signal-vs-telegram/">Signal vs Telegram — when to use which</a></li>
+        <li><a href="/compare/whatsapp-vs-signal/">WhatsApp vs Signal — leaving Meta</a></li>
+        <li><a href="/best-encrypted-messaging-apps/">Best encrypted messaging apps 2026 — full ranking</a></li>
+      </ul>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .compare-hero { padding: 4rem 0 2rem; }
+  .compare-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin: 1rem 0 0.75rem; }
+  .compare-hero .lead { max-width: 720px; font-size: 1.0625rem; line-height: 1.6; }
+  .breadcrumb { font-size: 0.875rem; }
+  .breadcrumb a { color: var(--text-secondary); }
+  .crumb-sep { margin: 0 0.4rem; opacity: 0.5; }
+
+  .trio-vs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+  }
+  .trio-side {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+  .trio-monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .trio-name { font-size: 1.125rem; font-weight: 700; }
+  .trio-score { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--accent-light); margin-top: 0.25rem; }
+  .score-out { color: var(--text-muted); font-size: 0.75rem; font-weight: 400; }
+  .trio-meta { color: var(--text-secondary); font-size: 0.8125rem; margin-top: 0.375rem; }
+
+  .tldr { padding-left: 1.25rem; line-height: 1.7; color: var(--text-secondary); }
+  .tldr li { margin-bottom: 0.5rem; }
+
+  .table-wrap { overflow-x: auto; margin-top: 1rem; }
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .cmp-table th, .cmp-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .cmp-table thead th {
+    color: var(--text-primary);
+    font-weight: 700;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-hover);
+  }
+  .cmp-table tbody th {
+    color: var(--text-secondary);
+    font-weight: 600;
+    width: 32%;
+  }
+  .cmp-table td { color: var(--text-secondary); }
+  .cmp-table td.winner { color: var(--success); font-weight: 600; }
+
+  .app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .app-card-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .app-card-head h3 { margin: 0; font-size: 1.25rem; flex: 1; }
+  .app-card-head .trio-score { font-size: 1rem; color: var(--accent-light); }
+  .app-card p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
+
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1rem; }
+  .pros-cons h4 { font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.5rem; }
+  .pros-cons ul { padding-left: 1.125rem; color: var(--text-secondary); line-height: 1.6; }
+  .pros-cons li { margin-bottom: 0.375rem; }
+  .cite { font-size: 0.8125rem; color: var(--text-muted); }
+
+  .decision-tree { padding-left: 1.25rem; color: var(--text-secondary); line-height: 1.8; }
+  .decision-tree li { margin-bottom: 0.75rem; }
+
+  .related { list-style: none; padding: 0; }
+  .related li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+  .related a { color: var(--accent-light); }
+
+  @media (max-width: 720px) {
+    .trio-vs { grid-template-columns: 1fr; }
+    .pros-cons { grid-template-columns: 1fr; }
+  }
+</style>

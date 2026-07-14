@@ -1,5 +1,4 @@
 ---
-import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
 ---
 
 <div id="launch-banner" class="launch-banner" hidden>
@@ -26,42 +25,64 @@ import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
     </a>
 
     <nav class="header-nav desktop-nav" aria-label="Main navigation">
-      <a href="/" class="nav-link">Tracker</a>
-      <a href="/groups" class="nav-link">Groups</a>
-      <a href="/faq" class="nav-link">FAQ</a>
+      <a href="/" class="nav-link">Home</a>
 
       <div class="nav-dropdown" data-dropdown>
         <button class="nav-link nav-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
-          Guides
+          Reviews
           <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
             <path d="M6 9l6 6 6-6" />
           </svg>
         </button>
         <div class="nav-dropdown-menu" role="menu">
-          <a href="/what-is-xchat" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">What Is XChat?</span>
-            <span class="dropdown-sub">Complete intro &amp; FAQ</span>
+          <a href="/best-encrypted-messaging-apps" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Best Encrypted Apps 2026</span>
+            <span class="dropdown-sub">Ranked top 10</span>
           </a>
-          <a href="/how-to-join-xchat-group" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">Join a Group</span>
-            <span class="dropdown-sub">4 steps + troubleshooting</span>
+          <a href="/reviews/signal/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Signal Review</span>
+            <span class="dropdown-sub">The gold standard</span>
           </a>
-          <a href="/how-to-create-group-link" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">Create Group Link</span>
-            <span class="dropdown-sub">6-step tutorial</span>
+          <a href="/reviews/threema/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Threema Review</span>
+            <span class="dropdown-sub">Swiss paid option</span>
           </a>
-          <a href="/android" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">XChat for Android</span>
-            <span class="dropdown-sub">Status &amp; safe workaround</span>
+          <a href="/reviews/wire/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Wire Review</span>
+            <span class="dropdown-sub">Swiss team E2EE</span>
           </a>
-          <a href="/web" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">XChat Web</span>
-            <span class="dropdown-sub">chat.x.com on any device</span>
+          <a href="/reviews/session/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Session Review</span>
+            <span class="dropdown-sub">Onion-routed, no ID</span>
           </a>
-          <a href="/communities-shutdown" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">Communities Migration</span>
-            <span class="dropdown-sub">Closes May 30, 2026</span>
+          <a href="/reviews/element/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Element Review</span>
+            <span class="dropdown-sub">Federated Matrix</span>
           </a>
+          <a href="/reviews/whatsapp/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">WhatsApp Review</span>
+            <span class="dropdown-sub">3B users, E2EE</span>
+          </a>
+          <a href="/reviews/telegram/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Telegram Review</span>
+            <span class="dropdown-sub">Biggest channels</span>
+          </a>
+          <a href="/reviews/briar/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Briar Review</span>
+            <span class="dropdown-sub">Works without internet</span>
+          </a>
+          <a href="/reviews/xchat/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">XChat Review</span>
+            <span class="dropdown-sub">New from X Corp</span>
+          </a>
+          <a href="/reviews/simplex/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">SimpleX Review</span>
+            <span class="dropdown-sub">No user IDs at all</span>
+          </a>
+          <span class="dropdown-soon" role="note">
+            <span class="dropdown-title">All major reviews shipped</span>
+            <span class="dropdown-sub">More niche reviews coming next</span>
+          </span>
         </div>
       </div>
 
@@ -73,22 +94,56 @@ import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
           </svg>
         </button>
         <div class="nav-dropdown-menu" role="menu">
+          <a href="/compare/signal-vs-threema/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Signal vs Threema</span>
+            <span class="dropdown-sub">Free vs paid privacy</span>
+          </a>
+          <a href="/compare/signal-vs-telegram/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Signal vs Telegram</span>
+            <span class="dropdown-sub">Default encryption?</span>
+          </a>
+          <a href="/compare/whatsapp-vs-signal/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">WhatsApp vs Signal</span>
+            <span class="dropdown-sub">Same protocol, diff metadata</span>
+          </a>
+          <a href="/compare/signal-vs-telegram-security/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Signal vs Telegram Security</span>
+            <span class="dropdown-sub">Default vs opt-in E2EE</span>
+          </a>
+          <a href="/compare/signal-vs-whatsapp-security/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Signal vs WhatsApp Security</span>
+            <span class="dropdown-sub">Which is actually safer?</span>
+          </a>
+          <a href="/compare/imessage-vs-signal/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">iMessage vs Signal</span>
+            <span class="dropdown-sub">Both encrypted, diff trade-offs</span>
+          </a>
+          <a href="/compare/signal-vs-whatsapp-vs-telegram/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Signal vs WhatsApp vs Telegram</span>
+            <span class="dropdown-sub">Three-way comparison</span>
+          </a>
+          <a href="/compare/wire-vs-signal-vs-threema/" role="menuitem" class="dropdown-item">
+            <span class="dropdown-title">Wire vs Signal vs Threema</span>
+            <span class="dropdown-sub">Three-way E2EE</span>
+          </a>
           <a href="/vs/whatsapp" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">vs WhatsApp</span>
-            <span class="dropdown-sub">Encryption & privacy</span>
+            <span class="dropdown-title">XChat vs WhatsApp</span>
+            <span class="dropdown-sub">XChat track</span>
           </a>
           <a href="/vs/signal" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">vs Signal</span>
-            <span class="dropdown-sub">Gold-standard crypto</span>
+            <span class="dropdown-title">XChat vs Signal</span>
+            <span class="dropdown-sub">XChat track</span>
           </a>
           <a href="/vs/telegram" role="menuitem" class="dropdown-item">
-            <span class="dropdown-title">vs Telegram</span>
-            <span class="dropdown-sub">Groups & channels</span>
+            <span class="dropdown-title">XChat vs Telegram</span>
+            <span class="dropdown-sub">XChat track</span>
           </a>
         </div>
       </div>
 
-      <a href="/list-your-group" class="nav-link">List</a>
+      <a href="/groups" class="nav-link">Groups</a>
+      <a href="/faq" class="nav-link">FAQ</a>
+      <a href="/contact" class="nav-link">Contact</a>
       <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm nav-cta">Join Community</a>
     </nav>
 
@@ -115,33 +170,53 @@ import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
     <nav class="drawer-nav" aria-label="Mobile menu">
       <div class="drawer-group">
         <span class="drawer-heading">Main</span>
-        <a href="/" class="drawer-link">Tracker</a>
-        <a href="/groups" class="drawer-link">Groups</a>
+        <a href="/" class="drawer-link">Home</a>
+        <a href="/best-encrypted-messaging-apps" class="drawer-link">Best Encrypted Apps 2026</a>
+        <a href="/groups" class="drawer-link">Groups Directory</a>
         <a href="/faq" class="drawer-link">FAQ</a>
-        <a href="/launch-countdown" class="drawer-link">Launch Recap</a>
+        <a href="/launch-countdown" class="drawer-link">XChat Launch Recap</a>
       </div>
 
       <div class="drawer-group">
-        <span class="drawer-heading">Guides</span>
-        <a href="/what-is-xchat" class="drawer-link">What Is XChat?</a>
-        <a href="/how-to-join-xchat-group" class="drawer-link">Join a Group</a>
-        <a href="/how-to-create-group-link" class="drawer-link">Create Group Link</a>
-        <a href="/android" class="drawer-link">XChat for Android</a>
-        <a href="/web" class="drawer-link">XChat Web (any device)</a>
-        <a href="/communities-shutdown" class="drawer-link">Communities Migration</a>
+        <span class="drawer-heading">Reviews</span>
+        <a href="/reviews/signal/" class="drawer-link">Signal Review</a>
+        <a href="/reviews/threema/" class="drawer-link">Threema Review</a>
+        <a href="/reviews/wire/" class="drawer-link">Wire Review</a>
+        <a href="/reviews/session/" class="drawer-link">Session Review</a>
+        <a href="/reviews/element/" class="drawer-link">Element Review</a>
+        <a href="/reviews/whatsapp/" class="drawer-link">WhatsApp Review</a>
+        <a href="/reviews/telegram/" class="drawer-link">Telegram Review</a>
+        <a href="/reviews/briar/" class="drawer-link">Briar Review</a>
+        <a href="/reviews/xchat/" class="drawer-link">XChat Review</a>
+        <a href="/reviews/simplex/" class="drawer-link">SimpleX Review</a>
+        <span class="drawer-soon">All major reviews shipped · more niche options next</span>
       </div>
 
       <div class="drawer-group">
         <span class="drawer-heading">Compare</span>
+        <a href="/compare/signal-vs-threema/" class="drawer-link">Signal vs Threema</a>
+        <a href="/compare/signal-vs-telegram/" class="drawer-link">Signal vs Telegram</a>
+        <a href="/compare/whatsapp-vs-signal/" class="drawer-link">WhatsApp vs Signal</a>
         <a href="/vs/whatsapp" class="drawer-link">XChat vs WhatsApp</a>
         <a href="/vs/signal" class="drawer-link">XChat vs Signal</a>
         <a href="/vs/telegram" class="drawer-link">XChat vs Telegram</a>
       </div>
 
       <div class="drawer-group">
+        <span class="drawer-heading">XChat Guides</span>
+        <a href="/what-is-xchat" class="drawer-link">What Is XChat?</a>
+        <a href="/how-to-join-xchat-group" class="drawer-link">Join a Group</a>
+        <a href="/how-to-create-group-link" class="drawer-link">Create Group Link</a>
+        <a href="/android" class="drawer-link">XChat for Android</a>
+        <a href="/web" class="drawer-link">XChat Web (any device)</a>
+      </div>
+
+      <div class="drawer-group">
         <span class="drawer-heading">For Owners</span>
         <a href="/list-your-group" class="drawer-link">List Your Group</a>
         <a href="/about" class="drawer-link">About</a>
+        <a href="/contact" class="drawer-link">Contact</a>
+        <a href="/terms" class="drawer-link">Terms</a>
       </div>
 
       <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary drawer-cta">Join Community</a>
@@ -168,27 +243,43 @@ import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
       }
     } catch (e) {}
 
-    var dropdown = document.querySelector('[data-dropdown]');
-    var dropdownBtn = document.querySelector('[data-dropdown-btn]');
-    if (dropdown && dropdownBtn) {
+    // 全站所有下拉菜单（Reviews / Compare）都要绑定 click 和 Esc 关闭
+    var dropdowns = document.querySelectorAll('[data-dropdown]');
+    dropdowns.forEach(function (dropdown) {
+      var dropdownBtn = dropdown.querySelector('[data-dropdown-btn]');
+      if (!dropdownBtn) return;
       dropdownBtn.addEventListener('click', function (e) {
         e.stopPropagation();
+        // 点开当前时，关闭其他已打开的下拉
+        dropdowns.forEach(function (other) {
+          if (other !== dropdown) {
+            other.classList.remove('open');
+            var otherBtn = other.querySelector('[data-dropdown-btn]');
+            if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
         var open = dropdown.classList.toggle('open');
         dropdownBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
       });
-      document.addEventListener('click', function (e) {
+    });
+    document.addEventListener('click', function (e) {
+      dropdowns.forEach(function (dropdown) {
         if (!dropdown.contains(e.target)) {
           dropdown.classList.remove('open');
-          dropdownBtn.setAttribute('aria-expanded', 'false');
+          var btn = dropdown.querySelector('[data-dropdown-btn]');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
         }
       });
-      document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        dropdowns.forEach(function (dropdown) {
           dropdown.classList.remove('open');
-          dropdownBtn.setAttribute('aria-expanded', 'false');
-        }
-      });
-    }
+          var btn = dropdown.querySelector('[data-dropdown-btn]');
+          if (btn) btn.setAttribute('aria-expanded', 'false');
+        });
+      }
+    });
 
     var menuBtn = document.getElementById('mobile-menu-btn');
     var drawer = document.getElementById('mobile-drawer');
@@ -530,7 +621,7 @@ import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
     text-align: center;
   }
 
-  @media (max-width: 860px) {
+  @media (max-width: 900px) {
     .desktop-nav { display: none; }
     .mobile-menu-btn { display: inline-flex; }
   }
@@ -542,5 +633,38 @@ import { XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
     }
 
     .banner-text { line-height: 1.3; }
+  }
+
+  /* === Coming-soon placeholders (not links, just info) === */
+  .dropdown-soon,
+  .drawer-soon {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.625rem 0.875rem;
+    color: var(--text-muted);
+    opacity: 0.85;
+    border-top: 1px solid var(--border);
+    margin-top: 0.375rem;
+    pointer-events: none;
+  }
+
+  .dropdown-soon .dropdown-title,
+  .drawer-soon {
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .dropdown-soon .dropdown-sub {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .drawer-soon {
+    font-size: 0.75rem;
+    line-height: 1.45;
+    padding: 0.5rem 0;
+    margin-top: 0.25rem;
   }
 </style>

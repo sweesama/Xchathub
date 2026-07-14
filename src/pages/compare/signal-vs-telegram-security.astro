@@ -1,0 +1,532 @@
+---
+/**
+ * compare/signal-vs-telegram-security.astro
+ *
+ * 高价值 SEO 词（聚焦安全维度）：
+ *   signal vs telegram security
+ *   signal vs telegram privacy
+ *   signal vs telegram encryption
+ *   signal vs telegram reddit
+ *   signal vs telegram which is more secure
+ *
+ * 这是与 /compare/signal-vs-telegram 不同的细分对比：
+ * - /compare/signal-vs-telegram 是综合对比（功能/群组/平台）
+ * - 本页是安全专题深挖（聚焦"默认 E2EE"差距 + 协议 + 元数据 + 审计）
+ *
+ * 核心论点：Signal 默认 E2EE on every chat。Telegram 默认 NOT E2EE，
+ * 只有 opt-in 的"Secret Chat"才 E2EE，普通聊天/群组是 server-side encrypted。
+ * 这是两者最大的安全差异，必须放大说明。
+ */
+import Layout from '../../layouts/Layout.astro';
+import { getAppBySlug } from '../../data/messagingApps';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
+import AdSlot from '../../components/AdSlot.astro';
+
+const signal = getAppBySlug('signal');
+const telegram = getAppBySlug('telegram');
+if (!signal || !telegram) throw new Error('Required app data missing');
+
+// Telegram 安全事实（硬编码补充字段）
+const tg = {
+  defaultE2EE: 'NO — only Secret Chats (opt-in, 1:1 only). All other chats are client-server / MTProto transport encryption',
+  protocol: 'MTProto (Telegram\'s custom protocol); audited but closed',
+  metadata: 'Significant — phone number, contacts, username, profile, last seen, online status, group memberships, channel subscriptions',
+  backupE2EE: 'Cloud chats are stored on Telegram servers (NOT E2EE); Secret Chats never sync to cloud',
+  groupSizeLimit: '200,000 members in groups / unlimited in channels — but NONE of these are E2EE',
+  phoneRequired: 'Yes — phone number is the identity',
+  emailRequired: 'No',
+  multiDevice: 'Unlimited — full cloud sync across all devices (this is the explicit design choice)',
+  sourceCode: 'Clients are open source (iOS/Android/desktop); server is closed source',
+  audits: 'Multiple E2EE audits of MTProto; full client audits limited; server never audited',
+  govRequests: 'Publishes transparency reports; has disclosed user data in terrorism cases per policy',
+  dataSharing: 'No Meta-style ad sharing, but Telegram collects substantial metadata for spam/abuse detection',
+  disappearing: 'Yes, in Secret Chats only with custom timers; regular chats have auto-delete only in last 2 years',
+};
+
+// Signal 安全事实（中央数据 + 补充）
+const sig = {
+  defaultE2EE: 'Every chat, call, group, status — always on, not opt-in',
+  protocol: 'Signal Protocol — designed and maintained by Signal Foundation; free licence to others',
+  metadata: 'Minimal — sealed sender hides who is messaging whom; only phone + last connection date stored',
+  backupE2EE: 'No cloud backups — Signal deliberately does not back up messages anywhere',
+  groupSizeLimit: '1,000 members',
+  phoneRequired: 'Yes (since 2024 optional username, but account still bound to real number)',
+  emailRequired: 'No',
+  multiDevice: 'Up to 5 linked devices — E2EE preserved, primary phone is source of truth',
+  sourceCode: 'Fully open source — clients AND server on GitHub, anyone can audit',
+  audits: 'Multiple ongoing third-party audits (NCC Group, Quarkslab, others); results published',
+  govRequests: 'Publishes transparency reports; in recent 12 months ~2,230 subpoenas, mostly for "registration date" only',
+  dataSharing: 'None — no commercial sharing, no ads business, no Meta parent',
+  disappearing: 'Yes, custom timers from 30 seconds to 4 weeks',
+};
+
+const rows = [
+  { label: 'Default end-to-end encryption', a: sig.defaultE2EE, b: tg.defaultE2EE, winner: 'a' },
+  { label: 'Encryption protocol', a: sig.protocol, b: tg.protocol, winner: null },
+  { label: 'Metadata collection', a: sig.metadata, b: tg.metadata, winner: 'a' },
+  { label: 'Cloud backups (E2EE?)', a: sig.backupE2EE, b: tg.backupE2EE, winner: 'a' },
+  { label: 'Open-source clients', a: 'Yes — fully open (GitHub)', b: 'Yes — open source clients', winner: null },
+  { label: 'Open-source server', a: 'Yes — Signal Server on GitHub', b: 'No — server is closed', winner: 'a' },
+  { label: 'Independent audits', a: 'Multiple, ongoing, public', b: 'Limited — only MTProto audited; server never audited', winner: 'a' },
+  { label: 'Group chat E2EE', a: 'Always on (all sizes)', b: 'Group chats are NOT E2EE (server can read)', winner: 'a' },
+  { label: 'Phone number as identity', a: sig.phoneRequired, b: tg.phoneRequired, winner: null },
+  { label: 'Multi-device', a: sig.multiDevice, b: tg.multiDevice, winner: null },
+  { label: 'Government data requests', a: sig.govRequests, b: tg.govRequests, winner: 'a' },
+  { label: 'Business model & incentives', a: 'Nonprofit — donations only', b: 'For-profit (premium subscriptions); Pavel Durov personally controls', winner: null },
+  { label: 'Approx. monthly active users', a: '~70 million', b: '~950 million', winner: 'b' },
+];
+
+const stsFaqs = [
+  {
+    question: 'Is Telegram more secure than Signal?',
+    answer: 'No. By default, Telegram chats are encrypted only between your device and Telegram\'s servers (client-server encryption), so Telegram itself can read your messages. End-to-end encryption on Telegram is opt-in per conversation via "Secret Chats" and does not work in groups. Signal, by contrast, is end-to-end encrypted on every chat, call, and group by default. For message content security, Signal is materially more secure than Telegram in its default configuration.',
+  },
+  {
+    question: 'Is Telegram really not end-to-end encrypted?',
+    answer: 'Correct. Standard Telegram chats, group chats, and channels are NOT end-to-end encrypted. They are encrypted in transit and at rest on Telegram\'s servers, but Telegram holds the keys. To get end-to-end encryption you must explicitly start a "Secret Chat" with a specific contact (1:1 only, no group Secret Chats), and you must do it on the original device. Secret Chats are not synced to the cloud.',
+  },
+  {
+    question: 'Is Telegram safer for groups than Signal?',
+    answer: 'No, the opposite. Signal group chats are end-to-end encrypted on every group, every size. Telegram group chats are NOT end-to-end encrypted; only "Secret Chats" (1:1 only) are. If you need a private group conversation, Signal is the safer choice. Telegram is the better choice for large public broadcast groups (up to 200,000 members) where end-to-end encryption is not possible anyway.',
+  },
+  {
+    question: 'Can I make Telegram end-to-end encrypted?',
+    answer: 'You can enable end-to-end encryption on a 1:1 conversation by starting a "Secret Chat". However, Secret Chats cannot be used in groups, cannot be synced across devices, and must be re-created per conversation. There is no way to make Telegram\'s regular chats, group chats, or channels end-to-end encrypted. If you need default E2EE for everyday messaging, Signal is the better fit.',
+  },
+];
+
+const jsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'Signal vs Telegram Security (2026) — The Default-E2EE Gap Explained',
+    description: 'Security-focused Signal vs Telegram comparison. The biggest gap: Telegram is NOT end-to-end encrypted by default — only opt-in Secret Chats are. Signal encrypts every chat by default. Plus metadata, source openness, audits.',
+    datePublished: '2026-07-08',
+    dateModified: '2026-07-08',
+    url: '/compare/signal-vs-telegram-security',
+  }),
+  faqPageJsonLd(stsFaqs),
+);
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Compare', url: 'https://xchat.directory/reviews/' },
+  { name: 'Signal vs Telegram Security', url: 'https://xchat.directory/compare/signal-vs-telegram-security/' },
+];
+---
+
+<Layout
+  title="Signal vs Telegram Security (2026) — Defaults Matter"
+  description="Signal vs Telegram security compared head-to-head. Telegram is NOT end-to-end encrypted by default — only opt-in Secret Chats. Signal encrypts every chat."
+  jsonLd={jsonLd}
+  canonicalPath="/compare/signal-vs-telegram-security"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="Signal vs Telegram security comparison"
+>
+  <article class="compare">
+    <section class="compare-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Compare</a> <span class="crumb-sep">/</span>
+          <span>Signal vs Telegram Security</span>
+        </nav>
+
+        <div class="hero-vs">
+          <div class="vs-side vs-a">
+            <span class="vs-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+            <div class="vs-name">{signal.name}</div>
+            <div class="vs-score">{signal.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
+          </div>
+          <div class="vs-divider"><span>vs</span></div>
+          <div class="vs-side vs-b">
+            <span class="vs-monogram" style={`background:${telegram.brandColor}`}>{telegram.monogram}</span>
+            <div class="vs-name">{telegram.name}</div>
+            <div class="vs-score">{telegram.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
+          </div>
+        </div>
+
+        <h1>Signal vs Telegram: <span class="text-gradient">The Default-Encryption Gap That Most Reviews Miss</span></h1>
+        <p class="lead text-secondary prose-body">
+          Telegram markets itself as "secure" and "encrypted," but its regular chats and group chats are
+          <strong>not</strong> end-to-end encrypted. Only opt-in "Secret Chats" are. Signal encrypts every chat,
+          call, and group by default. This page compares the two messengers purely on security: default E2EE,
+          metadata, source openness, audits, and government data exposure.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <h2 class="section-title">Security comparison: 13 dimensions</h2>
+        <div class="table-wrap">
+          <table class="cmp-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th class="col-a">{signal.name}</th>
+                <th class="col-b">{telegram.name}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr>
+                  <td class="cmp-label">{row.label}</td>
+                  <td class={`col-a${row.winner === 'a' ? ' col-win' : ''}`}>
+                    {row.winner === 'a' && <span class="winner-mark" aria-label="Winner">★</span>}
+                    {row.a}
+                  </td>
+                  <td class={`col-b${row.winner === 'b' ? ' col-win' : ''}`}>
+                    {row.winner === 'b' && <span class="winner-mark" aria-label="Winner">★</span>}
+                    {row.b}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="cmp-note text-muted">
+          ★ marks the dimension where one app clearly wins on security.<br />
+          Sources: <a href="https://signal.org/docs/" target="_blank" rel="noopener noreferrer">Signal official docs</a>,
+          <a href="https://core.telegram.org/api/end-to-end" target="_blank" rel="noopener noreferrer">Telegram MTProto / E2EE docs</a>,
+          Signal Transparency Reports (2024), Telegram Transparency Reports (2024).
+        </p>
+
+        <AdSlot slot="compare-mid" label="Sponsored" />
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Who should pick which (on security grounds)</h2>
+        <div class="pick-grid">
+          <article class="pick-card pick-a">
+            <header>
+              <span class="pick-monogram" style={`background:${signal.brandColor}`}>{signal.monogram}</span>
+              <h3>Choose Signal if security is your priority</h3>
+            </header>
+            <ul>
+              <li>You want <strong>every chat encrypted by default</strong> — not "encrypted if I remember to enable it"</li>
+              <li>You care about <strong>group chat encryption</strong> — Telegram's 200K-member groups are NOT E2EE</li>
+              <li>You don't trust Telegram's "we won't give data to governments" promise without audit</li>
+              <li>You want full open-source transparency (Signal server is on GitHub; Telegram's is not)</li>
+              <li>You're a journalist, activist, lawyer, doctor — any threat model where default-encryption matters</li>
+            </ul>
+            <a href="/reviews/signal/" class="pick-cta">Read full Signal review →</a>
+          </article>
+
+          <article class="pick-card pick-b">
+            <header>
+              <span class="pick-monogram" style={`background:${telegram.brandColor}`}>{telegram.monogram}</span>
+              <h3>Choose Telegram if reach and features matter more</h3>
+            </header>
+            <ul>
+              <li>You want 200K-member groups, channels for broadcasting, bots — Telegram is unmatched here</li>
+              <li>You're OK with <strong>enabling Secret Chat manually</strong> for sensitive conversations</li>
+              <li>You live in a region where Telegram is the de-facto messenger (Eastern Europe, parts of Asia, Middle East)</li>
+              <li>You want full unlimited cloud sync — Telegram is genuinely the best in this category</li>
+              <li>You don't need group chat encryption (mostly use 1:1 in Secret Chat mode anyway)</li>
+            </ul>
+            <a href="/reviews/telegram/" class="pick-cta">Read full Telegram review →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="prose">
+          <h2>The default-E2EE gap that most reviews miss</h2>
+          <p>
+            Telegram's marketing page says "heavily encrypted." Its CEO has publicly claimed "Telegram is more
+            secure than Signal." Both statements are misleading. What matters is what Telegram calls
+            "client-server / server-client encryption": your messages are encrypted in transit between your
+            device and Telegram's servers, and Telegram's servers can decrypt them because they hold the keys.
+            That is <em>not</em> end-to-end encryption.
+          </p>
+          <p>
+            Telegram <strong>does</strong> offer end-to-end encryption — but only in opt-in "Secret Chats" that:
+            (1) must be manually initiated per contact, (2) work only on the device you start them on (no cloud sync),
+            (3) are not available for group chats at all. The vast majority of Telegram traffic — regular chats,
+            group chats, channels — flows through Telegram's servers in a form Telegram itself can read.
+          </p>
+
+          <h3>Why Telegram chose this design (and why it matters)</h3>
+          <p>
+            Telegram's CEO Pavel Durov has explained the design choice: end-to-end encryption "kills" the user
+            experience because encrypted data can't be backed up, indexed, or synced across devices. That's
+            true, but it's a trade-off that erases the security guarantee most users think they're getting.
+          </p>
+          <p>
+            The result: a user who opens Telegram, chats with friends, and joins group chats is operating
+            under the assumption that their messages are private. They are not, by Telegram's own design.
+            If Telegram's servers are breached, compelled by a government, or simply abused by an insider,
+            every non-Secret Chat is exposed.
+          </p>
+
+          <h3>What "Signal Protocol" actually is — and why Telegram doesn't use it</h3>
+          <p>
+            Signal uses the <strong>Signal Protocol (Double Ratchet + X3DH)</strong>, designed by Moxie
+            Marlinspike and Trevor Perrin, currently maintained by Signal Foundation. It's the same protocol
+            WhatsApp, Google Messages, and Skype use under licence. It is the most peer-reviewed messaging
+            cryptography in the world, with a dozen published academic analyses.
+          </p>
+          <p>
+            Telegram uses <strong>MTProto</strong>, a protocol Telegram designed in-house. MTProto has been
+            audited (the encryption itself is fine), but the fact that Telegram had to invent its own
+            cryptography stack rather than using the field-standard Signal Protocol is itself a yellow flag.
+            Most security researchers recommend using battle-tested protocols rather than novel ones.
+          </p>
+
+          <h3>Metadata: Telegram is closer to WhatsApp than to Signal</h3>
+          <p>
+            Telegram collects substantial metadata: your phone number, contacts, username, profile, last-seen
+            timestamp, online status, every group you've joined, every channel you follow. This metadata
+            profile is similar in scope to WhatsApp's — and far more exposed than Signal's "sealed sender"
+            design, where Telegram's equivalent (Signal's servers) cannot tell who is messaging whom.
+          </p>
+
+          <h3>Open source: clients yes, server no</h3>
+          <p>
+            Telegram's iOS, Android, and desktop clients are open source on GitHub. Signal's clients and
+            server are open source. The difference: when a security researcher audits Signal, they can read
+            the server code that handles your data. When they audit Telegram, they cannot — the server code
+            has never been published. That's a non-trivial transparency gap.
+          </p>
+
+          <h3>Group chats: where the gap is largest</h3>
+          <p>
+            Telegram's headline feature is 200,000-member groups and unlimited channels. None of these are
+            end-to-end encrypted. A journalist creating a "sources wanted" group on Telegram is broadcasting
+            every message through Telegram's servers. The same journalist creating a Signal group of 1,000
+            people is fully E2EE-protected. This is not a minor trade-off — for high-risk use cases, the
+            choice is categorical.
+          </p>
+
+          <h3>What Telegram is actually best for</h3>
+          <p>
+            None of this means Telegram is bad. It means Telegram is best for the things it's optimized for:
+            large groups, channels, broadcasting, bots, file sharing, and unlimited cloud sync. If those are
+            your priorities and you remember to use Secret Chat for sensitive 1:1 conversations, Telegram
+            is a fine choice. If your threat model includes "I want every message to be encrypted by default
+            and I don't want to remember to enable it," Signal is the answer.
+          </p>
+
+          <h2>Reddit consensus (r/privacy, r/signal, r/Telegram)</h2>
+          <p>
+            The recurring r/privacy advice: <em>"Signal for private messages, Telegram for everything else."</em>
+            The technical consensus is that Signal is materially more secure on every dimension that matters
+            (default E2EE, metadata minimization, source openness, audits). The disagreement is about UX
+            trade-offs and ecosystem.
+          </p>
+          <p>
+            r/Telegram tends to push back on the framing, arguing that E2EE-by-default is overkill for most
+            users, that Telegram's server-side encryption is "good enough," and that the auditability of
+            MTProto plus the no-data-sharing-to-third-parties policy is acceptable. Both perspectives have
+            merit; the right answer depends on your threat model.
+          </p>
+
+          <h2>Verdict</h2>
+          <p>
+            On pure security, Signal wins on seven of the thirteen dimensions above, including the most
+            important one (default E2EE). Telegram wins on user base and feature set. If you want
+            security-by-default, choose Signal. If you want a feature-rich messenger and will manually
+            use Secret Chat for sensitive conversations, Telegram is fine.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Common security questions</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Signal actually safer than Telegram?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes, materially. Signal is end-to-end encrypted by default on every chat, call, and group. Telegram is only end-to-end encrypted in opt-in Secret Chats — regular chats, group chats, and channels are server-side encrypted, meaning Telegram can read them. Beyond default E2EE, Signal also minimizes metadata, has an open-source server (Telegram's is closed), and has been more thoroughly audited.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Which is more secure according to Reddit?</h3>
+            </summary>
+            <div class="faq-body">
+              The recurring r/privacy and r/signal consensus is that Signal is more secure because of default E2EE, sealed-sender metadata minimization, and open-source server transparency. r/Telegram tends to argue Telegram's UX and feature set justify the security trade-offs. Most security researchers recommend Signal for sensitive communication and Telegram for general-purpose messaging.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram encrypted by default?</h3>
+            </summary>
+            <div class="faq-body">
+              No — Telegram uses client-server encryption (MTProto) for messages in transit and at rest on Telegram's servers, but Telegram's servers hold the encryption keys. This means Telegram itself can read your messages. End-to-end encryption is available only via opt-in "Secret Chats," which work only 1:1, only on the originating device, and do not sync to cloud.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Can Telegram read my messages?</h3>
+            </summary>
+            <div class="faq-body">
+              In regular chats, group chats, and channels — yes. Telegram's servers hold the keys and can technically decrypt your message history. In Secret Chats — no, Secret Chats use end-to-end encryption and Telegram's servers never see plaintext. To maximize privacy on Telegram, you must remember to manually initiate a Secret Chat per contact, and understand that group chats cannot use Secret Chats.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Does Telegram have end-to-end encryption for groups?</h3>
+            </summary>
+            <div class="faq-body">
+              No. End-to-end encryption in Telegram is only available in 1:1 Secret Chats. Group chats (up to 200,000 members) and channels (unlimited subscribers) are NOT end-to-end encrypted — Telegram's servers can read every message. This is the largest security gap between Signal (E2EE on all groups up to 1,000) and Telegram (E2EE on zero groups).
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram safer than WhatsApp?</h3>
+            </summary>
+            <div class="faq-body">
+              No — WhatsApp is end-to-end encrypted by default on every chat and group (using the Signal Protocol), while Telegram is not. WhatsApp collects more metadata than Signal, but its message content is more private than Telegram's regular chats. For default E2EE, the ranking is: Signal > WhatsApp > Telegram.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+
+<style>
+  .compare-hero {
+    text-align: center;
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.05), transparent 60%),
+      var(--bg-primary);
+  }
+  .breadcrumb { font-size: 0.8125rem; margin-bottom: 2.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .crumb-sep { margin: 0 0.5rem; }
+  .compare-hero h1 { max-width: 820px; margin: 0 auto 1.25rem; }
+  .compare-hero .lead { font-size: 1.0625rem; max-width: 720px; margin: 0 auto; }
+
+  .hero-vs {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    align-items: center; gap: 1.5rem; max-width: 720px; margin: 0 auto 2.5rem;
+  }
+  .vs-side { display: flex; flex-direction: column; align-items: center; gap: 0.625rem; }
+  .vs-monogram {
+    width: 72px; height: 72px; border-radius: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.75rem; font-weight: 800; color: white;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 8px 24px rgba(0,0,0,0.3);
+    letter-spacing: -0.04em;
+  }
+  .vs-name { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+  .vs-score { font-family: var(--font-mono); font-size: 1rem; font-weight: 700; color: var(--accent-light); }
+  .vs-score .score-out { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; }
+  .vs-divider {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 0.875rem;
+    text-transform: uppercase; letter-spacing: 0.12em; padding: 0 0.5rem;
+  }
+  .vs-divider span {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg-card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center; font-weight: 700;
+  }
+
+  .section-title { text-align: center; margin-bottom: 2rem; font-size: clamp(1.5rem, 3vw, 2.25rem); }
+
+  .table-wrap {
+    max-width: 920px; margin: 0 auto; overflow-x: auto;
+    border: 1px solid var(--border); border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; min-width: 640px; }
+  .cmp-table th, .cmp-table td {
+    padding: 0.875rem 1.125rem; text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  .cmp-table thead th {
+    font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--text-muted);
+    background: rgba(255,255,255,0.02);
+  }
+  .cmp-table tbody td { color: var(--text-secondary); vertical-align: top; }
+  .cmp-table tbody tr:last-child td { border-bottom: none; }
+  .cmp-table tbody tr:hover { background: rgba(255,255,255,0.015); }
+  .cmp-label { font-weight: 600; color: var(--text-primary); min-width: 200px; }
+  .col-a, .col-b { color: var(--text-primary); }
+  .col-win { background: rgba(29,155,240,0.06); font-weight: 600; }
+  .winner-mark { color: var(--accent-light); margin-right: 0.375rem; font-size: 1rem; }
+  .cmp-note { font-size: 0.8125rem; text-align: center; max-width: 700px; margin: 1rem auto 0; line-height: 1.65; }
+
+  .pick-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 1.5rem; max-width: 920px; margin: 0 auto;
+  }
+  .pick-card {
+    padding: 1.75rem; border: 1px solid var(--border);
+    border-radius: var(--radius-xl); background: var(--bg-card);
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+  }
+  .pick-card:hover { transform: translateY(-2px); }
+  .pick-card header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+  .pick-monogram {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 0.9375rem;
+  }
+  .pick-card h3 { font-size: 1.125rem; margin: 0; }
+  .pick-card ul {
+    list-style: none; padding: 0; margin: 0 0 1.25rem 0;
+    display: flex; flex-direction: column; gap: 0.625rem;
+  }
+  .pick-card ul li {
+    padding-left: 1.5rem; position: relative;
+    font-size: 0.9375rem; line-height: 1.55; color: var(--text-secondary);
+  }
+  .pick-card ul li::before {
+    content: ''; position: absolute; left: 0; top: 0.625rem;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-light); opacity: 0.7;
+  }
+  .pick-cta {
+    color: var(--accent-light); font-weight: 600; font-size: 0.9375rem;
+    text-decoration: none; border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .pick-cta:hover { border-color: var(--accent-light); }
+  .pick-a {
+    border-color: rgba(37,146,233,0.3);
+    background: radial-gradient(ellipse at top, rgba(37,146,233,0.06), transparent 70%), var(--bg-card);
+  }
+  .pick-b {
+    border-color: rgba(13,189,139,0.3);
+    background: radial-gradient(ellipse at top, rgba(13,189,139,0.06), transparent 70%), var(--bg-card);
+  }
+
+  .prose { max-width: 720px; margin: 0 auto; color: var(--text-secondary); }
+  .prose h2 { color: var(--text-primary); font-size: 1.625rem; margin: 2.5rem 0 1.25rem; }
+  .prose h3 { color: var(--text-primary); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+  .prose p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.25rem; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .prose em { font-style: italic; color: var(--text-primary); }
+  .prose a { color: var(--accent-light); text-decoration: none; border-bottom: 1px dotted rgba(77,181,245,0.4); }
+  .prose a:hover { border-bottom-color: var(--accent-light); }
+
+  .faq-list { max-width: 720px; margin: 0 auto; }
+  .faq-q-title { font-size: 1rem; margin: 0; display: inline; }
+  .faq-body { padding: 0.75rem 0 0.5rem; color: var(--text-secondary); line-height: 1.7; font-size: 0.9375rem; }
+
+  @media (max-width: 720px) {
+    .pick-grid { grid-template-columns: 1fr; }
+    .hero-vs { gap: 0.75rem; }
+    .vs-monogram { width: 56px; height: 56px; font-size: 1.25rem; }
+    .compare-hero { padding-top: 3.5rem; }
+  }
+</style>

@@ -1,0 +1,97 @@
+---
+/**
+ * AdSlot.astro — AdSense 广告位占位
+ *
+ * 用法：
+ *   <AdSlot slot="in-article-1" />
+ *
+ * 1. 拿到 AdSense ca-pub-XXXXX + slot-id 后
+ *    - 把 <ADSENSE_PUBLISHER_ID> 和 <ADSENSE_SLOT_ID> 替换为真实值
+ *    - 把 `enabled` 默认值改成 true
+ * 2. 评测/对比页里用 <AdSlot slot="..." />
+ * 3. 等 AdSense 通过审核后，正式广告就会填进来
+ *
+ * 默认隐藏 + 仅占位渲染，不会影响页面主题和 SEO。
+ */
+
+export interface Props {
+  /** 占位 ID — 不同位置用不同 ID，方便日后单独定位广告效果 */
+  slot?: string;
+  /** 是否真正渲染广告代码；默认 false（先占位不投） */
+  enabled?: boolean;
+  /** 占位文案，仅当占位渲染时显示 */
+  label?: string;
+}
+
+const {
+  slot = 'default',
+  enabled = false,
+  label = 'Sponsored',
+} = Astro.props;
+
+const publisherId = '<ADSENSE_PUBLISHER_ID>';
+const slotId = '<ADSENSE_SLOT_ID>';
+---
+
+{enabled ? (
+  <aside class="ad-slot" data-ad-slot={slot} aria-label="Advertisement">
+    <ins
+      class="adsbygoogle"
+      style="display:block"
+      data-ad-client={publisherId}
+      data-ad-slot={slotId}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    />
+    <script is:inline>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </aside>
+) : (
+  <aside class="ad-slot ad-placeholder" data-ad-slot={slot} aria-label="Ad placeholder">
+    <span class="ad-placeholder-label">{label}</span>
+    <span class="ad-placeholder-hint">Advertisement — AdSense slot "{slot}"</span>
+  </aside>
+)}
+
+<style>
+  .ad-slot {
+    margin: 2rem auto;
+    padding: 1rem;
+    max-width: 728px;
+    text-align: center;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .ad-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    min-height: 90px;
+  }
+
+  .ad-placeholder-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .ad-placeholder-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    opacity: 0.7;
+    font-family: var(--font-mono);
+  }
+
+  @media (max-width: 720px) {
+    .ad-slot { margin: 1.5rem auto; }
+  }
+</style>

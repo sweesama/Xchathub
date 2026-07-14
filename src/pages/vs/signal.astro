@@ -6,7 +6,11 @@
  * Signal 在 privacy-conscious 用户群里是"金标准"，我们坦诚对比。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_LAUNCH_DISPLAY } from '../../data/xchat';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
 
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (for-profit)',           other: 'Signal Foundation (nonprofit)' },
@@ -26,21 +30,39 @@ const rows = [
   { label: 'Advertising revenue',      xchat: 'Yes (X platform)',              other: 'No — donation funded' },
 ];
 
-const comparisonJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'XChat vs Signal — Security and Privacy Compared',
-  author: { '@type': 'Organization', name: 'XChat Hub' },
-  publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
-  datePublished: '2026-04-20',
-  dateModified: new Date().toISOString().split('T')[0],
-  mainEntityOfPage: 'https://xchat.directory/vs/signal',
-  description: 'XChat vs Signal compared: encryption, open source, audits, metadata, and who wins on privacy. Updated April 2026.',
-};
+const vsFaqs = [
+  {
+    question: 'Is XChat as secure as Signal?',
+    answer: 'XChat and Signal are both end-to-end encrypted by default, but their security postures differ. Signal has been audited repeatedly by independent third parties (NCC Group, Quarkslab and others), runs the open-source Signal Protocol (Double Ratchet), and is operated by a 501(c)(3) nonprofit. XChat launched in April 2026 with no published independent audit, no disclosed protocol specification, and a closed-source client. For users who require cryptographically verifiable security today, Signal is the safer pick. XChat may catch up over time as audits become available.',
+  },
+  {
+    question: 'Do I need a phone number for XChat or Signal?',
+    answer: 'Signal still requires a phone number to register (though you can hide it behind a username since 2024). XChat does not require a phone number at all — your identity is your X (Twitter) account. If avoiding phone-number collection is a priority, XChat is the more anonymous option of the two.',
+  },
+  {
+    question: 'Can I use XChat on Android?',
+    answer: 'As of April 2026, XChat is iOS only (iPhone and iPad). An Android release has not been announced. Signal supports iOS, Android, Windows, macOS, Linux, and a web client. If you need cross-platform availability, Signal is currently the more universal choice; if you are iPhone-only and live inside the X ecosystem, XChat is a viable private messenger for your X contacts.',
+  },
+  {
+    question: 'Should I switch from Signal to XChat?',
+    answer: 'Not yet. Signal has 12 years of public audits, a much larger user base (~70M), and a transparent open-source stack. XChat is brand new, has no published audit, and is restricted to iOS. The best move is to keep using Signal for your encrypted conversations and add XChat as a complement for chats with your X contacts that you do not need to be cross-platform. Revisit the comparison once XChat publishes an audit and ships Android.',
+  },
+];
+
+const comparisonJsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'XChat vs Signal (2026) — Security and Privacy Compared',
+    description: 'XChat vs Signal compared: encryption, open source, audits, metadata, and who wins on privacy. Updated April 2026.',
+    datePublished: '2026-04-20',
+    dateModified: new Date().toISOString().split('T')[0],
+    url: '/vs/signal',
+  }),
+  faqPageJsonLd(vsFaqs),
+);
 ---
 
 <Layout
-  title="XChat vs Signal (2026) — Is XChat as Secure as Signal? | XChat Hub"
+  title="XChat vs Signal (2026) — Is XChat as Secure?"
   description="Honest XChat vs Signal comparison. Signal has 10+ years of audited Signal Protocol; XChat is new and closed source. Here's who should use which."
   jsonLd={comparisonJsonLd}
   canonicalPath="/vs/signal"

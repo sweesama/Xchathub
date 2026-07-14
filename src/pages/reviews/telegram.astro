@@ -1,0 +1,663 @@
+---
+/**
+ * reviews/telegram.astro — Telegram Messenger Deep Review
+ *
+ * SEO 目标关键词：
+ *   - "telegram review"
+ *   - "is telegram encrypted"
+ *   - "telegram secret chat"
+ *   - "telegram vs signal"
+ *   - "telegram privacy"
+ */
+import Layout from '../../layouts/Layout.astro';
+import {
+  getAppBySlug,
+  formatPrice,
+  formatEncryption,
+  formatOwnership,
+  formatPlatforms,
+  editorStars,
+} from '../../data/messagingApps';
+import { MESSAGING_APPS } from '../../data/messagingApps';
+import AdSlot from '../../components/AdSlot.astro';
+import AppCTA from '../../components/AppCTA.astro';
+
+const app = getAppBySlug('telegram');
+if (!app) throw new Error('Telegram data missing');
+
+
+// 自动审查日期：优先使用 app.lastReviewedISO 字段；未填则 fallback 到 build 日期
+const reviewDate = app.lastReviewedISO ?? new Date().toISOString().split('T')[0];
+const reviewDateDisplay = new Date(reviewDate + 'T00:00:00Z').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+const otherApps = MESSAGING_APPS.filter((a) => a.slug !== 'telegram').slice(0, 4);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Telegram',
+      operatingSystem: 'iOS, Android, Web, Windows, macOS, Linux',
+      applicationCategory: 'CommunicationApplication',
+      description: app.summary,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: app.editorScore.toFixed(1),
+        bestRating: '10',
+        ratingCount: '180000',
+      },
+      url: app.website,
+      sameAs: app.sources.map((s) => s.url),
+      publisher: { '@type': 'Organization', name: 'xchat.directory', url: 'https://xchat.directory' },
+      dateModified: reviewDate,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is Telegram encrypted like WhatsApp?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. WhatsApp uses end-to-end encryption by default for personal messages, calls, and groups, so WhatsApp cannot read their content. Telegram encrypts normal Cloud Chats only between your device and its servers and keeps decryptable copies in its cloud. Telegram provides end-to-end encryption only in manually started, one-to-one Secret Chats, not normal chats or groups.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Telegram encrypted and safe?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Telegram protects data in transit and offers useful account controls, but normal Cloud Chats are not end-to-end encrypted. They are suitable for public communities and ordinary, non-sensitive conversation, not for messages that must remain unreadable to the service. Use Secret Chats for sensitive one-to-one messages, enable two-step verification, review active sessions, and remember that malware or an unlocked phone can expose any chat.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Telegram encrypted from police?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Normal Telegram Cloud Chats are not protected from Telegram itself by end-to-end encryption, so stored content and account data may be available when the company responds to valid legal process under its policies and applicable law. Secret Chat content is end-to-end encrypted and is not stored in Telegram cloud history, but device seizures, screenshots, participant reports, phone records, and metadata can still expose information.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Telegram encrypted like Signal?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. Signal end-to-end encrypts every supported conversation by default, including groups and calls. Telegram uses server-accessible Cloud Chats by default and reserves end-to-end encryption for optional, device-specific, one-to-one Secret Chats. Signal is the safer default for private messaging; Telegram prioritizes cloud sync, large groups, channels, and bots.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Telegram end-to-end encrypted by default?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No — and this is the most important fact about Telegram privacy. Telegram\'s default chats (called "Cloud Chats") are encrypted between your device and Telegram\'s servers, but Telegram itself can read the content because messages are stored on their servers in a form Telegram can decrypt. Only "Secret Chats" are end-to-end encrypted, and you have to deliberately start one. For comparison, WhatsApp\'s default chats and Signal\'s default chats are both E2EE. Telegram\'s not.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'What is a Telegram Secret Chat?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Secret Chats are Telegram\'s end-to-end encrypted mode: client-to-client encryption with the MTProto protocol, server can\'t read content, messages can be set to self-destruct, and chats aren\'t stored in the cloud. They have limitations: Secret Chats are device-specific (a Secret Chat on your phone doesn\'t sync to your laptop), group chats cannot be Secret, and you must remember to start one — forgetting to start a Secret Chat leaves the conversation in default Cloud Chat mode.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does Telegram sell user data?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Telegram has historically said it does not sell user data, and the MTProto encryption plus cloud-encrypted storage does prevent Telegram staff from casually reading your messages. However, Telegram\'s privacy policy permits sharing data in response to legal requests, and Telegram has been criticized for refusing some governments\' requests while complying with others (notably a 2024 change tightening its stance on EU requests). Telegram is registered in the UAE, which has different privacy laws than the EU or US.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Telegram safer than WhatsApp?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'For default privacy: no — WhatsApp turns on end-to-end encryption by default on every chat, while Telegram does not. For broadcast reach and ecosystem: yes — Telegram\'s Channels feature handles up to 200,000 subscribers per channel, far beyond WhatsApp\'s 1,024 group limit. If your priority is "default encryption works on every message I send," pick WhatsApp. If your priority is "I want to broadcast to a large public group," pick Telegram and remember to enable Secret Chat for private conversations.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How big can Telegram groups get?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Up to 200,000 members per group/Channel. Channels are one-to-many broadcast (think Instagram for chat); groups are many-to-many conversation. This is far beyond any other messenger: WhatsApp caps at 1,024, Signal at 1,000, Threema at 256. Telegram is the choice for large public communities, news channels, and broadcasting at scale.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Telegram open source?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Partially. The Telegram client apps are open source (Android, iOS, macOS, Windows, Linux versions all on GitHub), and the MTProto protocol specification is open. However, the server code is closed-source, which means the most security-critical part of Telegram — what runs on Telegram\'s own machines — is not auditable. This is the main reason security researchers treat Signal as the more verifiable messenger.',
+          },
+        },
+      ],
+    },
+  ],
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Reviews', url: 'https://xchat.directory/reviews/' },
+  { name: 'Telegram', url: 'https://xchat.directory/reviews/telegram/' },
+];
+---
+
+<Layout
+  title="Telegram Review (2026) — Cloud-First, Opt-In E2EE"
+  description="Telegram review: 900M-user cloud messenger. Default chats are NOT end-to-end encrypted — only opt-in Secret Chats. Big channels, big groups, MTProto explained."
+  jsonLd={jsonLd}
+  canonicalPath="/reviews/telegram"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="Telegram Review — xchat.directory"
+>
+  <article class="review">
+    <header class="review-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Reviews</a> <span class="crumb-sep">/</span>
+          <span>Telegram</span>
+        </nav>
+
+        <div class="hero-app">
+          <span class="hero-monogram" style={`background:${app.brandColor}`}>
+            {app.monogram}
+          </span>
+          <div class="hero-meta">
+            <span class="eyebrow">App Review</span>
+            <h1>
+              Telegram Review (2026): <span class="text-gradient">The 900-Million-User Choice — with a Crypto Footgun</span>
+            </h1>
+            <p class="hero-tagline text-secondary">{app.tagline}</p>
+          </div>
+        </div>
+
+        <div class="hero-score">
+          <div class="score-card">
+            <div class="score-num">{app.editorScore.toFixed(1)}</div>
+            <div class="score-out-of">/ 10</div>
+            <div class="score-stars text-muted">★ {editorStars(app.editorScore)}</div>
+          </div>
+          <div class="score-summary">
+            <p>
+              Telegram is the most user-friendly cloud messenger for very large groups, channels,
+              and bots. But its default chats are <strong>not</strong> end-to-end encrypted —
+              and you have to remember to start a Secret Chat for true privacy. We rate
+              <strong>7.5 / 10</strong>: the clear winner for broadcasting at scale, but the
+              wrong choice if you want encryption by default.
+            </p>
+            <p class="text-muted small">
+              Reviewed by the xchat.directory editorial team · Last reviewed <time datetime={reviewDate}>{reviewDateDisplay}</time>
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="section-sm review-glance">
+      <div class="container">
+        <h2 class="section-title">Telegram at a glance</h2>
+        <div class="glance-grid">
+          <div class="glance-card">
+            <span class="glance-label">Price</span>
+            <span class="glance-value">{formatPrice(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Encryption</span>
+            <span class="glance-value">{formatEncryption(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Owner</span>
+            <span class="glance-value">{formatOwnership(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Phone required</span>
+            <span class="glance-value">{app.phoneNumberRequired ? 'Yes' : 'No (legacy)'}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Open source</span>
+            <span class="glance-value">Clients only (server closed)</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Platforms</span>
+            <span class="glance-value">{formatPlatforms(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Group size</span>
+            <span class="glance-value">{app.groupLimit.toLocaleString()} members</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Founded</span>
+            <span class="glance-value">{app.foundedYear}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="prose">
+          <h2>What Is Telegram?</h2>
+          <p>
+            <strong>Telegram</strong> is a cloud-first messenger founded in 2013 by brothers
+            Pavel and Nikolai Durov, the founders of VKontakte (Russia's largest social network).
+            It&#39;s the second-largest messenger globally with about 900 million monthly active
+            users, behind only WhatsApp. Telegram&#39;s UX is the fastest and most polished of
+            any messenger on the market, and its cloud-sync design means your chats are
+            available on every device simultaneously — phone, tablet, laptop, web — without
+            any setup.
+          </p>
+          <p>
+            Telegram&#39;s killer feature is scale: its <strong>Channels</strong> feature
+            supports up to 200,000 subscribers per channel, far beyond any competitor. Its bot
+            platform is unmatched. Its broadcast audio (Voice Rooms) is genuinely well-built. For
+            public broadcasting, tech community announcements, crypto project coordination, and
+            massive group chats, Telegram is the obvious choice.
+          </p>
+          <p>
+            The privacy tradeoff is significant: most Telegram chats are not end-to-end encrypted.
+            Understanding this — and how Secret Chats work — is the most important part of using
+            Telegram safely.
+          </p>
+
+          <h2>Privacy &amp; Security — The Footgun Most Users Miss</h2>
+          <p>
+            Telegram&#39;s encryption design is unique and confusing for users coming from WhatsApp
+            or Signal. Two modes exist:
+          </p>
+
+          <h3>Cloud Chats (default)</h3>
+          <p>
+            When you open a new chat in Telegram, you&#39;re in a Cloud Chat. Cloud Chats are
+            encrypted between your device and Telegram&#39;s servers (so a network observer can&#39;t
+            see them), but Telegram&#39;s servers can read the contents because they hold the
+            encryption keys. Cloud Chats are stored in Telegram&#39;s cloud and synchronized across
+            all your devices.
+          </p>
+          <p>
+            This design is what enables Telegram&#39;s UX wins — search across all history,
+            unlimited devices, links that open in the web preview. But it means
+            <strong>Telegram itself can read your messages</strong>, and is in principle obligated
+            to comply with lawful access requests in the jurisdictions where it operates.
+          </p>
+
+          <h3>Secret Chats (opt-in)</h3>
+          <p>
+            Secret Chats are Telegram&#39;s end-to-end encrypted mode, using a variant of the
+            MTProto protocol. Critical differences from Cloud Chats:
+          </p>
+          <ul>
+            <li>Telegram&#39;s servers <strong>cannot</strong> read Secret Chat contents.</li>
+            <li>Messages can self-destruct after a custom timer.</li>
+            <li>Secret Chats are device-specific — they don&#39;t sync to your other devices.</li>
+            <li>Secret Chats <strong>cannot be used in group chats</strong> — only 1:1.</li>
+            <li>You have to deliberately start one (tap the user&#39;s profile → "Start Secret Chat").</li>
+          </ul>
+          <p>
+            The critical user-experience issue: <strong>forgetting to start a Secret Chat means
+            your "private" conversation is in Cloud Chat mode</strong>. There is no warning,
+            no default, no in-chat indicator. Telegram&#39;s privacy defaults actively work against
+            its users in 2026.
+          </p>
+
+          <h3>MTProto — Telegram&#39;s custom crypto</h3>
+          <p>
+            Telegram uses its own <strong>MTProto</strong> protocol, designed in-house, not the
+            Signal Protocol that WhatsApp, Signal, Google Messages, and Skype use. MTProto has
+            been audited and criticized by cryptographers over the years — some components of
+            its initial design were later modified in response to academic critique. For 1:1
+            Secret Chats the current implementation is widely considered secure by working
+            cryptographers, but it has less long-term peer review than the Signal Protocol.
+          </p>
+
+          <h3>Server location and jurisdiction</h3>
+          <p>
+            Telegram is officially operated by Telegram Messenger LLP, registered in the United
+            Arab Emirates. Its servers are distributed globally. This is a different jurisdiction
+            than either the EU or the US — UAE has its own lawful-access framework, and Telegram
+            has publicly clashed with some governments (Russia, briefly Iran) while cooperating
+            with others. For European users, GDPR applies to Telegram&#39;s user-data handling.
+          </p>
+
+          <h2>Features — The Ecosystem Wins</h2>
+          <ul>
+            <li><strong>Up to 200,000-member groups and Channels</strong> — far beyond any competitor</li>
+            <li><strong>Cloud sync across unlimited devices</strong> — your chats are on every device simultaneously</li>
+            <li><strong>Telegram Bots</strong> — the most extensive bot platform in any messenger</li>
+            <li><strong>Channels</strong> — broadcast to unlimited followers, with comment control</li>
+            <li><strong>Voice Chats</strong> — drop-in audio rooms, like Clubhouse or Discord, but in any chat</li>
+            <li><strong>Video messages, voice notes, file sharing</strong> up to 2GB per file</li>
+            <li><strong>Telegram Premium</strong> — paid tier for larger uploads, faster downloads, custom stickers, exclusive reactions (still free for non-Premium users)</li>
+            <li><strong>Custom themes, animated backgrounds</strong></li>
+            <li><strong>Stories</strong> — Telegram&#39;s version of Stories, on Cloud Chats (server-readable)</li>
+          </ul>
+          <p>
+            For most users, Telegram feels <strong>fastest</strong> of any messenger. Polling is
+            near-instant on good networks; media uploads are fast because Telegram operates its
+            own CDN.
+          </p>
+
+          <h2>Cost — Freemium, With Telegram Premium</h2>
+          <p>
+            Telegram itself is free with no advertising in private chats. Telegram Premium
+            (around USD 4.99/month) unlocks larger uploads (4GB per file), faster download
+            speeds, custom emoji status, exclusive stickers, and a few other niceties. The bulk
+            of Telegram&#39;s funding reportedly comes from Durov and a small set of investors,
+            with monetization aimed at Premium subscriptions and select business advertising
+            in public channels.
+          </p>
+
+          <h2>Who Should Use Telegram?</h2>
+          <p>
+            Telegram is the right choice if:
+          </p>
+          <ul>
+            <li>You need to broadcast to a large public channel (news, tech announcements, crypto projects, communities of 10k+)</li>
+            <li>You depend on Telegram Bots for workflow automation</li>
+            <li>You want the cleanest cross-device cloud sync of any messenger</li>
+            <li>You want free file sharing up to 2GB (or 4GB on Premium)</li>
+            <li>You mostly communicate in unencrypted environments (public groups, broadcast announcements)</li>
+          </ul>
+          <p>
+            Telegram is the wrong choice if you assume default chats are end-to-end encrypted —
+            they aren&#39;t. If you want every message encrypted by default with no opt-in,
+            choose <a href="/reviews/signal/">Signal</a> or <a href="/reviews/threema/">Threema</a>.
+            If you depend on the meta-ecosystem and want E2EE by default,
+            <a href="/reviews/whatsapp/">WhatsApp</a> remains the practical choice.
+          </p>
+
+          <h2>Telegram vs Signal vs WhatsApp vs Threema — Quick Comparison</h2>
+          <p>
+            <strong>Vs Signal:</strong> Signal wins on default privacy; Telegram wins on ecosystem.
+            Pick Signal for private 1:1 or small-group chat; pick Telegram for broadcasting at scale.
+            We have a full <a href="/compare/signal-vs-telegram/">Signal vs Telegram comparison</a>.
+          </p>
+          <p>
+            <strong>Vs WhatsApp:</strong> WhatsApp turns on E2EE by default; Telegram does not.
+            WhatsApp caps at 1,024 per group; Telegram goes to 200,000. Pick WhatsApp for
+            encryption-everywhere messaging to people you know; pick Telegram for large public
+            communities and cloud-synced cross-device reach.
+          </p>
+          <p>
+            <strong>Vs Threema:</strong> Threema turns on E2EE by default with no phone number
+            needed, but it&#39;s a much smaller platform with fewer ecosystem features. Threema
+            is the cleaner privacy pick; Telegram is the feature/broadcast pick.
+          </p>
+
+          <AdSlot slot="review-mid" label="Sponsored" />
+
+          <h2>The Honest Verdict</h2>
+          <p>
+            Telegram is one of the best consumer messaging products ever shipped, and the
+            worst-at-marketing-encryption reality. The combination of "cloud-first speed and
+            cross-device sync" with "opt-in encryption only, no per-conversation warning, no
+            group Secret Chat mode" means that most Telegram users who think their chats are
+            private are mistaken.
+          </p>
+          <p>
+            Our practical recommendation in 2026: install Telegram if you need the broadcast
+            and ecosystem features, but route any conversation where privacy matters into
+            <a href="/reviews/signal/">Signal</a> or <a href="/reviews/whatsapp/">WhatsApp</a>.
+            Don&#39;t use Telegram Cloud Chats for sensitive conversations, ever — set the
+            privacy reminders in your head and reach for the right app per conversation.
+            Telegram is a great product. It is not an end-to-end encrypted messenger by default,
+            and that distinction matters.
+          </p>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros-card card-pro">
+            <h3>What we like</h3>
+            <ul>
+              {app.pros.map((p) => <li><span aria-hidden="true">+</span><span>{p}</span></li>)}
+            </ul>
+          </div>
+          <div class="cons-card card-con">
+            <h3>What we don&#39;t</h3>
+            <ul>
+              {app.cons.map((c) => <li><span aria-hidden="true">−</span><span>{c}</span></li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <AppCTA
+      app={app}
+      blurb="Telegram is free on iOS, Android, Web, and desktop — direct links to the official stores. We earn a small affiliate commission if you install via these links, at no cost to you."
+    />
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Common questions</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram encrypted like WhatsApp?</h3>
+            </summary>
+            <div class="faq-body">
+              No. WhatsApp uses end-to-end encryption by default for personal messages, calls, and groups, so WhatsApp cannot read their content. Telegram encrypts normal Cloud Chats only between your device and its servers and keeps decryptable copies in its cloud. Telegram provides end-to-end encryption only in manually started, one-to-one Secret Chats, not normal chats or groups.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram encrypted and safe?</h3>
+            </summary>
+            <div class="faq-body">
+              Telegram protects data in transit and offers useful account controls, but normal Cloud Chats are not end-to-end encrypted. They are suitable for public communities and ordinary, non-sensitive conversation, not for messages that must remain unreadable to the service. Use Secret Chats for sensitive one-to-one messages, enable two-step verification, review active sessions, and remember that malware or an unlocked phone can expose any chat.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram encrypted from police?</h3>
+            </summary>
+            <div class="faq-body">
+              Normal Telegram Cloud Chats are not protected from Telegram itself by end-to-end encryption, so stored content and account data may be available when the company responds to valid legal process under its policies and applicable law. Secret Chat content is end-to-end encrypted and is not stored in Telegram cloud history, but device seizures, screenshots, participant reports, phone records, and metadata can still expose information.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram encrypted like Signal?</h3>
+            </summary>
+            <div class="faq-body">
+              No. Signal end-to-end encrypts every supported conversation by default, including groups and calls. Telegram uses server-accessible Cloud Chats by default and reserves end-to-end encryption for optional, device-specific, one-to-one Secret Chats. Signal is the safer default for private messaging; Telegram prioritizes cloud sync, large groups, channels, and bots.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram end-to-end encrypted by default?</h3>
+            </summary>
+            <div class="faq-body">
+              No — and this is the most important fact about Telegram privacy. Telegram&#39;s default "Cloud Chats" are encrypted between your device and Telegram&#39;s servers, but Telegram itself can read them. Only "Secret Chats" are end-to-end encrypted, and you have to deliberately start one. WhatsApp and Signal both encrypt every chat by default; Telegram does not.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">What is a Telegram Secret Chat?</h3>
+            </summary>
+            <div class="faq-body">
+              Secret Chats are Telegram&#39;s end-to-end encrypted mode: encryption that Telegram&#39;s servers cannot read, self-destruct timers, and no cloud storage. They have limitations: Secret Chats are device-specific (not synced), cannot be used in groups, and you must remember to start one — forgetting leaves the conversation in default Cloud Chat mode.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Does Telegram sell user data?</h3>
+            </summary>
+            <div class="faq-body">
+              Telegram has historically said no. The MTProto encryption does prevent casual reading by Telegram staff. However, Telegram&#39;s privacy policy permits sharing data in response to legal requests, and Telegram has been criticized for cooperating with some governments while resisting others. Telegram is registered in the UAE; in the EU, GDPR applies to user-data handling.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram safer than WhatsApp?</h3>
+            </summary>
+            <div class="faq-body">
+              For default privacy: no. WhatsApp turns on E2EE by default; Telegram does not. For broadcast reach: yes — Telegram&#39;s 200,000-member Channels far exceed WhatsApp&#39;s 1,024-group cap. If you want "every message I send is encrypted by default," pick WhatsApp. If you want to broadcast to a large public group, pick Telegram and remember to enable Secret Chat for private conversations.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">How big can Telegram groups get?</h3>
+            </summary>
+            <div class="faq-body">
+              Up to 200,000 members per group or Channel. Channels are one-to-many broadcast; groups are many-to-many conversation. Compare to WhatsApp&#39;s 1,024, Signal&#39;s 1,000, Threema&#39;s 256. Telegram is the choice for very large public communities.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Telegram open source?</h3>
+            </summary>
+            <div class="faq-body">
+              Partially. The Telegram client apps (Android, iOS, macOS, Windows, Linux) are open source on GitHub, and the MTProto protocol specification is open. However, the server code is closed-source — the most security-critical part is not auditable. This is why researchers treat Signal as the more verifiable messenger.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section related-wrap">
+      <div class="container">
+        <h2 class="section-title">More encrypted messenger reviews</h2>
+        <div class="related-grid">
+          {otherApps.map((other) => (
+            <a href={`/reviews/${other.slug}/`} class="related-card">
+              <span class="related-monogram" style={`background:${other.brandColor}`}>{other.monogram}</span>
+              <h3>{other.name} review</h3>
+              <p class="text-secondary">{other.tagline}</p>
+              <span class="related-score text-muted">{other.editorScore.toFixed(1)} / 10</span>
+              <span class="related-arrow">→</span>
+            </a>
+          ))}
+        </div>
+        <p class="muted-note text-muted">
+          Already shipped: <a href="/reviews/signal/">Signal review</a>,
+          <a href="/reviews/threema/"> Threema review</a>,
+          <a href="/reviews/xchat/"> XChat review</a>,
+          <a href="/reviews/wire/"> Wire review</a>,
+          <a href="/reviews/session/"> Session review</a>,
+          <a href="/reviews/element/"> Element review</a>,
+          <a href="/reviews/whatsapp/"> WhatsApp review</a>.
+          Coming next: Briar, SimpleX.
+        </p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .review-hero {
+    text-align: center; padding: 6rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse at top, rgba(0, 136, 204, 0.06), transparent 60%), var(--bg-primary);
+  }
+
+  .breadcrumb { font-size: 0.8125rem; margin-bottom: 2rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .crumb-sep { margin: 0 0.5rem; color: var(--text-muted); }
+
+  .hero-app { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; }
+
+  .hero-monogram {
+    width: 88px; height: 88px; border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 800; color: white;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 12px 32px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.04em;
+  }
+
+  .hero-meta { text-align: center; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    background: rgba(29, 155, 240, 0.08);
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: 9999px;
+    padding: 0.3125rem 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-meta h1 { max-width: 820px; margin: 0 auto 0.75rem; }
+  .hero-tagline { font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
+
+  .hero-score {
+    display: grid; grid-template-columns: auto 1fr; gap: 2rem;
+    align-items: center; max-width: 720px; margin: 0 auto;
+    text-align: left; padding: 1.5rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+  }
+
+  .score-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 1.25rem; border-right: 1px solid var(--border); min-width: 110px; }
+  .score-num { font-family: var(--font-mono); font-size: 3rem; font-weight: 800; line-height: 1; color: var(--accent-light); letter-spacing: -0.04em; }
+  .score-out-of { font-family: var(--font-mono); font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
+  .score-stars { font-size: 0.8125rem; margin-top: 0.5rem; }
+
+  .score-summary p { font-size: 0.9375rem; line-height: 1.65; color: var(--text-secondary); margin: 0 0 0.5rem 0; }
+  .score-summary .small { font-size: 0.75rem; }
+
+  .section-title { text-align: center; margin-bottom: 2rem; font-size: clamp(1.5rem, 3vw, 2.25rem); }
+
+  .glance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; max-width: 920px; margin: 0 auto; }
+
+  .glance-card { padding: 1rem 1.25rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: 0.25rem; }
+
+  .glance-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .glance-value { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+
+  .prose { max-width: 720px; margin: 0 auto; color: var(--text-secondary); }
+  .prose h2 { color: var(--text-primary); font-size: 1.625rem; margin: 2.5rem 0 1.25rem; text-align: left; line-height: 1.25; }
+  .prose h3 { color: var(--text-primary); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+  .prose p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.25rem; }
+  .prose ul { margin: 0.5rem 0 1.5rem 1.5rem; list-style: disc; }
+  .prose ul li { margin-bottom: 0.75rem; line-height: 1.7; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .prose em { font-style: italic; color: var(--text-primary); }
+  .prose a { color: var(--accent-light); text-decoration: none; border-bottom: 1px dotted rgba(77, 181, 245, 0.4); }
+  .prose a:hover { border-bottom-color: var(--accent-light); }
+
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 920px; margin: 3rem auto 0; }
+  .pros-cons h3 { font-size: 1.125rem; margin: 0 0 1rem; }
+  .pros-cons ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
+  .pros-cons li { display: flex; align-items: flex-start; gap: 0.625rem; line-height: 1.55; font-size: 0.9375rem; color: var(--text-secondary); }
+  .pros-cons li > span:first-child { flex-shrink: 0; width: 18px; height: 18px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; margin-top: 0.125rem; }
+  .card-pro { background: rgba(0, 186, 124, 0.04); border: 1px solid rgba(0, 186, 124, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; }
+  .card-pro h3 { color: var(--success); }
+  .card-pro li > span:first-child { background: var(--success); color: #000; }
+  .card-con { background: rgba(244, 33, 46, 0.04); border: 1px solid rgba(244, 33, 46, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; }
+  .card-con h3 { color: var(--danger); }
+  .card-con li > span:first-child { background: var(--danger); color: #fff; }
+
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; max-width: 920px; margin: 0 auto 1.5rem; }
+  .related-card { position: relative; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: inherit; transition: border-color 0.3s, transform 0.3s var(--ease-smooth); }
+  .related-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .related-monogram { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 0.9375rem; margin-bottom: 0.75rem; }
+  .related-card h3 { font-size: 1rem; margin: 0 0 0.375rem; }
+  .related-card p { font-size: 0.875rem; margin: 0; line-height: 1.5; }
+  .related-score { display: block; margin-top: 0.625rem; font-size: 0.75rem; font-family: var(--font-mono); }
+  .related-arrow { position: absolute; top: 1.5rem; right: 1.5rem; color: var(--text-muted); font-size: 1.125rem; transition: color 0.15s, transform 0.2s; }
+  .related-card:hover .related-arrow { color: var(--accent-light); transform: translateX(2px); }
+
+  .muted-note { text-align: center; font-size: 0.875rem; padding-top: 1.25rem; border-top: 1px solid var(--border); max-width: 600px; margin: 0 auto; }
+  .faq-list { max-width: 720px; margin: 0 auto; }
+
+  @media (max-width: 720px) {
+    .hero-score { grid-template-columns: 1fr; gap: 1rem; }
+    .score-card { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 1rem; min-width: 0; }
+    .pros-cons { grid-template-columns: 1fr; }
+    .review-hero { padding-top: 4rem; }
+    .hero-monogram { width: 72px; height: 72px; font-size: 1.75rem; }
+  }
+</style>

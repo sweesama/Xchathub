@@ -1,0 +1,536 @@
+---
+/**
+ * compare/whatsapp-vs-signal.astro
+ *
+ * 高价值 SEO 词：whatsapp vs signal, signal vs whatsapp, whatsapp signal comparison
+ * 目标搜索意图：用户最常见的选择 — 留在 WhatsApp 还是转 Signal
+ *
+ * 关键事实差异：两边都用 Signal Protocol，但 metadata 策略天差地别
+ */
+import Layout from '../../layouts/Layout.astro';
+import {
+  getAppBySlug,
+  formatPlatforms,
+} from '../../data/messagingApps';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
+import AdSlot from '../../components/AdSlot.astro';
+
+const a = getAppBySlug('signal');
+const b = getAppBySlug('whatsapp');
+if (!a || !b) throw new Error('Comparison data missing');
+
+const rows: { label: string; a: string; b: string; winner: 'a' | 'b' | null }[] = [
+  { label: 'Founded', a: '2014', b: '2009', winner: null },
+  { label: 'Owner', a: 'Signal Foundation (nonprofit, US)', b: 'Meta Platforms (US)', winner: null },
+  { label: 'Business model', a: 'Free, donation-funded nonprofit', b: 'Free, ad-supported across Meta platforms', winner: null },
+  { label: 'Phone number required', a: 'Yes (with username option since 2024)', b: 'Yes', winner: null },
+  { label: 'End-to-end encryption', a: 'Default on every chat, call, and group', b: 'Default on every chat and call', winner: null },
+  { label: 'Encryption protocol', a: 'Signal Protocol (Double Ratchet), open source', b: 'Signal Protocol (same algorithm, Meta-licensed use)', winner: null },
+  { label: 'Metadata collected', a: 'Minimal — phone number, day you joined, last seen', b: 'Extensive — phone number, contacts, who talks to whom, when, how often', winner: 'a' },
+  { label: 'Who can read message content', a: 'Nobody — not even Signal', b: 'Nobody (Signal Protocol protects the body)', winner: null },
+  { label: 'Open source', a: 'Yes — clients and server', b: 'No (server closed, client-side partially)', winner: 'a' },
+  { label: 'Independent audits', a: 'Multiple, ongoing, publicly released', b: 'External audits, not full transparency', winner: 'a' },
+  { label: 'Platforms', a: formatPlatforms(a), b: formatPlatforms(b), winner: null },
+  { label: 'Group size limit', a: '1,000 members', b: '1,024 members', winner: null },
+  { label: 'Voice / video calls (E2EE)', a: 'Yes', b: 'Yes', winner: null },
+  { label: 'Status / Stories', a: 'Signal Stories (E2EE)', b: 'Status (server-side only)', winner: null },
+  { label: 'Disappearing messages', a: 'Yes, custom timers', b: 'Yes (24h, 7d, 90d)', winner: null },
+  { label: 'Monthly active users', a: '~70 million', b: '~3 billion', winner: 'b' },
+  { label: 'Advertising/tracking', a: 'None', b: 'Metadata shared with broader Meta ad system', winner: 'a' },
+  { label: 'Backup encryption', a: 'Encrypted backups default', b: 'Opt-in (off by default)', winner: 'a' },
+];
+
+const wsFaqs = [
+  {
+    question: 'Is WhatsApp safer than Signal?',
+    answer: 'For message content, no. Both WhatsApp and Signal use the Signal Protocol for end-to-end encryption, so the message body is protected in transit. The real difference is metadata: Signal collects almost no metadata (phone number, account creation date, last connection) while WhatsApp collects extensive metadata (who you talk to, when, how often, your contacts, group memberships, status) and shares it with the broader Meta advertising system. Signal is run by a nonprofit; WhatsApp is run by Meta, a publicly traded ad company. Choose Signal if metadata and corporate incentives matter to you.',
+  },
+  {
+    question: 'Why is WhatsApp so popular if Signal is more private?',
+    answer: 'WhatsApp is installed on virtually every smartphone in many countries, especially outside the United States. The killer feature is the network effect: nearly everyone you want to message is already on WhatsApp, so you do not need to convince them to install a new app. Signal\'s user base is much smaller (~70M vs ~3B). For most users the practical answer is to use both: WhatsApp for the network you cannot leave, Signal for the conversations where privacy matters.',
+  },
+  {
+    question: 'Does WhatsApp share data with Facebook?',
+    answer: 'Yes. Since 2021 WhatsApp shares data with the broader Meta family of products: phone number, contacts, profile photo, status, last seen, online status, group memberships, transaction data, and device info. This is governed by WhatsApp\'s privacy policy and the Meta data policy. Signal does not collect or share this kind of data. The end-to-end encryption protects the message body, but it does not prevent metadata collection at the platform level.',
+  },
+  {
+    question: 'Is WhatsApp OK for everyday use?',
+    answer: 'Yes, for most users. WhatsApp uses the Signal Protocol, so message content is genuinely protected. The metadata collection is a concern for users with specific threat models (journalism, activism, sensitive business) but is not a deal-breaker for typical personal use. The biggest immediate privacy wins on WhatsApp are: enable two-step verification, turn on end-to-end encrypted backups, audit linked devices regularly, never share your registration code, and keep the app updated.',
+  },
+];
+
+const jsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'WhatsApp vs Signal (2026) — Which Encrypted Messenger Should You Use?',
+    description: 'Honest WhatsApp vs Signal comparison covering privacy, metadata collection, ownership, audits, and real-world usability. Both encrypt your messages — the difference is what they do with the metadata around them.',
+    datePublished: '2026-06-10',
+    dateModified: '2026-07-08',
+    url: '/compare/whatsapp-vs-signal',
+  }),
+  faqPageJsonLd(wsFaqs),
+);
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Compare', url: 'https://xchat.directory/reviews/' },
+  { name: 'WhatsApp vs Signal', url: 'https://xchat.directory/compare/whatsapp-vs-signal/' },
+];
+---
+
+<Layout
+  title="WhatsApp vs Signal (2026) — Metadata vs Encryption"
+  description="WhatsApp vs Signal compared on encryption, metadata, ownership, and audits. Both use Signal Protocol — the difference is what they do around it."
+  jsonLd={jsonLd}
+  canonicalPath="/compare/whatsapp-vs-signal"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="WhatsApp vs Signal comparison"
+>
+  <article class="compare">
+    <!-- ============== HERO ============== -->
+    <section class="compare-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Compare</a> <span class="crumb-sep">/</span>
+          <span>WhatsApp vs Signal</span>
+        </nav>
+
+        <div class="hero-vs">
+          <div class="vs-side vs-a">
+            <span class="vs-monogram" style={`background:${a.brandColor}`}>{a.monogram}</span>
+            <div class="vs-name">{a.name}</div>
+            <div class="vs-score">{a.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
+          </div>
+          <div class="vs-divider"><span>vs</span></div>
+          <div class="vs-side vs-b">
+            <span class="vs-monogram" style={`background:${b.brandColor}`}>{b.monogram}</span>
+            <div class="vs-name">{b.name}</div>
+            <div class="vs-score">{b.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
+          </div>
+        </div>
+
+        <h1>WhatsApp vs Signal: <span class="text-gradient">Same Crypto, Opposite Privacy Models</span></h1>
+        <p class="lead text-secondary prose-body">
+          The most common question in encrypted messaging is "should I switch from WhatsApp to Signal?"
+          Both apps use the same Signal Protocol to encrypt your messages — so the body of your chat is
+          equally protected. The real difference is <strong>metadata</strong>: who you talk to, when,
+          and how often. That's where Signal wins big.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============== COMPARISON TABLE ============== -->
+    <section class="section-sm">
+      <div class="container">
+        <h2 class="section-title">Side-by-side comparison</h2>
+        <div class="table-wrap">
+          <table class="cmp-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th class="col-a">{a.name}</th>
+                <th class="col-b">{b.name}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row) => (
+                <tr>
+                  <td class="cmp-label">{row.label}</td>
+                  <td class={`col-a${row.winner === 'a' ? ' col-win' : ''}`}>
+                    {row.winner === 'a' && <span class="winner-mark" aria-label="Winner">★</span>}
+                    {row.a}
+                  </td>
+                  <td class={`col-b${row.winner === 'b' ? ' col-win' : ''}`}>
+                    {row.winner === 'b' && <span class="winner-mark" aria-label="Winner">★</span>}
+                    {row.b}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="cmp-note text-muted">
+          ★ marks the dimension where one app clearly wins.<br />
+          Data sources:
+          <a href="https://signal.org" target="_blank" rel="noopener noreferrer">Signal Foundation</a>,
+          <a href="https://www.whatsapp.com/security" target="_blank" rel="noopener noreferrer">WhatsApp Security Whitepaper</a>,
+          <a href="https://en.wikipedia.org/wiki/Comparison_of_messaging_apps" target="_blank" rel="noopener noreferrer">comparison of messaging apps on Wikipedia</a>.
+          Apps reviewed July 8, 2026.
+        </p>
+
+        <AdSlot slot="compare-mid" label="Sponsored" />
+      </div>
+    </section>
+
+    <!-- ============== PICK CARDS ============== -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Who should pick which</h2>
+        <div class="pick-grid">
+          <article class="pick-card pick-a">
+            <header>
+              <span class="pick-monogram" style={`background:${a.brandColor}`}>{a.monogram}</span>
+              <h3>Choose Signal if…</h3>
+            </header>
+            <ul>
+              <li>Your threat model includes adversaries — state surveillance, metadata collection, or even persistent commercial tracking</li>
+              <li>You're a journalist, activist, lawyer, doctor, or anyone whose conversations are sensitive</li>
+              <li>You want to support an open-source nonprofit instead of an ad-funded Meta product</li>
+              <li>You're willing to give up the universal install base for stronger privacy</li>
+              <li>You want backup encryption turned on by default</li>
+            </ul>
+            <a href="/reviews/signal/" class="pick-cta">Read full Signal review →</a>
+          </article>
+
+          <article class="pick-card pick-b">
+            <header>
+              <span class="pick-monogram" style={`background:${b.brandColor}`}>{b.monogram}</span>
+              <h3>Stay on WhatsApp if…</h3>
+            </header>
+            <ul>
+              <li>Your contacts will never install another app — most people you know are already on WhatsApp</li>
+              <li>You're communicating with people in countries where Signal is blocked or restricted</li>
+              <li>Your threat model is "casual snooping, not state-level" — WhatsApp's body encryption is more than enough</li>
+              <li>You depend on WhatsApp Business, Channels, or Status features</li>
+              <li>You're okay with Meta collecting metadata (who, when, how often)</li>
+            </ul>
+            <a href="https://www.whatsapp.com/security" target="_blank" rel="noopener noreferrer" class="pick-cta">Read WhatsApp's security whitepaper →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== LONGFORM PROSE ============== -->
+    <section class="section">
+      <div class="container">
+        <div class="prose">
+          <h2>The encryption is the easy part</h2>
+          <p>
+            Here's the part most comparisons get wrong: <strong>WhatsApp and Signal use the same
+            encryption algorithm</strong>. Both wrap messages in the Signal Protocol — the Double
+            Ratchet algorithm designed by Moxie Marlinspike in 2013 that WhatsApp's parent company
+            Meta licenses for use.
+          </p>
+          <p>
+            That means the body of any message you send in WhatsApp is encrypted with the same
+            cryptography as a message in Signal. Neither Meta nor WhatsApp Inc. can read it.
+            Neither can a network observer or someone with access to your phone's internet traffic.
+            Your chats — the actual text and media — are equally safe in both apps.
+          </p>
+
+          <h2>The hard part is metadata</h2>
+          <p>
+            What WhatsApp and Signal <em>don't</em> agree on is what happens around the message.
+            Modern surveillance is more often about <strong>who</strong> is talking to <strong>whom</strong>,
+            <strong>when</strong>, how often, from what country, and to which phone numbers — than
+            about reading the message body itself.
+          </p>
+          <p>
+            Signal minimizes metadata intentionally. Its servers only know your phone number, the
+            day you joined, and the last time you used the service. Through the sealed-sender
+            feature, even the server doesn't reliably know who is sending any specific message.
+          </p>
+          <p>
+            WhatsApp collects a lot more. Meta states in its
+            <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>
+            that it logs device identifiers, contacts, location, transaction data, and "service-related
+            information" — and shares that data with the broader Meta family. So even though your
+            message body is encrypted, the graph of who you talk to is still very visible to Meta.
+          </p>
+
+          <h3>What about messages I've already sent on WhatsApp?</h3>
+          <p>
+            Switching doesn't change historical metadata. Meta already has the history graph.
+            But moving forward, every new day without new metadata piling up is a small win for
+            your privacy — and the bigger win is that you demonstrate to your contacts that an
+            E2EE alternative exists.
+          </p>
+
+          <h2>What about backups?</h2>
+          <p>
+            WhatsApp's biggest privacy footgun is backups. By default, your chat history on
+            Android is backed up to Google Drive (and on iOS, to iCloud) <strong>unencrypted</strong>.
+            If someone gets your Google or iCloud account, they get your chat history. You can
+            turn on end-to-end encrypted backups (released in late 2021), but it's <em>off by default</em>
+            and most users never touch the setting.
+          </p>
+          <p>
+            Signal has its own equivalent: encrypted backups to a file you control, or no backup
+            at all. Signal Desktop pulls messages from your phone, so it has no separate cloud backup.
+            The default privacy posture is stronger.
+          </p>
+
+          <h2>The "nobody I know is on Signal" problem</h2>
+          <p>
+            The most honest critique of Signal is the network effect. WhatsApp has 3 billion
+            monthly active users; Signal has 70 million. If you switch to Signal, most of your
+            contacts won't follow you — your family group chat stays on WhatsApp, your work chat
+            stays on WhatsApp, your kid's school parents stay on WhatsApp.
+          </p>
+          <p>
+            This is real. The standard advice in 2026 is to run <strong>both apps</strong> on your
+            phone. Use WhatsApp for the family / community / convenience chats where E2EE protects
+            the body but you accept the metadata tradeoff. Use Signal for the sensitive chats —
+            work conversations with confidential client information, intimate discussions, anything
+            you wouldn't want logged in a Meta advertising graph.
+          </p>
+
+          <h2>What about WhatsApp Business, Channels, and Status?</h2>
+          <p>
+            WhatsApp is more than a messenger — it's a micro-platform with Status (Stories-style
+            posts), Channels (broadcast to thousands), Communities (sub-groups inside larger groups),
+            and a full WhatsApp Business product. If you depend on any of these for work or community,
+            you can't simply migrate to Signal.
+          </p>
+          <p>
+            Signal has its own equivalents (Stories was added in 2023), but the ecosystem around
+            them is much smaller. For most power users, the right answer is "WhatsApp for the
+            platform features, Signal for the privacy-sensitive chats."
+          </p>
+
+          <h2>Verdict</h2>
+          <p>
+            If you have to pick one as your default messenger in 2026: pick the one that matches
+            your threat model. For "casual snooping," WhatsApp is fine because the Signal Protocol
+            does its job. For "metadata matters," Signal is the clear choice.
+          </p>
+          <p>
+            The best practical answer is to install both and route each conversation through the
+            right app based on its sensitivity. That way your most private conversations get
+            Signal's strict metadata posture, while your family group chat stays where everyone
+            already is.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== FAQ ============== -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Common questions</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Signal more secure than WhatsApp?</h3>
+            </summary>
+            <div class="faq-body">
+              Equal on the encryption of message bodies — both use the Signal Protocol. Signal wins on metadata: its servers see far less, the implementation is open source, and audits are public. Signal also wins on backup encryption (default on Signal vs opt-in on WhatsApp). For practical privacy, Signal is the stronger choice in 2026.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Why does WhatsApp collect so much metadata if messages are encrypted?</h3>
+            </summary>
+            <div class="faq-body">
+              Because Meta's business is built on the advertising graph. Even if Meta can't read message bodies, the metadata — who you talk to, when, from what country, on what device — is enormously valuable for ad targeting across Facebook, Instagram, and the broader Meta family. End-to-end encryption protects the content; it does not by itself hide the relationship graph.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Should I switch my whole family to Signal?</h3>
+            </summary>
+            <div class="faq-body">
+              Only if they will actually switch. The practical advice for most families is to use WhatsApp for the family group chat (where the network effect matters) and Signal for the small subset of chats where you want stricter privacy — sensitive work, medical, or personal conversations.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp end-to-end encrypted?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes — every chat, voice call, and video call is end-to-end encrypted by default using the Signal Protocol. The body of your messages is unreadable by Meta, your carrier, or anyone else with network access. What's not encrypted is the metadata around those messages: who you talk to, when, how often.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">What should I turn on in WhatsApp right now?</h3>
+            </summary>
+            <div class="faq-body">
+              Three things: (1) turn on end-to-end encrypted backups (Settings → Chats → Chat Backup → End-to-end encrypted backup); (2) turn on disappearing messages for sensitive chats; (3) review who can see your profile photo and "About" text. None of these make WhatsApp as private as Signal, but they close the most common leaks.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .compare-hero {
+    text-align: center;
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(ellipse at top, rgba(37, 211, 102, 0.06), transparent 60%),
+      var(--bg-primary);
+  }
+
+  .breadcrumb { font-size: 0.8125rem; margin-bottom: 2.5rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .crumb-sep { margin: 0 0.5rem; }
+
+  .compare-hero h1 { max-width: 820px; margin: 0 auto 1.25rem; }
+  .compare-hero .lead { font-size: 1.0625rem; max-width: 680px; margin: 0 auto; }
+
+  .hero-vs {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 720px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .vs-side { display: flex; flex-direction: column; align-items: center; gap: 0.625rem; }
+
+  .vs-monogram {
+    width: 72px; height: 72px; border-radius: 18px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 1.75rem; font-weight: 800; color: white;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 8px 24px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.04em;
+  }
+
+  .vs-name { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; }
+
+  .vs-score {
+    font-family: var(--font-mono);
+    font-size: 1rem; font-weight: 700; color: var(--accent-light);
+  }
+
+  .vs-score .score-out { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; }
+
+  .vs-divider {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 0.875rem;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    padding: 0 0.5rem;
+  }
+
+  .vs-divider span {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg-card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+  }
+
+  .section-title { text-align: center; margin-bottom: 2rem; font-size: clamp(1.5rem, 3vw, 2.25rem); }
+
+  .table-wrap {
+    max-width: 880px; margin: 0 auto; overflow-x: auto;
+    border: 1px solid var(--border); border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .cmp-table { width: 100%; border-collapse: collapse; font-size: 0.9375rem; min-width: 600px; }
+
+  .cmp-table th,
+  .cmp-table td { padding: 0.875rem 1.125rem; text-align: left; border-bottom: 1px solid var(--border); }
+
+  .cmp-table thead th {
+    font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--text-muted);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .cmp-table tbody td { color: var(--text-secondary); }
+
+  .cmp-table tbody tr:last-child td { border-bottom: none; }
+  .cmp-table tbody tr:hover { background: rgba(255, 255, 255, 0.015); }
+
+  .cmp-label { font-weight: 600; color: var(--text-primary); min-width: 180px; }
+  .col-a { color: var(--text-primary); }
+  .col-b { color: var(--text-primary); }
+
+  .col-win { background: rgba(29, 155, 240, 0.06); font-weight: 600; }
+
+  .winner-mark { color: var(--accent-light); margin-right: 0.375rem; font-size: 1rem; }
+
+  .cmp-note {
+    font-size: 0.8125rem; text-align: center;
+    max-width: 600px; margin: 1rem auto 0; line-height: 1.65;
+  }
+
+  .pick-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+    max-width: 920px; margin: 0 auto;
+  }
+
+  .pick-card {
+    padding: 1.75rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+  }
+
+  .pick-card:hover { transform: translateY(-2px); }
+
+  .pick-card header { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1.25rem; }
+
+  .pick-monogram {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 0.9375rem;
+  }
+
+  .pick-card h3 { font-size: 1.125rem; margin: 0; }
+
+  .pick-card ul {
+    list-style: none; padding: 0; margin: 0 0 1.25rem 0;
+    display: flex; flex-direction: column; gap: 0.625rem;
+  }
+
+  .pick-card ul li {
+    padding-left: 1.5rem; position: relative;
+    font-size: 0.9375rem; line-height: 1.55; color: var(--text-secondary);
+  }
+
+  .pick-card ul li::before {
+    content: ''; position: absolute; left: 0; top: 0.625rem;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--accent-light); opacity: 0.7;
+  }
+
+  .pick-cta {
+    color: var(--accent-light);
+    font-weight: 600; font-size: 0.9375rem;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .pick-cta:hover { border-color: var(--accent-light); }
+
+  .pick-a {
+    border-color: rgba(37, 146, 233, 0.3);
+    background: radial-gradient(ellipse at top, rgba(37, 146, 233, 0.06), transparent 70%), var(--bg-card);
+  }
+
+  .pick-b {
+    border-color: rgba(37, 211, 102, 0.3);
+    background: radial-gradient(ellipse at top, rgba(37, 211, 102, 0.06), transparent 70%), var(--bg-card);
+  }
+
+  .prose { max-width: 720px; margin: 0 auto; color: var(--text-secondary); }
+  .prose h2 { color: var(--text-primary); font-size: 1.625rem; margin: 2.5rem 0 1.25rem; }
+  .prose h3 { color: var(--text-primary); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+  .prose p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.25rem; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .prose em { font-style: italic; color: var(--text-primary); }
+  .prose a { color: var(--accent-light); text-decoration: none; border-bottom: 1px dotted rgba(77, 181, 245, 0.4); }
+  .prose a:hover { border-bottom-color: var(--accent-light); }
+
+  .faq-list { max-width: 720px; margin: 0 auto; }
+
+  @media (max-width: 720px) {
+    .pick-grid { grid-template-columns: 1fr; }
+    .hero-vs { gap: 0.75rem; }
+    .vs-monogram { width: 56px; height: 56px; font-size: 1.25rem; }
+    .compare-hero { padding-top: 3.5rem; }
+  }
+</style>

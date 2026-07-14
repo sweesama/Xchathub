@@ -7,7 +7,11 @@
  * 大表格 + pros/cons + when-to-use 推荐，同时满足 Google Featured Snippet 抓取。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_LAUNCH_DISPLAY } from '../../data/xchat';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
 
 /** 对比维度数据 */
 const rows = [
@@ -28,21 +32,39 @@ const rows = [
   { label: 'Owned by advertising co.', xchat: 'Yes (X Ads)',                   other: 'Yes (Meta Ads)' },
 ];
 
-const comparisonJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'XChat vs WhatsApp — Full Side-by-Side Comparison',
-  author: { '@type': 'Organization', name: 'XChat Hub' },
-  publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
-  datePublished: '2026-04-20',
-  dateModified: new Date().toISOString().split('T')[0],
-  mainEntityOfPage: 'https://xchat.directory/vs/whatsapp',
-  description: 'XChat vs WhatsApp compared on encryption, privacy, platforms, group size, and more. Which messenger should you use in 2026?',
-};
+const vwFaqs = [
+  {
+    question: 'Is XChat more private than WhatsApp?',
+    answer: 'XChat and WhatsApp are both end-to-end encrypted by default on every chat, but the metadata and ownership differ. WhatsApp is owned by Meta and shares metadata (phone number, contacts, who you talk to, when, how often) with the broader Meta advertising system. XChat ties your identity to your X (Twitter) account rather than your phone number and is owned by X Corp, a for-profit subsidiary. Neither option is fully metadata-private; the right choice depends on which corporate data flow you are more comfortable with. For maximum privacy, neither is as strong as Signal or Threema.',
+  },
+  {
+    question: 'Can WhatsApp and XChat message each other?',
+    answer: 'No. WhatsApp and XChat are separate networks with separate user bases. There is no interoperability. You install one or both apps and use each with their own users. If your friends and family are on WhatsApp, you will keep using WhatsApp for them; XChat is a useful complement for your X contacts but cannot reach WhatsApp users.',
+  },
+  {
+    question: 'Does XChat work on Android?',
+    answer: 'As of April 2026, XChat is iOS only (iPhone and iPad). WhatsApp runs on iOS, Android, Web, Windows, macOS, and has native desktop apps. If you are on Android, XChat is not available and WhatsApp is the practical choice. If you are iPhone-only, both work; the difference is whether you want your messenger tied to your X social graph (XChat) or to your phone number with a 2-billion-user network (WhatsApp).',
+  },
+  {
+    question: 'Should I switch from WhatsApp to XChat?',
+    answer: 'It depends on your contacts. If all your friends and family are on WhatsApp, switching to XChat means losing that network. The best move is to add XChat alongside WhatsApp: keep WhatsApp for the network you cannot leave, use XChat for private conversations with X contacts. The killer feature of XChat is no phone number (your X handle is your identity), which feels more private than giving Meta your phone number. Revisit the comparison once XChat ships Android and the user base grows.',
+  },
+];
+
+const comparisonJsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'XChat vs WhatsApp (2026) — Full Side-by-Side Comparison',
+    description: 'XChat vs WhatsApp compared on encryption, privacy, platforms, group size, and more. Which messenger should you use in 2026?',
+    datePublished: '2026-04-20',
+    dateModified: new Date().toISOString().split('T')[0],
+    url: '/vs/whatsapp',
+  }),
+  faqPageJsonLd(vwFaqs),
+);
 ---
 
 <Layout
-  title="XChat vs WhatsApp (2026) — Encryption, Privacy, Features Compared | XChat Hub"
+  title="XChat vs WhatsApp (2026) — Encryption Compared"
   description="Detailed XChat vs WhatsApp comparison: E2EE, phone numbers, Android availability, group size, security audits, and who should switch. Updated April 2026."
   jsonLd={comparisonJsonLd}
   canonicalPath="/vs/whatsapp"

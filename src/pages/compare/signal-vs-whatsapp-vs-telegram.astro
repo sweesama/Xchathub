@@ -1,0 +1,436 @@
+---
+/**
+ * compare/signal-vs-whatsapp-vs-telegram.astro
+ *
+ * 高价值 SEO 词（三连对比）：
+ *   signal vs whatsapp vs telegram,
+ *   whatsapp vs signal vs telegram,
+ *   telegram vs whatsapp vs signal,
+ *   signal vs whatsapp security / privacy,
+ *   best messaging app 2026,
+ *   most secure messaging app 2026
+ *
+ * 目标搜索意图：用户研究完加密通信评测，正在 3 个主流 E2EE app 里选；
+ *   这 3 个的共同点是：默认 E2EE、开源、不是 Meta/Telegram 阵营
+ *
+ * 设计原则（与 /compare/signal-vs-threema 一致）：
+ *   - 12 维对比表
+ *   - 3 个 pick 卡片（if-you-are-x-pick-y）
+ *   - 决策树
+ *   - 各 app 真实优缺点（不吹捧）
+ *   - 1500-2500 词，符合 SEO 内容规范
+ */
+import Layout from '../../layouts/Layout.astro';
+import { getAppBySlug } from '../../data/messagingApps';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
+import AdSlot from '../../components/AdSlot.astro';
+
+const signal = getAppBySlug('signal');
+const whatsapp = getAppBySlug('whatsapp');
+const telegram = getAppBySlug('telegram');
+if (!signal || !whatsapp || !telegram) throw new Error('Three-way comparison data missing');
+
+type App = typeof signal;
+const apps: App[] = [signal, whatsapp, telegram];
+
+interface Row {
+  label: string;
+  values: [string, string, string];
+  winners: [boolean, boolean, boolean];
+}
+
+const rows: Row[] = [
+  { label: 'Founded', values: [`${signal.foundedYear}`, `${whatsapp.foundedYear}`, `${telegram.foundedYear}`], winners: [false, false, false] },
+  { label: 'Owner', values: [signal.owner, whatsapp.owner, telegram.owner], winners: [false, false, false] },
+  { label: 'Owner country', values: [signal.ownerCountry, whatsapp.ownerCountry, telegram.ownerCountry], winners: [false, false, false] },
+  { label: 'Business model', values: [signal.pricing === 'free' ? 'Free, donation-funded' : signal.pricing, whatsapp.pricing === 'free' ? 'Free, Meta-owned' : whatsapp.pricing, telegram.pricing === 'freemium' ? 'Free / Telegram Premium' : telegram.pricing], winners: [false, false, false] },
+  { label: 'Phone number required', values: [signal.phoneNumberRequired ? 'Yes (usernames added 2024)' : 'No', whatsapp.phoneNumberRequired ? 'Yes' : 'No', telegram.phoneNumberRequired ? 'Yes' : 'No'], winners: [false, false, false] },
+  { label: 'Default end-to-end encryption', values: ['Yes — every chat', 'Yes — every chat', 'No — only Secret Chats (opt-in)'], winners: [true, true, false] },
+  { label: 'Encryption technology', values: ['Signal Protocol + sealed-sender', 'Signal Protocol', 'MTProto (E2EE only in Secret Chats)'], winners: [false, false, false] },
+  { label: 'Open source', values: [signal.openSource ? 'Yes — clients + server' : 'No', whatsapp.openSource ? 'Partial — clients only' : 'No', telegram.openSource ? 'No — server closed' : 'No'], winners: [true, false, false] },
+  { label: 'Independent audits', values: ['Multiple, ongoing', 'Limited (closed server)', 'Self-audited only'], winners: [true, false, false] },
+  { label: 'Group size limit', values: [`${signal.groupLimit}`, `${whatsapp.groupLimit}`, `${telegram.groupLimit}`], winners: [false, false, true] },
+  { label: 'Voice / video calls (E2EE)', values: ['Yes — built in', 'Yes — built in', 'Yes — but not E2EE by default'], winners: [true, true, false] },
+  { label: 'Approx. monthly users', values: [`~${signal.monthlyActiveUsersMillions}M`, `~${((whatsapp.monthlyActiveUsersMillions ?? 0) / 1000).toFixed(1)}B`, `~${telegram.monthlyActiveUsersMillions}M`], winners: [false, true, false] },
+  { label: 'Cloud sync across devices', values: ['Limited — primary device', 'Limited — primary device', 'Unlimited — full cloud'], winners: [false, false, true] },
+  { label: 'Best fit', values: [signal.tagline, whatsapp.tagline, telegram.tagline], winners: [false, false, false] },
+];
+
+const swtFaqs = [
+  {
+    question: 'Which is the most secure: Signal, WhatsApp, or Telegram?',
+    answer: 'Signal is the most secure of the three. Every Signal chat, call, and group is end-to-end encrypted by default using the open-source Signal Protocol. WhatsApp uses the same protocol for message content but is closed source and collects extensive metadata. Telegram is the least secure by default because standard Telegram chats and group chats are NOT end-to-end encrypted; only opt-in "Secret Chats" (1:1 only) are.',
+  },
+  {
+    question: 'Which has the largest user base?',
+    answer: 'WhatsApp has by far the largest user base at approximately 3 billion monthly active users. Telegram is second with around 900 million. Signal is third with approximately 70 million. If you need a messenger that everyone you know already uses, WhatsApp is the practical choice. If you need encryption by default, Signal is the practical choice. Telegram fits the niche of public broadcast groups and bot platforms.',
+  },
+  {
+    question: 'Can WhatsApp, Signal, and Telegram message each other?',
+    answer: 'No. They are three separate networks with separate user bases. There is no interoperability. You install one or more apps and use each with its own users. Many privacy-conscious users install both Signal (for private 1:1 and small groups) and Telegram (for channels and large groups), and keep WhatsApp for compatibility with non-technical friends and family.',
+  },
+  {
+    question: 'Should I leave WhatsApp for Signal or Telegram?',
+    answer: 'If privacy is your main concern, switch to Signal. If you want channels, large groups, and bot-driven workflows and are willing to live with non-end-to-end-encrypted default chats, switch to Telegram. If your friends and family are on WhatsApp and will not move, the practical move is to install Signal or Telegram alongside WhatsApp for the conversations where you want E2EE, while keeping WhatsApp for the network you cannot leave.',
+  },
+];
+
+const jsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'Signal vs WhatsApp vs Telegram (2026) — Which Messenger Should You Actually Use?',
+    description: 'Honest three-way comparison of Signal, WhatsApp, and Telegram on encryption defaults, ownership, metadata, group limits, and threat-model fit. One of these is NOT end-to-end encrypted by default — and that changes everything.',
+    datePublished: '2026-07-08',
+    dateModified: '2026-07-08',
+    url: '/compare/signal-vs-whatsapp-vs-telegram',
+  }),
+  faqPageJsonLd(swtFaqs),
+);
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Compare', url: 'https://xchat.directory/reviews/' },
+  { name: 'Signal vs WhatsApp vs Telegram', url: 'https://xchat.directory/compare/signal-vs-whatsapp-vs-telegram/' },
+];
+---
+
+<Layout
+  title="Signal vs WhatsApp vs Telegram (2026) — Who Wins?"
+  description="Signal vs WhatsApp vs Telegram compared on default encryption, ownership, and group limits. Two default to E2EE, one does not — here's who should pick which."
+  jsonLd={jsonLd}
+  canonicalPath="/compare/signal-vs-whatsapp-vs-telegram"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="Signal vs WhatsApp vs Telegram comparison"
+>
+  <article class="compare">
+    <!-- ============== HERO ============== -->
+    <section class="compare-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Compare</a> <span class="crumb-sep">/</span>
+          <span>Signal vs WhatsApp vs Telegram</span>
+        </nav>
+
+        <h1>Signal vs WhatsApp vs Telegram (2026)</h1>
+        <p class="lead text-secondary">Three messengers almost everyone has heard of. Two default to end-to-end encryption on every chat. One does not — and that single fact reframes the whole comparison. Below: what each one actually does, where they differ, and which one matches your threat model.</p>
+
+        <div class="trio-vs">
+          {apps.map((app, i) => (
+            <div class={`trio-side trio-${i}`}>
+              <span class="trio-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+              <div class="trio-name">{app.name}</div>
+              <div class="trio-score">{app.editorScore.toFixed(1)} <span class="score-out">/ 10</span></div>
+              <div class="trio-meta">{app.tagline}</div>
+            </div>
+          ))}
+        </div>
+
+        <AdSlot slot="review-top" label="Sponsored" />
+      </div>
+    </section>
+
+    <!-- ============== TL;DR ============== -->
+    <section class="container section-sm">
+      <h2>The 30-second answer</h2>
+      <ul class="tldr">
+        <li><strong>Pick Signal</strong> if you want the best balance of <em>audited encryption</em>, <em>massive user base</em>, and <em>zero cost</em>. Phone number required at signup.</li>
+        <li><strong>Pick Threema</strong> if <em>true anonymity from registration</em> (no phone, no email) matters more than network size. You pay $4.49 once.</li>
+        <li><strong>Pick Wire</strong> if you want <em>E2EE for teams</em> (rooms, guest access, SAML SSO) plus a Swiss-hosted data path. Personal use is free.</li>
+      </ul>
+    </section>
+
+    <AdSlot slot="review-mid" label="Sponsored" />
+
+      <!-- ============== KEY CALLOUT — TELEGRAM IS NOT E2EE BY DEFAULT ============== -->
+      <section class="container section-sm">
+        <div class="callout">
+          <h2>The fact most Telegram marketing pages bury</h2>
+          <p>Telegram uses MTProto for transport encryption between your device and Telegram's servers, and Telegram's servers store your chats. That is <strong>not</strong> end-to-end encryption ' + EM + ' Telegram itself can read your messages (and is legally required to hand them over to authorities when ordered). E2EE on Telegram only exists in opt-in <em>Secret Chats</em>, which:</p>
+          <ul>
+            <li>Must be started manually per conversation ' + EM + ' easy to forget.</li>
+            <li>Do not sync to the cloud ' + EM + ' only the two devices in the chat can read them.</li>
+            <li>Do not work for groups.</li>
+            <li>Cannot be set as the default.</li>
+          </ul>
+          <p>If your threat model includes "I don't want the messenger provider to be able to read my messages," Telegram is not the right choice for everyday chat. Use Signal or WhatsApp for E2EE by default, and Telegram only for the channels/bots/cloud-sync features it actually does better than anyone.</p>
+        </div>
+      </section>
+
+    <!-- ============== COMPARISON TABLE ============== -->
+    <section class="container section-sm">
+      <h2>Side-by-side: 14 dimensions</h2>
+      <p class="text-secondary">Where one option is meaningfully better, its cell is highlighted. "Tied" cells are dimmed.</p>
+      <div class="table-wrap">
+        <table class="cmp-table">
+          <thead>
+            <tr>
+              <th scope="col">Dimension</th>
+              <th scope="col">Wire</th>
+              <th scope="col">Signal</th>
+              <th scope="col">Threema</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr>
+                <th scope="row">{row.label}</th>
+                {row.values.map((v, i) => (
+                  <td class={row.winners[i] ? 'winner' : ''}>{v}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ============== DEEP-DIVE PER APP ============== -->
+    <section class="container section-sm">
+      <h2>What each one is actually best at</h2>
+
+      <article class="app-card">
+        <header class="app-card-head">
+          <span class="trio-monogram" style={`background:${signal.brandColor}`}>S</span>
+          <h3>Signal — best for audited privacy by default</h3>
+          <span class="trio-score">{signal.editorScore.toFixed(1)} / 10</span>
+        </header>
+        <p>Signal is the reference implementation of "good end-to-end encryption": open-source clients <em>and</em> server, sealed-sender metadata minimization, multiple ongoing third-party audits, and a nonprofit funding model that means no investor pressure to monetize. With ~70 million monthly users it has the largest E2EE-only network. The trade-off is the phone number requirement at signup (2024 added forward-only usernames, but you still need a number to register).</p>
+        <div class="pros-cons">
+          <div>
+            <h4>Strengths</h4>
+            <ul>{signal.pros.map((p) => <li>{p}</li>)}</ul>
+          </div>
+          <div>
+            <h4>Honest weaknesses</h4>
+            <ul>{signal.cons.map((c) => <li>{c}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cite"><strong>Sources:</strong> {signal.sources.map((s, i) => (
+          <>{i > 0 && ', '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></>
+        ))}</p>
+      </article>
+
+      <article class="app-card">
+        <header class="app-card-head">
+          <span class="trio-monogram" style={`background:${whatsapp.brandColor}`}>W</span>
+          <h3>WhatsApp — best because everyone is already there</h3>
+          <span class="trio-score">{whatsapp.editorScore.toFixed(1)} / 10</span>
+        </header>
+        <p>WhatsApp's killer feature is its install base: roughly 3 billion people. Every chat and call is end-to-end encrypted using the Signal Protocol — so Meta <em>cannot</em> read message contents. What Meta does collect is extensive metadata: who you talk to, when, how often, from where, on what device. That metadata feeds the broader Meta advertising graph. For everyday conversation with friends and family who are already on WhatsApp, it is the pragmatic encrypted messenger. For a threat model that includes "Meta should not know who I'm in contact with," it is not.</p>
+        <div class="pros-cons">
+          <div>
+            <h4>Strengths</h4>
+            <ul>{whatsapp.pros.map((p) => <li>{p}</li>)}</ul>
+          </div>
+          <div>
+            <h4>Honest weaknesses</h4>
+            <ul>{whatsapp.cons.map((c) => <li>{c}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cite"><strong>Sources:</strong> {whatsapp.sources.map((s, i) => (
+          <>{i > 0 && ', '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></>
+        ))}</p>
+      </article>
+
+      <article class="app-card">
+        <header class="app-card-head">
+          <span class="trio-monogram" style={`background:${telegram.brandColor}`}>Tg</span>
+          <h3>Telegram — best for channels, bots, and cloud sync</h3>
+          <span class="trio-score">{telegram.editorScore.toFixed(1)} / 10</span>
+        </header>
+        <p>Telegram is unmatched on a specific set of features: 200,000-member public channels, the Telegram Bot Platform, voice rooms, video notes, and full cloud sync across unlimited devices. If your use case is "follow public broadcasts, run a community, automate workflows with bots, read old chats on every device" — Telegram is the best tool for that. It is not the right tool for private conversation by default. Be honest with yourself about which use case you actually have.</p>
+        <div class="pros-cons">
+          <div>
+            <h4>Strengths</h4>
+            <ul>{telegram.pros.map((p) => <li>{p}</li>)}</ul>
+          </div>
+          <div>
+            <h4>Honest weaknesses</h4>
+            <ul>{telegram.cons.map((c) => <li>{c}</li>)}</ul>
+          </div>
+        </div>
+        <p class="cite"><strong>Sources:</strong> {telegram.sources.map((s, i) => (
+          <>{i > 0 && ', '}<a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a></>
+        ))}</p>
+      </article>
+    </section>
+
+    <AdSlot slot="review-mid" label="Sponsored" />
+
+    <!-- ============== DECISION TREE ============== -->
+    <section class="container section-sm">
+      <h2>Decision tree: which one should you actually install?</h2>
+      <ol class="decision-tree">
+        <li><strong>Do you need to message people who are not on E2EE messengers yet?</strong><br/>— Start with <strong>Signal</strong>. Your contacts are most likely already there or willing to install it.</li>
+        <li><strong>Do you run a team of 5+ that needs rooms, guest access, admin controls?</strong><br/>— Use <strong>Wire</strong>. Personal messages are free; business plans add the team features that Signal simply does not have.</li>
+        <li><strong>Is "no phone number, no email, no linkable identifier" non-negotiable?</strong><br/>— Use <strong>Threema</strong>. It is the only mainstream messenger that respects this from signup onward.</li>
+        <li><strong>Do you live in Switzerland / DACH and care about FDPIC jurisdiction?</strong><br/>— <strong>Wire</strong> and <strong>Threema</strong> are both Swiss-hosted. Signal is US-hosted, which matters for some threat models.</li>
+        <li><strong>Are you a journalist or activist in a high-risk country?</strong><br/>— <strong>Signal</strong> for daily communication, with disappearing messages enabled. Telegram is not safe for sensitive sources unless every conversation is a Secret Chat.</li>
+      </ol>
+    </section>
+
+    <!-- ============== FAQ ============== -->
+    <section class="container section-sm">
+      <h2>Frequently asked questions</h2>
+      <details>
+        <summary><h3 class="faq-q-title">Is Telegram really less secure than Signal?</h3></summary>
+        <div class="faq-body">
+          <p>It depends what you mean by "secure." Telegram's transport is encrypted (MTProto), its servers are professionally run, and the app has a bug bounty. But "encrypted in transit and at rest on the provider's servers" is not the same as "end-to-end encrypted." Telegram can read your messages and is legally compelled to hand them over to authorities when ordered. Signal, by contrast, mathematically cannot read your messages — there is no key on Signal's servers that could decrypt them.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Is Signal actually safer than WhatsApp if both use the Signal Protocol?</h3></summary>
+        <div class="faq-body">
+          <p>The cryptography on individual messages is identical. The difference is in metadata and ownership. Signal collects almost no metadata (sealed sender hides who-is-messaging-whom) and is run by a nonprofit. WhatsApp collects extensive metadata (who, when, from where, on what device, how often) and shares it with Meta's advertising graph. The Signal Protocol is the same — the operating model is not.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Why do so many people still use WhatsApp if Signal is more private?</h3></summary>
+        <div class="faq-body">
+          <p>Network effects. WhatsApp has roughly 3 billion users; Signal has roughly 70 million. Switching messengers only works if the people you actually want to talk to also switch. For most users, the realistic move is: keep WhatsApp for the social graph you cannot migrate, and run Signal in parallel for the small group of contacts who also value privacy.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Can I use Telegram for channels and Signal for private chats?</h3></summary>
+        <div class="faq-body">
+          <p>Yes — this is a common, sensible split. Use Telegram for following public channels, communities, and bot-driven workflows where the conversation is not sensitive. Use Signal (or WhatsApp) for personal conversations where you want E2EE. Running two messengers in parallel is normal in 2026.</p>
+        </div>
+      </details>
+      <details>
+        <summary><h3 class="faq-q-title">Does Telegram have E2EE for voice and video calls?</h3></summary>
+        <div class="faq-body">
+          <p>Voice and video calls on Telegram are encrypted in transit to Telegram's servers, but they are not end-to-end encrypted between you and the other party. Telegram announced end-to-end encrypted calls in 2024 for 1:1 calls only, but adoption has been gradual and group calls remain server-decryptable. Treat Telegram calls as "encrypted but readable by Telegram."</p>
+        </div>
+      </details>
+    </section>
+
+    <AdSlot slot="review-bottom" label="Sponsored" />
+
+    <!-- ============== RELATED COMPARISONS ============== -->
+    <section class="container section-sm">
+      <h2>Keep digging</h2>
+      <ul class="related">
+        <li><a href="/compare/signal-vs-telegram/">Signal vs Telegram — closer two-way comparison</a></li>
+        <li><a href="/compare/whatsapp-vs-signal/">WhatsApp vs Signal — leaving Meta</a></li>
+        <li><a href="/compare/wire-vs-signal-vs-threema/">Wire vs Signal vs Threema — the E2EE-only trio</a></li>
+        <li><a href="/best-encrypted-messaging-apps/">Best encrypted messaging apps 2026 — full ranking</a></li>
+        <li><a href="/reviews/signal/">Full Signal review (deep dive)</a></li>
+        <li><a href="/reviews/whatsapp/">Full WhatsApp review (metadata trade-offs)</a></li>
+      </ul>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .compare-hero { padding: 4rem 0 2rem; }
+  .compare-hero h1 { font-size: clamp(2rem, 4.5vw, 3rem); margin: 1rem 0 0.75rem; }
+  .compare-hero .lead { max-width: 720px; font-size: 1.0625rem; line-height: 1.6; }
+  .breadcrumb { font-size: 0.875rem; }
+  .breadcrumb a { color: var(--text-secondary); }
+  .crumb-sep { margin: 0 0.4rem; opacity: 0.5; }
+
+  .trio-vs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin: 2rem 0 1rem;
+  }
+  .trio-side {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1rem;
+    text-align: center;
+  }
+  .trio-monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.06) inset, 0 4px 16px rgba(0,0,0,0.4);
+  }
+  .trio-name { font-size: 1.125rem; font-weight: 700; }
+  .trio-score { font-family: var(--font-mono); font-size: 1.25rem; font-weight: 700; color: var(--accent-light); margin-top: 0.25rem; }
+  .score-out { color: var(--text-muted); font-size: 0.75rem; font-weight: 400; }
+  .trio-meta { color: var(--text-secondary); font-size: 0.8125rem; margin-top: 0.375rem; }
+
+  .tldr { padding-left: 1.25rem; line-height: 1.7; color: var(--text-secondary); }
+  .tldr li { margin-bottom: 0.5rem; }
+
+  .table-wrap { overflow-x: auto; margin-top: 1rem; }
+  .cmp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .cmp-table th, .cmp-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .cmp-table thead th {
+    color: var(--text-primary);
+    font-weight: 700;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border-hover);
+  }
+  .cmp-table tbody th {
+    color: var(--text-secondary);
+    font-weight: 600;
+    width: 32%;
+  }
+  .cmp-table td { color: var(--text-secondary); }
+  .cmp-table td.winner { color: var(--success); font-weight: 600; }
+
+  .app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .app-card-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.75rem; }
+  .app-card-head h3 { margin: 0; font-size: 1.25rem; flex: 1; }
+  .app-card-head .trio-score { font-size: 1rem; color: var(--accent-light); }
+  .app-card p { color: var(--text-secondary); line-height: 1.7; margin-bottom: 1rem; }
+
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-bottom: 1rem; }
+  .pros-cons h4 { font-size: 0.8125rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.5rem; }
+  .pros-cons ul { padding-left: 1.125rem; color: var(--text-secondary); line-height: 1.6; }
+  .pros-cons li { margin-bottom: 0.375rem; }
+  .cite { font-size: 0.8125rem; color: var(--text-muted); }
+
+  .decision-tree { padding-left: 1.25rem; color: var(--text-secondary); line-height: 1.8; }
+  .decision-tree li { margin-bottom: 0.75rem; }
+
+  .related { list-style: none; padding: 0; }
+  .related li { padding: 0.5rem 0; border-bottom: 1px solid var(--border); }
+  .related a { color: var(--accent-light); }
+
+  .callout {
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem 1.75rem;
+  }
+  .callout h2 { font-size: 1.375rem; margin-top: 0; }
+  .callout p, .callout ul { color: var(--text-secondary); line-height: 1.7; }
+  .callout ul { padding-left: 1.25rem; margin: 0.75rem 0; }
+  .callout li { margin-bottom: 0.375rem; }
+
+  @media (max-width: 720px) {
+    .trio-vs { grid-template-columns: 1fr; }
+    .pros-cons { grid-template-columns: 1fr; }
+  }
+</style>

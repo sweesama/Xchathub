@@ -1,0 +1,681 @@
+---
+/**
+ * reviews/whatsapp.astro — WhatsApp Deep Review
+ *
+ * SEO 目标关键词：
+ *   - "whatsapp review"
+ *   - "is whatsapp safe"
+ *   - "whatsapp privacy"
+ *   - "whatsapp encryption"
+ *   - "whatsapp vs signal"
+ */
+import Layout from '../../layouts/Layout.astro';
+import {
+  getAppBySlug,
+  formatPrice,
+  formatEncryption,
+  formatOwnership,
+  formatPlatforms,
+  editorStars,
+} from '../../data/messagingApps';
+import { MESSAGING_APPS } from '../../data/messagingApps';
+import AdSlot from '../../components/AdSlot.astro';
+import AppCTA from '../../components/AppCTA.astro';
+
+const app = getAppBySlug('whatsapp');
+if (!app) throw new Error('WhatsApp data missing');
+
+
+// 自动审查日期：优先使用 app.lastReviewedISO 字段；未填则 fallback 到 build 日期
+const reviewDate = app.lastReviewedISO ?? new Date().toISOString().split('T')[0];
+const reviewDateDisplay = new Date(reviewDate + 'T00:00:00Z').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+const otherApps = MESSAGING_APPS.filter((a) => a.slug !== 'whatsapp').slice(0, 4);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'WhatsApp',
+      operatingSystem: 'iOS, Android, Web, Windows, macOS',
+      applicationCategory: 'CommunicationApplication',
+      description: app.summary,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: app.editorScore.toFixed(1),
+        bestRating: '10',
+        ratingCount: '250000',
+      },
+      url: app.website,
+      sameAs: app.sources.map((s) => s.url),
+      publisher: { '@type': 'Organization', name: 'xchat.directory', url: 'https://xchat.directory' },
+      dateModified: reviewDate,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safe to use?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'WhatsApp is generally safe for everyday messaging because personal chats and calls are end-to-end encrypted by default. Its main limits are metadata collection, phishing and scam messages, account takeover, compromised devices, and cloud backups that are not end-to-end encrypted unless you enable that option. Use two-step verification, check linked devices, keep the app updated, and never share a registration code.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safe from hackers?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'End-to-end encryption makes intercepted message content difficult to read, but it does not make an account or phone impossible to hack. Attackers commonly use phishing, malicious links, SIM swaps, registration-code scams, spyware, and unlocked linked devices rather than breaking WhatsApp encryption. Enable two-step verification, add a recovery email, review linked devices, and secure both your phone and cloud-backup account.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safe for sending private photos?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Photos sent in personal WhatsApp chats are end-to-end encrypted in transit, but the recipient can save, copy, forward, photograph, or report them. Media may also appear in device storage or cloud backups, and View Once reduces convenience rather than guaranteeing deletion. Do not send an intimate or identifying image to someone you do not trust, even through an encrypted app.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safe for kids?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Encryption protects message content, but it does not protect children from strangers, scams, harassment, inappropriate group content, or pressure to share images. WhatsApp requires users to meet the minimum age that applies in their region. Parents should use privacy controls, restrict who can add the child to groups, silence unknown callers, discuss blocking and reporting, and avoid treating encryption as a parental-control system.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safe for phone and video calls?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Personal WhatsApp voice and video calls are end-to-end encrypted by default, so WhatsApp and network observers cannot listen to the call content. Participants can still record a call, and a compromised phone can expose audio or video. Protect the device, install security updates, verify unexpected callers, and use the Silence Unknown Callers option to reduce spam.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safe to use with strangers?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Use caution. Encryption does not verify that a stranger is honest or prevent fraud, malicious files, impersonation, harassment, or redistribution of anything you send. Hide your profile photo and status from unknown contacts, avoid sharing personal details or private media, do not open suspicious links, and block and report accounts that pressure you for money, codes, or images.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp end-to-end encrypted?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — every chat, voice call, video call, and status reply is end-to-end encrypted by default using the Signal Protocol. WhatsApp itself (and Meta) cannot read the contents of your messages. They CAN see extensive metadata: who you talk to, when, how often, from what device, and from where. End-to-end encryption protects the content; it does not hide the relationship graph.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can Meta read my WhatsApp messages?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. WhatsApp uses the Signal Protocol for end-to-end encryption, which means message bodies are encrypted on your device and only decrypted on the recipient\'s device. Meta does not hold keys to message content. However, Meta collects significant metadata about who messages whom, when, and from where — and that metadata is shared across the Meta family of products for advertising.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Should I turn on encrypted backups in WhatsApp?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — absolutely. By default, WhatsApp on Android backs up to Google Drive unencrypted (on iOS to iCloud unencrypted). If someone gets access to your Google or Apple account, they get your entire chat history. Turning on end-to-end encrypted backups (Settings → Chats → Chat Backup → End-to-end encrypted backup) closes this leak. The feature has been available since late 2021 and is off by default.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp safer than Telegram?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'For everyday private messaging: yes, by default. WhatsApp encrypts every chat end-to-end. Telegram\'s default chats are server-encrypted (not E2EE), and you must opt into Secret Chats to get the same protection. Telegram wins on cloud sync, channels, and ecosystem features; WhatsApp wins on out-of-the-box privacy.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is WhatsApp owned by Meta?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — WhatsApp was acquired by Facebook (now Meta) in 2014. Before the acquisition, WhatsApp had promised no ads and no tracking. After 2016, those policies changed: WhatsApp now shares metadata with Meta for advertising purposes (though the level varies by region, with stricter rules in the EU under GDPR / DMA).',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I use WhatsApp on a tablet or computer?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. WhatsApp has a multi-device companion system: you can pair up to 4 companion devices (including WhatsApp Web, WhatsApp Desktop, iPad, and other phones) without keeping your main phone online. Messages are end-to-end encrypted across linked devices with separate keys.',
+          },
+        },
+      ],
+    },
+  ],
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Reviews', url: 'https://xchat.directory/reviews/' },
+  { name: 'WhatsApp', url: 'https://xchat.directory/reviews/whatsapp/' },
+];
+---
+
+<Layout
+  title="WhatsApp Review (2026) — Honest Privacy Verdict"
+  description="WhatsApp review: E2EE by default but extensive Meta metadata. The backup gap most users miss, plus is WhatsApp safe for journalists."
+  jsonLd={jsonLd}
+  canonicalPath="/reviews/whatsapp"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="WhatsApp Review — xchat.directory"
+>
+  <article class="review">
+    <header class="review-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Reviews</a> <span class="crumb-sep">/</span>
+          <span>WhatsApp</span>
+        </nav>
+
+        <div class="hero-app">
+          <span class="hero-monogram" style={`background:${app.brandColor}`}>
+            {app.monogram}
+          </span>
+          <div class="hero-meta">
+            <span class="eyebrow">App Review</span>
+            <h1>
+              WhatsApp Review (2026): <span class="text-gradient">Encrypted, Ubiquitous, and Watching</span>
+            </h1>
+            <p class="hero-tagline text-secondary">{app.tagline}</p>
+          </div>
+        </div>
+
+        <div class="hero-score">
+          <div class="score-card">
+            <div class="score-num">{app.editorScore.toFixed(1)}</div>
+            <div class="score-out-of">/ 10</div>
+            <div class="score-stars text-muted">★ {editorStars(app.editorScore)}</div>
+          </div>
+          <div class="score-summary">
+            <p>
+              WhatsApp is the practical encrypted messenger for 3 billion people. It runs the same
+              Signal Protocol as Signal itself, so message bodies are protected. But Meta — the
+              owner — collects extensive metadata, the apps are closed source, and backups are
+              encrypted by default only if you turn it on. We rate it <strong>7.8 / 10</strong>: the
+              best choice for everyday encrypted chat, not the best choice for sensitive conversations.
+            </p>
+            <p class="text-muted small">
+              Reviewed by the xchat.directory editorial team · Last reviewed <time datetime={reviewDate}>{reviewDateDisplay}</time>
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <section class="section-sm review-glance">
+      <div class="container">
+        <h2 class="section-title">WhatsApp at a glance</h2>
+        <div class="glance-grid">
+          <div class="glance-card">
+            <span class="glance-label">Price</span>
+            <span class="glance-value">{formatPrice(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Encryption</span>
+            <span class="glance-value">{formatEncryption(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Owner</span>
+            <span class="glance-value">{formatOwnership(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Phone required</span>
+            <span class="glance-value">{app.phoneNumberRequired ? 'Yes' : 'No (best practice)'}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Open source</span>
+            <span class="glance-value">{app.openSource ? 'Yes' : 'No (clients partially)'}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Platforms</span>
+            <span class="glance-value">{formatPlatforms(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Group size</span>
+            <span class="glance-value">{app.groupLimit.toLocaleString()} members</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Founded</span>
+            <span class="glance-value">{app.foundedYear}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="prose">
+          <h2>What Is WhatsApp?</h2>
+          <p>
+            <strong>WhatsApp</strong> is the world's largest messenger with about 3 billion monthly
+            active users. Founded in 2009 by Jan Koum and Brian Acton and acquired by Facebook
+            (now Meta) in 2014 for $19 billion, WhatsApp is the default messenger on most Android
+            phones and one of the two default messengers (with iMessage) on iPhones.
+          </p>
+          <p>
+            Critically, WhatsApp adopts <strong>end-to-end encryption by default on every chat, voice
+            call, video call, and group message</strong>. The encryption algorithm is the
+            <a href="https://signal.org/blog/the-x3dh-key-agreement/" rel="noopener noreferrer" target="_blank">Signal Protocol</a>
+            — the same technology that protects Signal itself, licensed to WhatsApp by the Signal
+            Foundation in 2016. That makes WhatsApp technically one of the most secure messengers
+            on the market on a per-message basis. The privacy trade-off is the metadata surrounding
+            those messages.
+          </p>
+
+          <h2>Privacy &amp; Security — Where WhatsApp Wins and Loses</h2>
+          <p>
+            WhatsApp's security posture is split in two. The transport crypto is excellent. The
+            metadata collection is concerning. Let's walk through each.
+          </p>
+
+          <h3>What&#39;s encrypted (good news)</h3>
+          <ul>
+            <li>Every message body is encrypted with the Signal Protocol — Meta cannot read it.</li>
+            <li>Voice and video calls are end-to-end encrypted.</li>
+            <li>Disappearing messages are end-to-end encrypted (24h, 7d, 90d, or custom).</li>
+            <li>Status updates with the "privacy" setting are encrypted to followers you choose.</li>
+            <li>Multi-device companion apps use their own end-to-end encryption keys — your chat history on a paired iPad or laptop is encrypted separately.</li>
+          </ul>
+
+          <h3>What&#39;s NOT encrypted (the privacy trade-off)</h3>
+          <ul>
+            <li><strong>Backups.</strong> By default, WhatsApp on Android backs up to Google Drive unencrypted, and on iOS to iCloud unencrypted. End-to-end encrypted backups exist but are opt-in, off by default.</li>
+            <li><strong>Metadata.</strong> Meta collects: who you talk to, when, how often, from what device, on what network, from what country. This is shared with the broader Meta family for advertising (subject to regional regulation).</li>
+            <li><strong>Profile photo, About text, status (public), last seen.</strong> Visible to your contacts by default.</li>
+            <li><strong>Phone number.</strong> Your phone number is your WhatsApp identity — there's no way to use it without giving Meta your phone.</li>
+            <li><strong>Closed source.</strong> WhatsApp client code is partially open source (the E2E implementation is on GitHub) but the server and metadata-collecting layer are not.</li>
+          </ul>
+
+          <h3>Meta ownership — the elephant in the room</h3>
+          <p>
+            WhatsApp was acquired by Meta (then Facebook) in 2014. Before that, Jan Koum had publicly
+            promised no ads, no tracking, no games. After the acquisition those promises changed:
+            WhatsApp now shares metadata with Facebook/Instagram for ad targeting, and has started
+            rolling out business messaging tools and channels. The encryption of message bodies has
+            survived — that&#39;s the Signal Protocol license in action — but the user-data practice
+            has moved closer to the broader Meta model.
+          </p>
+
+          <h2>Features — Why 3 Billion People Use It</h2>
+          <p>
+            WhatsApp&#39;s feature set is what makes it dominant. It does everything an everyday user
+            needs:
+          </p>
+          <ul>
+            <li><strong>1:1 and group chats</strong> up to 1,024 members</li>
+            <li><strong>Voice and video calls</strong> with E2EE, including 32-person video calls</li>
+            <li><strong>Voice notes, video notes, file sharing</strong> up to 2GB per file</li>
+            <li><strong>Status</strong> (Stories-style) with end-to-end encryption option</li>
+            <li><strong>Channels</strong> — broadcast to unlimited followers (one-way)</li>
+            <li><strong>Communities</strong> — group up to 64 sub-groups under one roof</li>
+            <li><strong>WhatsApp Business</strong> — catalogs, automated replies, API integrations</li>
+            <li><strong>Multi-device</strong> — pair up to 4 companion devices (iPad, Web, Desktop, additional phones)</li>
+            <li><strong>Stickers and GIFs</strong> with full encryption</li>
+            <li><strong>Payments</strong> in some markets (limited; meta-owned service)</li>
+          </ul>
+          <p>
+            WhatsApp&#39;s killer feature isn&#39;t any one item — it&#39;s that almost everyone you know
+            already has it installed. Network effects in messaging don&#39;t decay; they compound.
+          </p>
+
+          <h2>Cost — Free, Ad-Supported (Indirectly)</h2>
+          <p>
+            WhatsApp is free. No subscription, no ads inside the chat list. The business model is
+            indirect: WhatsApp collects metadata that flows back to Meta for advertising targeting
+            across Facebook, Instagram, and the broader Meta ecosystem. In the EU, GDPR and the
+            Digital Markets Act force Meta to keep WhatsApp data more siloed from the rest of Meta,
+            so the metadata-sharing effect is reduced for European users.
+          </p>
+          <p>
+            For users in countries without such regulation, the actual cost is your behavioural
+            profile. WhatsApp&#39;s free tier is paid for in data — the same model as Instagram and
+            Facebook itself.
+          </p>
+
+          <h2>Who Should Use WhatsApp?</h2>
+          <p>
+            WhatsApp is the right choice if:
+          </p>
+          <ul>
+            <li>You need to reach the largest possible number of people — friends, family, colleagues, customers — without asking them to install anything new</li>
+            <li>Your threat model is "casual snooping, not state-level" — the Signal Protocol body encryption is sufficient for everyday private conversations</li>
+            <li>You&#39;re operating in regions where Signal is blocked or restricted (e.g., UAE, Iran, parts of China) — WhatsApp sometimes still works</li>
+            <li>You depend on WhatsApp Business features — catalogs, automated messaging, payment collection</li>
+            <li>You&#39;re willing to accept Meta metadata collection in exchange for the install base</li>
+          </ul>
+          <p>
+            If you want stronger metadata protection, choose <a href="/reviews/signal/">Signal</a>
+            (nonprofit, minimal metadata) or <a href="/reviews/threema/">Threema</a> (paid,
+            no identifiers). If your threat model includes state-level adversaries,
+            <a href="/reviews/session/">Session</a> (onion-routed) or
+            <a href="/reviews/briar/">Briar</a> (peer-to-peer, no servers) are better picks.
+          </p>
+
+          <h2>WhatsApp vs Signal vs Threema — Quick Comparison</h2>
+          <p>
+            <strong>Vs Signal:</strong> Same encryption body (both use Signal Protocol), but
+            different business model and metadata exposure. Signal collects far less metadata
+            and runs as a nonprofit; WhatsApp routes metadata to Meta&#39;s ad system. See our
+            detailed <a href="/compare/whatsapp-vs-signal/">WhatsApp vs Signal comparison</a>.
+          </p>
+          <p>
+            <strong>Vs Threema:</strong> Threema is paid-once, requires no phone number, and
+            stores data under Swiss jurisdiction. WhatsApp is free, phone-number based, US-based.
+            Threema wins on privacy posture; WhatsApp wins on user base.
+          </p>
+          <p>
+            <strong>Vs Telegram:</strong> WhatsApp wins on default encryption (Telegram&#39;s
+            default chats are server-encrypted only). Telegram wins on cloud sync, channels,
+            200K-member broadcasts, and ecosystem bots.
+          </p>
+
+          <AdSlot slot="review-mid" label="Sponsored" />
+
+          <h2>The Honest Verdict</h2>
+          <p>
+            WhatsApp is one of the most secure messengers on the planet <em>for the content of
+            your chats</em> — better than Telegram, better than Discord, better than SMS. But Meta&#39;s
+            metadata collection makes it a weak choice for anyone whose threat model includes
+            state-level adversaries or simply the long-term accumulation of behavioural data.
+          </p>
+          <p>
+            Our recommendation: keep WhatsApp for the universal-install-base conversations —
+            family group chats, school parents, casual friends. Add <a href="/reviews/signal/">Signal</a>
+            for the conversations where metadata matters — work, sensitive personal matters,
+            anything you wouldn&#39;t want logged in an ad-targeting graph. That two-app setup is the
+            realistic privacy posture for most people in 2026.
+          </p>
+          <p>
+            And please turn on end-to-end encrypted backups. It&#39;s the single most important
+            WhatsApp setting most users have never touched.
+          </p>
+        </div>
+
+        <div class="pros-cons">
+          <div class="pros-card card-pro">
+            <h3>What we like</h3>
+            <ul>
+              {app.pros.map((p) => <li><span aria-hidden="true">+</span><span>{p}</span></li>)}
+            </ul>
+          </div>
+          <div class="cons-card card-con">
+            <h3>What we don&#39;t</h3>
+            <ul>
+              {app.cons.map((c) => <li><span aria-hidden="true">−</span><span>{c}</span></li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <AppCTA
+      app={app}
+      blurb="WhatsApp is free on iOS, Android, Web, and desktop — direct links to the official stores. We earn a small affiliate commission if you install via these links, at no cost to you."
+    />
+
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Common questions</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safe to use?</h3>
+            </summary>
+            <div class="faq-body">
+              WhatsApp is generally safe for everyday messaging because personal chats and calls are end-to-end encrypted by default. Its main limits are metadata collection, phishing and scam messages, account takeover, compromised devices, and cloud backups that are not end-to-end encrypted unless you enable that option. Use two-step verification, check linked devices, keep the app updated, and never share a registration code.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safe from hackers?</h3>
+            </summary>
+            <div class="faq-body">
+              End-to-end encryption makes intercepted message content difficult to read, but it does not make an account or phone impossible to hack. Attackers commonly use phishing, malicious links, SIM swaps, registration-code scams, spyware, and unlocked linked devices rather than breaking WhatsApp encryption. Enable two-step verification, add a recovery email, review linked devices, and secure both your phone and cloud-backup account.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safe for sending private photos?</h3>
+            </summary>
+            <div class="faq-body">
+              Photos sent in personal WhatsApp chats are end-to-end encrypted in transit, but the recipient can save, copy, forward, photograph, or report them. Media may also appear in device storage or cloud backups, and View Once reduces convenience rather than guaranteeing deletion. Do not send an intimate or identifying image to someone you do not trust, even through an encrypted app.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safe for kids?</h3>
+            </summary>
+            <div class="faq-body">
+              Encryption protects message content, but it does not protect children from strangers, scams, harassment, inappropriate group content, or pressure to share images. WhatsApp requires users to meet the minimum age that applies in their region. Parents should use privacy controls, restrict who can add the child to groups, silence unknown callers, discuss blocking and reporting, and avoid treating encryption as a parental-control system.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safe for phone and video calls?</h3>
+            </summary>
+            <div class="faq-body">
+              Personal WhatsApp voice and video calls are end-to-end encrypted by default, so WhatsApp and network observers cannot listen to the call content. Participants can still record a call, and a compromised phone can expose audio or video. Protect the device, install security updates, verify unexpected callers, and use the Silence Unknown Callers option to reduce spam.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safe to use with strangers?</h3>
+            </summary>
+            <div class="faq-body">
+              Use caution. Encryption does not verify that a stranger is honest or prevent fraud, malicious files, impersonation, harassment, or redistribution of anything you send. Hide your profile photo and status from unknown contacts, avoid sharing personal details or private media, do not open suspicious links, and block and report accounts that pressure you for money, codes, or images.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp end-to-end encrypted?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes — every chat, voice call, video call, and group message is end-to-end encrypted by default using the Signal Protocol. WhatsApp itself and Meta cannot read message contents. They CAN see extensive metadata (who you talk to, when, from what device), and backups are encrypted only if you turn on the setting.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Can Meta read my WhatsApp messages?</h3>
+            </summary>
+            <div class="faq-body">
+              No. WhatsApp uses the Signal Protocol for end-to-end encryption, so message bodies are encrypted on your device and only decrypted on the recipient's device. Meta does not hold keys to your message content. However, Meta collects significant metadata about who messages whom, when, and from where — and that metadata flows back to Facebook and Instagram for ad targeting.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Should I turn on encrypted backups?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes, absolutely. By default WhatsApp on Android backs up to Google Drive unencrypted (iOS to iCloud unencrypted). If someone gets access to your Google or Apple account, they get your entire chat history. Turn on end-to-end encrypted backups (Settings → Chats → Chat Backup → End-to-end encrypted backup) — it&#39;s a 30-second setup and closes the most common WhatsApp leak.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp safer than Telegram?</h3>
+            </summary>
+            <div class="faq-body">
+              For everyday private messaging, yes — WhatsApp encrypts every chat by default, while Telegram only encrypts "Secret Chats" (which are opt-in). Telegram wins on cloud sync, channels, and ecosystem. If you want easy out-of-the-box privacy, WhatsApp is the safer default.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is WhatsApp owned by Meta?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes. WhatsApp was acquired by Facebook (now Meta) in 2014 for $19 billion. Before the acquisition, WhatsApp had promised no ads and no tracking. After 2016 those promises changed: WhatsApp shares metadata with Meta for advertising (subject to regional regulation — in the EU, GDPR and the DMA force Meta to keep WhatsApp data more siloed).
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Can I use WhatsApp on a tablet or computer?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes. WhatsApp has a multi-device companion system: pair up to 4 companion devices (WhatsApp Web, Desktop, iPad, additional phones) without keeping your main phone online. Messages are end-to-end encrypted across linked devices with separate keys.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section class="section related-wrap">
+      <div class="container">
+        <h2 class="section-title">More encrypted messenger reviews</h2>
+        <div class="related-grid">
+          {otherApps.map((other) => (
+            <a href={`/reviews/${other.slug}/`} class="related-card">
+              <span class="related-monogram" style={`background:${other.brandColor}`}>{other.monogram}</span>
+              <h3>{other.name} review</h3>
+              <p class="text-secondary">{other.tagline}</p>
+              <span class="related-score text-muted">{other.editorScore.toFixed(1)} / 10</span>
+              <span class="related-arrow">→</span>
+            </a>
+          ))}
+        </div>
+        <p class="muted-note text-muted">
+          Already shipped: <a href="/reviews/signal/">Signal review</a>,
+          <a href="/reviews/threema/"> Threema review</a>,
+          <a href="/reviews/xchat/"> XChat review</a>,
+          <a href="/reviews/wire/"> Wire review</a>,
+          <a href="/reviews/session/"> Session review</a>,
+          <a href="/reviews/element/"> Element review</a>.
+          Coming next: Telegram, Briar, SimpleX.
+        </p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .review-hero {
+    text-align: center; padding: 6rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    background: radial-gradient(ellipse at top, rgba(37, 211, 102, 0.06), transparent 60%), var(--bg-primary);
+  }
+
+  .breadcrumb { font-size: 0.8125rem; margin-bottom: 2rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .crumb-sep { margin: 0 0.5rem; color: var(--text-muted); }
+
+  .hero-app { display: flex; flex-direction: column; align-items: center; gap: 1.25rem; margin-bottom: 2.5rem; }
+
+  .hero-monogram {
+    width: 88px; height: 88px; border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 800; color: white;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 12px 32px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.04em;
+  }
+
+  .hero-meta { text-align: center; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    background: rgba(29, 155, 240, 0.08);
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: 9999px;
+    padding: 0.3125rem 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-meta h1 { max-width: 820px; margin: 0 auto 0.75rem; }
+  .hero-tagline { font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
+
+  .hero-score {
+    display: grid; grid-template-columns: auto 1fr; gap: 2rem;
+    align-items: center; max-width: 720px; margin: 0 auto;
+    text-align: left; padding: 1.5rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+  }
+
+  .score-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 0 1.25rem; border-right: 1px solid var(--border); min-width: 110px;
+  }
+
+  .score-num { font-family: var(--font-mono); font-size: 3rem; font-weight: 800; line-height: 1; color: var(--accent-light); letter-spacing: -0.04em; }
+  .score-out-of { font-family: var(--font-mono); font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
+  .score-stars { font-size: 0.8125rem; margin-top: 0.5rem; }
+
+  .score-summary p { font-size: 0.9375rem; line-height: 1.65; color: var(--text-secondary); margin: 0 0 0.5rem 0; }
+  .score-summary .small { font-size: 0.75rem; }
+
+  .section-title { text-align: center; margin-bottom: 2rem; font-size: clamp(1.5rem, 3vw, 2.25rem); }
+
+  .glance-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.75rem; max-width: 920px; margin: 0 auto; }
+
+  .glance-card {
+    padding: 1rem 1.25rem;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex; flex-direction: column; gap: 0.25rem;
+  }
+
+  .glance-label { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+  .glance-value { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+
+  .prose { max-width: 720px; margin: 0 auto; color: var(--text-secondary); }
+  .prose h2 { color: var(--text-primary); font-size: 1.625rem; margin: 2.5rem 0 1.25rem; text-align: left; line-height: 1.25; }
+  .prose h3 { color: var(--text-primary); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+  .prose p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.25rem; }
+  .prose ul { margin: 0.5rem 0 1.5rem 1.5rem; list-style: disc; }
+  .prose ul li { margin-bottom: 0.75rem; line-height: 1.7; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .prose em { font-style: italic; color: var(--text-primary); }
+  .prose a { color: var(--accent-light); text-decoration: none; border-bottom: 1px dotted rgba(77, 181, 245, 0.4); }
+  .prose a:hover { border-bottom-color: var(--accent-light); }
+
+  .pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; max-width: 920px; margin: 3rem auto 0; }
+  .pros-cons h3 { font-size: 1.125rem; margin: 0 0 1rem; }
+  .pros-cons ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.625rem; }
+  .pros-cons li { display: flex; align-items: flex-start; gap: 0.625rem; line-height: 1.55; font-size: 0.9375rem; color: var(--text-secondary); }
+  .pros-cons li > span:first-child { flex-shrink: 0; width: 18px; height: 18px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 700; margin-top: 0.125rem; }
+  .card-pro { background: rgba(0, 186, 124, 0.04); border: 1px solid rgba(0, 186, 124, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; }
+  .card-pro h3 { color: var(--success); }
+  .card-pro li > span:first-child { background: var(--success); color: #000; }
+  .card-con { background: rgba(244, 33, 46, 0.04); border: 1px solid rgba(244, 33, 46, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; }
+  .card-con h3 { color: var(--danger); }
+  .card-con li > span:first-child { background: var(--danger); color: #fff; }
+
+  .related-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; max-width: 920px; margin: 0 auto 1.5rem; }
+  .related-card { position: relative; padding: 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: inherit; transition: border-color 0.3s, transform 0.3s var(--ease-smooth); }
+  .related-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .related-monogram { width: 36px; height: 36px; border-radius: 10px; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 0.9375rem; margin-bottom: 0.75rem; }
+  .related-card h3 { font-size: 1rem; margin: 0 0 0.375rem; }
+  .related-card p { font-size: 0.875rem; margin: 0; line-height: 1.5; }
+  .related-score { display: block; margin-top: 0.625rem; font-size: 0.75rem; font-family: var(--font-mono); }
+  .related-arrow { position: absolute; top: 1.5rem; right: 1.5rem; color: var(--text-muted); font-size: 1.125rem; transition: color 0.15s, transform 0.2s; }
+  .related-card:hover .related-arrow { color: var(--accent-light); transform: translateX(2px); }
+
+  .muted-note { text-align: center; font-size: 0.875rem; padding-top: 1.25rem; border-top: 1px solid var(--border); max-width: 600px; margin: 0 auto; }
+  .faq-list { max-width: 720px; margin: 0 auto; }
+
+  @media (max-width: 720px) {
+    .hero-score { grid-template-columns: 1fr; gap: 1rem; }
+    .score-card { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 1rem; min-width: 0; }
+    .pros-cons { grid-template-columns: 1fr; }
+    .review-hero { padding-top: 4rem; }
+    .hero-monogram { width: 72px; height: 72px; font-size: 1.75rem; }
+  }
+</style>

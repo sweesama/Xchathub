@@ -33,7 +33,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Crypto',
     emoji: '₿',
     h1: 'XChat Crypto Groups — Bitcoin, Ethereum, DeFi & Web3 Communities',
-    metaTitle: 'XChat Crypto Groups Directory — BTC, ETH, DeFi, Web3 Chats',
+    metaTitle: 'XChat Crypto Groups — BTC, ETH, DeFi, Web3 Chats',
     metaDescription: 'Find public XChat group chat invite links for crypto, Bitcoin, Ethereum, DeFi, NFTs, and Web3. Submit your crypto group to be listed.',
     intro: 'Crypto Twitter has always been the loudest part of X. With XChat\'s encrypted group links, traders, builders, and degens are moving alpha conversations into private rooms. This page tracks public crypto groups as they appear.',
     exampleTypes: [
@@ -50,7 +50,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Tech',
     emoji: '💻',
     h1: 'XChat Tech Groups — Software, Startups & Developer Communities',
-    metaTitle: 'XChat Tech Groups Directory — Devs, Startups, Engineering',
+    metaTitle: 'XChat Tech Groups — Devs, Startups, Engineering',
     metaDescription: 'Browse XChat group chat invite links for software developers, startups, engineering, and tech founders. Submit your tech group free.',
     intro: 'Tech Twitter is splitting into hundreds of group chats. From indie hackers to Big Tech engineers, XChat is becoming a private replacement for Slack-style communities. This is where to find them.',
     exampleTypes: [
@@ -67,7 +67,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'AI',
     emoji: '🤖',
     h1: 'XChat AI Groups — LLMs, Agents, Prompt Engineering & ML Research',
-    metaTitle: 'XChat AI Groups Directory — LLMs, Agents, ML, Prompts',
+    metaTitle: 'XChat AI Groups — LLMs, Agents, Prompt Engineering',
     metaDescription: 'Find public XChat group chat invite links for AI, LLMs, ChatGPT, Grok, Claude, agents, and ML research. Submit your AI group free.',
     intro: 'AI moves faster than any subreddit can keep up with. XChat groups have become the place where researchers, prompt engineers, and tool builders share what\'s new in real time. Track them here.',
     exampleTypes: [
@@ -84,7 +84,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'News',
     emoji: '📰',
     h1: 'XChat News Groups — Breaking News, Politics & Current Events',
-    metaTitle: 'XChat News Groups Directory — Breaking News & Discussion',
+    metaTitle: 'XChat News Groups — Breaking News & Discussion',
     metaDescription: 'Find public XChat group chat invite links for breaking news, politics, current events, and journalism. Submit your news group free.',
     intro: 'News broke first on Twitter. With XChat groups, journalists, news junkies, and political commentators are organizing into private rooms for sharper discussion away from the algorithm.',
     exampleTypes: [
@@ -101,7 +101,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Sports',
     emoji: '⚽',
     h1: 'XChat Sports Groups — Live Game Chat, Fantasy & Team Communities',
-    metaTitle: 'XChat Sports Groups Directory — Fans, Fantasy, Live Games',
+    metaTitle: 'XChat Sports Groups — Fans, Fantasy, Live Games',
     metaDescription: 'Find public XChat group chat invite links for football, basketball, soccer, MMA, fantasy sports, and team fan groups. Submit your sports group.',
     intro: 'Game-day group chats moved off Discord and SMS. XChat\'s 350-1000 member groups are perfect for team fan rooms, fantasy leagues, and live-event commentary.',
     exampleTypes: [
@@ -118,7 +118,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Gaming',
     emoji: '🎮',
     h1: 'XChat Gaming Groups — Esports, Streaming, MMO & Console Chat',
-    metaTitle: 'XChat Gaming Groups Directory — Esports, Streamers, MMOs',
+    metaTitle: 'XChat Gaming Groups — Esports, Streamers, MMOs',
     metaDescription: 'Find public XChat group chat invite links for gaming, esports, streamers, MMO guilds, and console communities. Submit your gaming group.',
     intro: 'Gamers were among the first to test joinable group links. From competitive esports teams to casual MMO guilds, XChat is becoming a Discord alternative for X-native communities.',
     exampleTypes: [
@@ -135,7 +135,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Business',
     emoji: '💼',
     h1: 'XChat Business Groups — Founders, Investors & Industry Networks',
-    metaTitle: 'XChat Business Groups Directory — Founders, VCs, Sales',
+    metaTitle: 'XChat Business Groups — Founders, VCs, Sales',
     metaDescription: 'Find public XChat group chat invite links for founders, investors, sales, marketing, and industry-specific business networks. Submit your business group.',
     intro: 'B2B Twitter networks are migrating into XChat groups. Founders, operators, VCs, and sales teams are using invite-only rooms to share deal flow and intel without the noise.',
     exampleTypes: [
@@ -152,7 +152,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Entertainment',
     emoji: '🎬',
     h1: 'XChat Entertainment Groups — TV, Movies, Music & Pop Culture',
-    metaTitle: 'XChat Entertainment Groups — TV, Movies, Music, Anime',
+    metaTitle: 'XChat Entertainment Groups — TV, Movies, Anime',
     metaDescription: 'Find public XChat group chat invite links for TV shows, movies, music, anime, and pop culture fans. Submit your entertainment group free.',
     intro: 'TV finales, album drops, and movie premieres are the perfect group-chat moments. XChat entertainment groups give fan communities a private place to react in real time.',
     exampleTypes: [
@@ -169,7 +169,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Education',
     emoji: '🎓',
     h1: 'XChat Education Groups — Study Groups, Courses & Learning Communities',
-    metaTitle: 'XChat Education Groups — Study, Courses, Learning',
+    metaTitle: 'XChat Education Groups — Study & Learning',
     metaDescription: 'Find public XChat group chat invite links for study groups, online courses, language learning, and academic communities. Submit your education group.',
     intro: 'Learning is more fun in a group. XChat is filling the gap between Discord study servers and Telegram course channels with encrypted, X-native learning communities.',
     exampleTypes: [
@@ -186,7 +186,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     label: 'Local',
     emoji: '📍',
     h1: 'XChat Local Groups — City, Neighborhood & Regional Communities',
-    metaTitle: 'XChat Local Groups Directory — City & Neighborhood Chats',
+    metaTitle: 'XChat Local Groups — Cities & Neighborhoods',
     metaDescription: 'Find public XChat group chat invite links for cities, neighborhoods, and regional communities. Submit your local group free.',
     intro: 'Nextdoor is dying. WhatsApp groups don\'t scale. XChat local groups support up to 1,000 members — large enough for an entire neighborhood, small enough to stay relevant.',
     exampleTypes: [

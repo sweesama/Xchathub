@@ -30,7 +30,22 @@ Thumbs.db
 *.log
 *-log.txt
 build-log.txt
+build-log-*.txt
 .cache/
+
+# Temporary V3 debug/verification scripts (V3.8 validation complete)
+verify-v3.mjs
+bisect.cjs
+check-syntax.cjs
+make-minimal.cjs
+
+# Python cache
+scripts/__pycache__/
+
+# Keyword research auto-generated outputs (regenerated on each run)
+reports/keyword-research-*.csv
+reports/keyword-research-*.json
+reports/keyword-research-*-summary.txt
 
 # Generated PNGs (these are re-created by prebuild hook from SVG sources)
 public/og-image.png

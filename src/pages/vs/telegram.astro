@@ -6,7 +6,11 @@
  * Telegram 以"公共频道 + 大群"称霸，我们聚焦"社交图谱 + 默认加密"差异。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_LAUNCH_DISPLAY } from '../../data/xchat';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  graphJsonLd,
+} from '../../lib/structuredData';
 
 const rows = [
   { label: 'Owner',                    xchat: 'X Corp (Elon Musk)',            other: 'Telegram FZ-LLC (Durov brothers)' },
@@ -26,21 +30,39 @@ const rows = [
   { label: 'Voice / video calls',      xchat: 'Yes',                           other: 'Yes' },
 ];
 
-const comparisonJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Article',
-  headline: 'XChat vs Telegram — Privacy, Groups, Features',
-  author: { '@type': 'Organization', name: 'XChat Hub' },
-  publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
-  datePublished: '2026-04-20',
-  dateModified: new Date().toISOString().split('T')[0],
-  mainEntityOfPage: 'https://xchat.directory/vs/telegram',
-  description: 'XChat vs Telegram comparison: default E2EE, group size, bots, channels, and which messenger fits you. Updated April 2026.',
-};
+const vtFaqs = [
+  {
+    question: 'Is XChat more private than Telegram?',
+    answer: 'Yes, in the encryption sense. XChat is end-to-end encrypted on every chat and group by default. Telegram is NOT end-to-end encrypted by default — only opt-in "Secret Chats" (1:1 only, no groups) are E2EE. If you want a private conversation by default, XChat is materially more private than Telegram in its default configuration. Telegram wins on scale (200K-member groups, public channels, bots) and on being cross-platform with full cloud sync.',
+  },
+  {
+    question: 'Does Telegram have end-to-end encryption?',
+    answer: 'Telegram supports end-to-end encryption only in "Secret Chats" — an opt-in mode that must be enabled per 1:1 conversation. Secret Chats do not work in groups, are not synced to the cloud, and must be started on the device you intend to use. The vast majority of Telegram conversations (regular chats, group chats, channels) are encrypted only between your device and Telegram\'s servers, so Telegram can technically read them.',
+  },
+  {
+    question: 'Can XChat replace Telegram?',
+    answer: 'Not yet. XChat is iOS-only as of April 2026, has no public channels, no bots, and a much smaller group-size limit (350 at launch, growing toward 1,000). Telegram supports 200,000-member groups, public channels, a mature bot platform, and runs on every major platform. If you need broadcast-style public communities, Telegram is the right tool. XChat is closer to a private messenger inside the X social graph — it complements Telegram rather than replacing it.',
+  },
+  {
+    question: 'Do I need a phone number for XChat or Telegram?',
+    answer: 'Telegram requires a phone number to register (no way around it). XChat does not require a phone number — your identity is your X (Twitter) account. If you want to chat without giving a phone number, XChat is the more anonymous option.',
+  },
+];
+
+const comparisonJsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: 'XChat vs Telegram (2026) — Privacy, Groups, Features',
+    description: 'XChat vs Telegram comparison: default E2EE, group size, bots, channels, and which messenger fits you. Updated April 2026.',
+    datePublished: '2026-04-20',
+    dateModified: new Date().toISOString().split('T')[0],
+    url: '/vs/telegram',
+  }),
+  faqPageJsonLd(vtFaqs),
+);
 ---
 
 <Layout
-  title="XChat vs Telegram (2026) — Privacy, Groups, Channels Compared | XChat Hub"
+  title="XChat vs Telegram (2026) — Privacy & Groups"
   description="XChat vs Telegram: default encryption vs. opt-in, 481 vs. 200,000 group members, X social graph vs. Telegram bots and channels. Full breakdown."
   jsonLd={comparisonJsonLd}
   canonicalPath="/vs/telegram"

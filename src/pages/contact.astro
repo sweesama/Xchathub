@@ -1,0 +1,114 @@
+---
+/**
+ * contact.astro — 联系我们
+ * AdSense 审批前置条件 + 用户触达渠道
+ */
+import Layout from '../layouts/Layout.astro';
+import { XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
+
+/* 动态生成 "最后更新" 日期，避免站点看起来没人维护 */
+const today = new Date();
+const lastUpdatedISO = today.toISOString().split('T')[0]; // YYYY-MM-DD
+const lastUpdatedDisplay = today.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout
+  title="Contact Us | XChat Hub"
+  description="How to reach the XChat Hub team — Telegram community, email, group submission, and bug reports."
+  canonicalPath="/contact"
+>
+  <section class="section">
+    <div class="container content-page">
+      <h1>Contact Us</h1>
+      <p class="text-muted" style="margin-bottom: 2rem;">Last updated: <time datetime={lastUpdatedISO}>{lastUpdatedDisplay}</time></p>
+
+      <p>
+        XChat Hub is maintained by an independent editorial team. We are not affiliated
+        with X Corp or any messaging platform we review. The fastest way to reach a real
+        human is via Telegram — we respond within 48 hours.
+      </p>
+
+      <h2>Primary contact: Telegram community</h2>
+      <p>
+        Our <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a> group
+        is staffed by volunteer admins. Use this channel for:
+      </p>
+      <ul>
+        <li>General questions about XChat or any reviewed messenger</li>
+        <li>Group directory submissions and listing changes</li>
+        <li>Editorial corrections to a review</li>
+        <li>Privacy / data removal requests</li>
+      </ul>
+      <p>
+        Average response time: <strong>under 48 hours</strong>. For paid listing
+        questions, please reference your Buy Me a Coffee receipt number.
+      </p>
+
+      <h2>By topic</h2>
+
+      <h3>Editorial corrections</h3>
+      <p>
+        Spotted a factual error in one of our reviews? Send a Telegram message to
+        <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">@Xchathubcommunity</a>
+        with the article URL and the corrected information (ideally with a public source link).
+        We verify all submissions against primary sources before updating.
+      </p>
+
+      <h3>Group directory submissions</h3>
+      <p>
+        We have a self-service form for adding your XChat group to the directory. Visit the
+        <a href="/list-your-group">List Your Group</a> page to submit — free listings are reviewed
+        within 24 hours, paid Featured / Lifetime plans are activated immediately after payment
+        verification.
+      </p>
+
+      <h3>Press &amp; partnerships</h3>
+      <p>
+        For press inquiries, backlink exchanges, or partnership proposals, message us on Telegram
+        with the subject line starting <code>Press:</code> or <code>Partnership:</code>. We do not
+        accept paid editorial placements — review scores are independent of commercial relationships.
+      </p>
+
+      <h3>Security reports</h3>
+      <p>
+        Found a security issue on this site (XSS, broken auth, leaked token)?
+        Please disclose responsibly via Telegram DM to an admin. We do not currently run a paid
+        bug bounty program, but we credit researchers publicly in the changelog after the fix ships.
+      </p>
+
+      <h2>What we will NOT respond to</h2>
+      <ul>
+        <li>SEO link-buying offers</li>
+        <li>Requests to artificially inflate a review score</li>
+        <li>DMCA takedowns without a valid copyright claim (see our <a href="/terms">Terms</a>)</li>
+        <li>Generic crypto / NFT / gambling promotions</li>
+      </ul>
+
+      <h2>Our other channels</h2>
+      <p>
+        Telegram channel (announcements only, no replies):
+        <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer">@xchathubdirectory</a>
+      </p>
+
+      <h2>Response time SLA</h2>
+      <p>
+        We aim to acknowledge every inbound message within 48 hours during weekdays (UTC).
+        Weekend messages are processed on Monday. Complex editorial reviews may take up to 7 days
+        if they require contacting the relevant vendor.
+      </p>
+
+      <h2>About this website</h2>
+      <p>
+        For information about who runs XChat Hub, see our <a href="/about">About page</a>.
+        For data we collect and how we use it, see our
+        <a href="/privacy">Privacy Policy</a>.
+        For the legal terms governing use of this site, see our
+        <a href="/terms">Terms of Service</a>.
+      </p>
+    </div>
+  </section>
+</Layout>

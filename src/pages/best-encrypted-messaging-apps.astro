@@ -1,0 +1,733 @@
+---
+/**
+ * best-encrypted-messaging-apps.astro
+ *
+ * This page targets the highest-volume keywords in the niche:
+ *   - "best encrypted messaging app 2026"
+ *   - "most secure messaging app"
+ *   - "most private messaging app"
+ *   - "encrypted messaging apps compared"
+ *   - "best encrypted chat apps"
+ *
+ * Strategy: produce an authoritative "year + best of" aggregator that
+ * other small review sites link to as a reference. Updated yearly.
+ */
+import Layout from '../layouts/Layout.astro';
+import {
+  getAppsRanked,
+  formatPrice,
+  formatEncryption,
+  formatOwnership,
+  formatPlatforms,
+} from '../data/messagingApps';
+import {
+  articleJsonLd,
+  faqPageJsonLd,
+  itemListJsonLd,
+  graphJsonLd,
+} from '../lib/structuredData';
+
+const ranked = getAppsRanked();
+const currentYear = 2026;
+const reviewDate = '2026-07-08';
+
+// 与 src/pages/sitemap.xml.ts 中 PUBLISHED_REVIEW_SLUGS 保持一致
+// 原因：避免站内链接指向未发布的评测页导致 404
+const PUBLISHED_REVIEW_SLUGS = new Set<string>(['signal', 'threema', 'xchat', 'wire', 'session', 'element', 'whatsapp', 'telegram', 'briar', 'simplex']);
+
+// "Editor's pick" goes to top scorer
+const topApp = ranked[0];
+
+// ==== JSON-LD: Article + ItemList（10 个评测项）+ FAQPage ====
+
+// ItemList：取所有已发布评测的 app，按排名顺序
+const listItems = ranked
+  .filter((a) => PUBLISHED_REVIEW_SLUGS.has(a.slug))
+  .map((a, i) => ({
+    position: i + 1,
+    name: a.name,
+    url: `https://xchat.directory/reviews/${a.slug}/`,
+  }));
+
+const bestFaqs = [
+  {
+    question: 'What is the most secure messaging app in 2026?',
+    answer: 'Signal is widely considered the most secure messaging app in 2026 because every chat, call, and group is end-to-end encrypted by default using the open-source Signal Protocol (Double Ratchet), its clients and server are fully open source and audited regularly, and it operates as a 501(c)(3) nonprofit with no advertising business. Threema and Wire are the two strongest alternatives for users who need no phone number or enterprise-grade team features.',
+  },
+  {
+    question: 'Which encrypted messaging app is the most private?',
+    answer: 'For maximum privacy, choose an app with no phone number required, no central server storing metadata, and open-source clients. Threema (Swiss, paid, random IDs), Session (onion-routed, fork of Signal), SimpleX (no user IDs at all, even the operator cannot correlate users), and Briar (peer-to-peer, works over Tor/Bluetooth) are the four most private options we cover.',
+  },
+  {
+    question: 'Is Telegram encrypted?',
+    answer: 'Telegram is NOT end-to-end encrypted by default. Standard Telegram chats and group chats are encrypted only between your device and Telegram\'s servers, so Telegram itself can read them. To get end-to-end encryption on Telegram you must explicitly start a "Secret Chat" (1:1 only, no groups), and it must be re-enabled per conversation. If you forget, your messages are not end-to-end encrypted.',
+  },
+  {
+    question: 'Is WhatsApp secure?',
+    answer: 'WhatsApp uses the Signal Protocol for end-to-end encryption, so message content cannot be read by WhatsApp or Meta. However, WhatsApp collects extensive metadata (who you talk to, when, how often, your contacts, group memberships) that is shared with the broader Meta advertising system. For pure message content security WhatsApp is solid; for privacy against corporate data harvesting it is not.',
+  },
+  {
+    question: 'What is the best free encrypted messaging app?',
+    answer: 'Signal is the best free encrypted messaging app. It is donation-funded, open source, audited, and uses the Signal Protocol by default on every chat and call. Session and SimpleX are also free and even more anonymous, but with smaller user bases.',
+  },
+];
+
+const jsonLd = graphJsonLd(
+  articleJsonLd({
+    headline: `Best Encrypted Messaging Apps in ${currentYear} (Ranked & Reviewed)`,
+    description: `An honest, independent ranking of the best encrypted messaging apps in ${currentYear} for privacy-conscious users, journalists, businesses, and people who just want their chats to stay private.`,
+    datePublished: '2026-01-01',
+    dateModified: reviewDate,
+    url: '/best-encrypted-messaging-apps',
+  }),
+  itemListJsonLd(listItems),
+  faqPageJsonLd(bestFaqs),
+);
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Reviews', url: 'https://xchat.directory/reviews/' },
+  { name: `Best Encrypted Messaging Apps ${currentYear}`, url: 'https://xchat.directory/best-encrypted-messaging-apps/' },
+];
+---
+
+<Layout
+  title={`Best Encrypted Messaging Apps ${currentYear} — Ranked`}
+  description={`Ranked ${currentYear} list of best encrypted messaging apps: Signal, Threema, Wire, WhatsApp, Telegram, XChat, more. Encryption, audits, ownership covered.`}
+  jsonLd={jsonLd}
+  canonicalPath="/best-encrypted-messaging-apps"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt={`Best Encrypted Messaging Apps ${currentYear}`}
+>
+  <article class="best">
+    <!-- HERO -->
+    <header class="best-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Reviews</a> <span class="crumb-sep">/</span>
+          <span>Best Encrypted Messaging Apps {currentYear}</span>
+        </nav>
+
+        <span class="eyebrow">Updated {reviewDate} · Annual review</span>
+        <h1>
+          Best Encrypted Messaging Apps in <span class="text-gradient">{currentYear}</span> (Ranked &amp; Reviewed)
+        </h1>
+        <p class="lead text-secondary prose-body">
+          An honest, independent ranking of the encrypted messengers worth your attention this year.
+          We weigh end-to-end encryption, open-source status, independent audits, ownership,
+          user base, and real-world usability — then we ask one question: would I recommend
+          this to my own family?
+        </p>
+      </div>
+    </header>
+
+    <!-- TOP PICK -->
+    <section class="section-sm">
+      <div class="container">
+        <div class="top-pick card">
+          <div class="top-pick-header">
+            <span class="top-pick-label">Editor's Choice</span>
+            <span class="top-pick-badge">{topApp.editorScore.toFixed(1)} / 10</span>
+          </div>
+          <div class="top-pick-body">
+            <span class="top-pick-monogram" style={`background:${topApp.brandColor}`}>
+              {topApp.monogram}
+            </span>
+            <div class="top-pick-meta">
+              <h2>{topApp.name}</h2>
+              <p class="text-secondary">{topApp.tagline}</p>
+              <p>
+                {topApp.description.split('.')[0]}. &nbsp;
+                {PUBLISHED_REVIEW_SLUGS.has(topApp.slug) ? (
+                  <a href={`/reviews/${topApp.slug}/`}>Read the full {topApp.name} review →</a>
+                ) : (
+                  <span class="text-muted"><em>{topApp.name} review coming soon</em></span>
+                )}
+              </p>
+              <a href={topApp.website} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+                Visit Website ↗
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RANKINGS -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">The full ranking</h2>
+        <p class="section-sub text-secondary text-center">
+          Apps ranked by editor score. Ties broken by user base and openness.
+        </p>
+
+        <ol class="rank-list">
+          {ranked.map((app, i) => {
+            const hasReview = PUBLISHED_REVIEW_SLUGS.has(app.slug);
+            return (
+              <li class="rank-item card">
+                <div class="rank-num">{i + 1}</div>
+                <span class="rank-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+                <div class="rank-body">
+                  <div class="rank-head">
+                    <h3>
+                      {hasReview ? (
+                        <a href={`/reviews/${app.slug}/`}>{app.name}</a>
+                      ) : (
+                        <>{app.name} <small class="rank-soon-label">· review coming soon</small></>
+                      )}
+                    </h3>
+                    <span class="rank-score">{app.editorScore.toFixed(1)}</span>
+                  </div>
+                  <p class="rank-tagline text-secondary">{app.tagline}</p>
+                  <p class="rank-summary">{app.summary}</p>
+                  <dl class="rank-meta">
+                    <div><dt>Price</dt><dd>{formatPrice(app)}</dd></div>
+                    <div><dt>Encryption</dt><dd>{formatEncryption(app)}</dd></div>
+                    <div><dt>Open source</dt><dd>{app.openSource ? 'Yes' : 'No'}</dd></div>
+                    <div><dt>Owned by</dt><dd>{formatOwnership(app)}</dd></div>
+                    <div><dt>Platforms</dt><dd>{formatPlatforms(app)}</dd></div>
+                    <div><dt>Group size</dt><dd>{app.groupLimit.toLocaleString()}</dd></div>
+                  </dl>
+                  {hasReview ? (
+                    <a href={`/reviews/${app.slug}/`} class="rank-cta">
+                      Read {app.name} review →
+                    </a>
+                  ) : (
+                    <span class="rank-cta rank-cta-soon">Review coming soon</span>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    <!-- HOW WE TEST -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">How we test and score</h2>
+        <div class="how-grid">
+          <div class="how-card">
+            <h3>1. Encryption by default</h3>
+            <p class="text-secondary">
+              End-to-end encryption on every chat, call, and group by default — not as an opt-in toggle
+              users can forget. Apps where encryption is opt-in (Telegram's default, Element's rooms)
+              get downranked.
+            </p>
+          </div>
+          <div class="how-card">
+            <h3>2. Open-source &amp; audited</h3>
+            <p class="text-secondary">
+              Published source code, regular independent security audits, no proprietary crypto black boxes.
+              Closed-source apps get downranked regardless of marketing claims.
+            </p>
+          </div>
+          <div class="how-card">
+            <h3>3. Ownership &amp; business model</h3>
+            <p class="text-secondary">
+              Nonprofit, donation-funded, one-time paid, or commercial-ad-supported? We rank by
+              how much pressure there is to monetize user data.
+            </p>
+          </div>
+          <div class="how-card">
+            <h3>4. Identity &amp; metadata</h3>
+            <p class="text-secondary">
+              Phone number, email, or random ID? Where is the data hosted? How much metadata
+              is exposed to the operator?
+            </p>
+          </div>
+          <div class="how-card">
+            <h3>5. Cross-platform and polish</h3>
+            <p class="text-secondary">
+              iOS, Android, web, desktop: which platforms support the app, and how polished is
+              the experience on each?
+            </p>
+          </div>
+          <div class="how-card">
+            <h3>6. Real-world use</h3>
+            <p class="text-secondary">
+              Can you actually use the app day-to-day without friction? We consider feature
+              gap, group sizes, and whether your contacts would install it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CHOOSING GUIDE -->
+    <section class="section choose-section">
+      <div class="container">
+        <h2 class="section-title">Which one should you choose?</h2>
+        <div class="choose-grid">
+          <div class="choose-card">
+            <span class="choose-emoji" aria-hidden="true">🛡️</span>
+            <h3>I just want it to work</h3>
+            <p>Pick <a href="/reviews/signal/">Signal</a>. Free, nonprofit, E2EE by default, most of your
+            tech-fluent friends already have it.</p>
+          </div>
+          <div class="choose-card">
+            <span class="choose-emoji" aria-hidden="true">🕶️</span>
+            <h3>I won't give any phone number</h3>
+            <p>Pick <a href="/reviews/threema/">Threema</a> (~$4 once) or
+            <a href="/reviews/session/">Session</a> (free, onion-routed). Both are zero-identifier from day one.</p>
+          </div>
+          <div class="choose-card">
+            <span class="choose-emoji" aria-hidden="true">🏢</span>
+            <h3>I run a business or team</h3>
+            <p>Pick <a href="/reviews/wire/">Wire</a> or <a href="/reviews/element/">Element</a>.
+            Both are built for enterprise collaboration with proper admin controls.</p>
+          </div>
+          <div class="choose-card">
+            <span class="choose-emoji" aria-hidden="true">📡</span>
+            <h3>I live in an internet-restricted region</h3>
+            <p>Pick <a href="/reviews/briar/">Briar</a>. Works over Tor, Wi-Fi, or Bluetooth —
+            no central server needed.</p>
+          </div>
+          <div class="choose-card">
+            <span class="choose-emoji" aria-hidden="true">📊</span>
+            <h3>I want to broadcast to thousands</h3>
+            <p>Pick <a href="/reviews/telegram/">Telegram</a>. Up to 200,000-member channels and
+            full cloud sync. Note: encryption is opt-in per chat.</p>
+          </div>
+          <div class="choose-card">
+            <span class="choose-emoji" aria-hidden="true">💬</span>
+            <h3>I already use X (Twitter)</h3>
+            <p>Pick <a href="/reviews/xchat/">XChat</a>. Built into the X platform, no phone number
+            required. Note: no published audit yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Common questions</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              <h3 class="faq-q-title">What is end-to-end encryption?</h3>
+            </summary>
+            <div class="faq-body">
+              End-to-end encryption (E2EE) means only the sender and receiver can read the message —
+              not the messenger server, not a man-in-the-middle, not a government with a subpoena.
+              Apps like Signal and Threema run E2EE on every chat by default. Telegram's default chats are <em>not</em> E2EE; only "Secret Chats" are.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Which encrypted messenger is the most popular?</h3>
+            </summary>
+            <div class="faq-body">
+              WhatsApp by far (3+ billion MAUs), then Telegram (~900 million), then Signal (~70 million). But popularity doesn't equal privacy — WhatsApp is owned by Meta and routes metadata through its servers.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Which encrypted messenger is the safest?</h3>
+            </summary>
+            <div class="faq-body">
+              For most users, <strong>Signal</strong> — its protocol is peer-reviewed, audited, and it's run by a nonprofit. For users who refuse to give a phone number, <strong>Threema</strong> or <strong>Session</strong> are safer picks. For users in internet-restricted countries, <strong>Briar</strong> is designed for that exact scenario.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Does the NSA / my government have a backdoor?</h3>
+            </summary>
+            <div class="faq-body">
+              No published backdoor exists in any of the apps on this list. Government surveillance in modern reports tends to focus on metadata (who is messaging whom) rather than message content, since properly encrypted E2EE is hard to break mathematically. Apps that minimize metadata (Signal, Threema, SimpleX) make that harder too.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Can I use multiple encrypted messengers?</h3>
+            </summary>
+            <div class="faq-body">
+              Absolutely — and many privacy-conscious users do. A common setup: Signal for daily chat, Threema for sensitive work conversations, Element for open-source communities, and one messenger per platform you need to reach.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">What about iMessage?</h3>
+            </summary>
+            <div class="faq-body">
+              iMessage is end-to-end encrypted between Apple devices using iCloud Advanced Data Protection, but it's not cross-platform (Android users see green bubbles with no E2EE) and Apple still has access to recovery keys. It's safer than SMS but not as clean as Signal.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- LONG-TAIL ANCHOR SECTION (2026 specific queries) -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">2026 update: what changed this year</h2>
+        <p class="section-sub text-secondary text-center">
+          Concrete answers to the questions people search for in {currentYear} — not generic privacy explainers.
+        </p>
+
+        <h3 class="subsection-title">What is the most secure messaging app in 2026?</h3>
+        <p class="text-secondary">
+          For default end-to-end encryption on every chat, <strong>Signal</strong> is still the reference implementation in {currentYear}. For true anonymity from signup (no phone, no email, no linkable identifier), <strong>Threema</strong> is the only mainstream messenger that respects this. For metadata minimization beyond what Signal offers, <strong>SimpleX Chat</strong> ships with no user IDs at all. The honest answer is "it depends on your threat model" — but if forced to pick one, Signal is the strongest general-purpose choice.
+        </p>
+
+        <h3 class="subsection-title">Best encrypted messaging app without phone number</h3>
+        <p class="text-secondary">
+          Three solid options: <a href="/reviews/threema/">Threema</a> (~$4 one-time, Swiss-made, E2EE by default), <a href="/reviews/session/">Session</a> (free, open-source, onion-routed), and <a href="/reviews/simplex/">SimpleX Chat</a> (free, fully decentralized, no user IDs). Signal added optional usernames in 2024 but still requires a phone number at signup. Telegram and WhatsApp cannot be used without a phone number.
+        </p>
+
+        <h3 class="subsection-title">Free encrypted chat apps for Android and iPhone</h3>
+        <p class="text-secondary">
+          All ten apps on this list have Android and iOS clients except where noted. The free-and-fully-E2EE-by-default picks: <strong>Signal</strong>, <strong>Session</strong>, <strong>Element</strong>, <strong>Briar</strong> (Android only), <strong>SimpleX</strong>, and <strong>Wire</strong> (free for personal use). WhatsApp and Telegram are free but, as noted, Telegram's default chats are not end-to-end encrypted.
+        </p>
+
+        <h3 class="subsection-title">Is WhatsApp encryption ending in 2026?</h3>
+        <p class="text-secondary">
+          No — WhatsApp's per-message encryption (Signal Protocol, E2EE) remains on by default for personal chats. What <em>has</em> changed in recent updates is metadata exposure through Meta's broader product graph, and optional cloud backups which are end-to-end encrypted only if you enable that option manually. Encrypted backups should be on by default in {currentYear}; if you haven't turned them on, do it now (Settings → Chats → Chat Backup → End-to-end encrypted backup).
+        </p>
+
+        <h3 class="subsection-title">Anonymous messaging app — free options</h3>
+        <p class="text-secondary">
+          For true anonymity (no phone, no email, no linkable identifier), the free picks are <a href="/reviews/session/">Session</a>, <a href="/reviews/simplex/">SimpleX Chat</a>, and <a href="/reviews/briar/">Briar</a>. <a href="/reviews/threema/">Threema</a> is the strongest paid anonymous option (~$4 once). All four avoid tying your account to a phone number or email. Anonymous <em>does not</em> mean untraceable — these apps protect against the operator and casual observers, but a determined adversary with legal process can still request metadata where it exists.
+        </p>
+
+        <h3 class="subsection-title">Why is Telegram not in our top three?</h3>
+        <p class="text-secondary">
+          Telegram's default chats are encrypted in transit and at rest on Telegram's servers, but they are <strong>not</strong> end-to-end encrypted — Telegram can read them and is legally required to hand them over to authorities when ordered. End-to-end encryption only exists in opt-in "Secret Chats," which must be started manually per conversation and do not work for groups. For users whose threat model includes "I don't want the messenger provider to read my messages," Telegram is not the right tool. It is excellent for channels, bots, and cloud sync — which is why we still include it in the ranking — but you should know what you're getting.
+        </p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  /* ===== Hero ===== */
+  .best-hero {
+    text-align: center;
+    padding: 5rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 155, 240, 0.06), transparent 60%),
+      var(--bg-primary);
+  }
+
+  .breadcrumb {
+    font-size: 0.8125rem;
+    margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .crumb-sep { margin: 0 0.5rem; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--success);
+    background: rgba(0, 186, 124, 0.08);
+    border: 1px solid rgba(0, 186, 124, 0.25);
+    border-radius: 9999px;
+    padding: 0.3125rem 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .best-hero h1 {
+    max-width: 880px;
+    margin: 0 auto 1.25rem;
+  }
+
+  .lead {
+    font-size: 1.0625rem;
+    max-width: 720px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ===== Top Pick ===== */
+  .top-pick {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0;
+    overflow: hidden;
+    border-color: rgba(0, 186, 124, 0.25);
+    background:
+      linear-gradient(135deg, rgba(0, 186, 124, 0.05), var(--bg-card));
+  }
+
+  .top-pick-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.75rem;
+    background: rgba(0, 186, 124, 0.08);
+    border-bottom: 1px solid rgba(0, 186, 124, 0.2);
+  }
+
+  .top-pick-label {
+    color: var(--success);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .top-pick-badge {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--success);
+    font-size: 0.9375rem;
+  }
+
+  .top-pick-body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem;
+    align-items: center;
+  }
+
+  .top-pick-monogram {
+    width: 88px;
+    height: 88px;
+    border-radius: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 800;
+    color: white;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 8px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .top-pick-meta h2 { margin: 0 0 0.375rem; font-size: 1.625rem; }
+  .top-pick-meta .text-secondary { margin-bottom: 0.75rem; font-size: 0.9375rem; }
+  .top-pick-meta p { color: var(--text-secondary); line-height: 1.65; margin: 0 0 1rem; }
+  .top-pick-meta a.btn-primary { text-decoration: none; }
+
+  /* ===== Rank list ===== */
+  .section-title {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+  }
+
+  .subsection-title {
+    font-size: 1.125rem;
+    margin: 2rem 0 0.5rem;
+    color: var(--text-primary);
+  }
+  .subsection-title + p { margin-bottom: 1rem; }
+
+  .section-sub {
+    text-align: center;
+    font-size: 0.9375rem;
+    margin-bottom: 2.5rem;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .rank-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 auto;
+    max-width: 880px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .rank-item {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 1.5rem;
+  }
+
+  .rank-num {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    line-height: 1;
+    width: 32px;
+    text-align: center;
+  }
+
+  .rank-item:first-child .rank-num {
+    color: var(--accent-light);
+  }
+
+  .rank-monogram {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    color: white;
+    font-size: 1.25rem;
+  }
+
+  .rank-body { min-width: 0; }
+
+  .rank-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .rank-head h3 { margin: 0; font-size: 1.25rem; }
+  .rank-head a { color: var(--text-primary); text-decoration: none; }
+  .rank-head a:hover { color: var(--accent-light); }
+
+  .rank-score {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent-light);
+    font-size: 1rem;
+  }
+
+  .rank-tagline { margin: 0 0 0.5rem; font-size: 0.875rem; font-style: italic; }
+  .rank-summary { color: var(--text-secondary); line-height: 1.6; margin: 0 0 0.875rem; font-size: 0.9375rem; }
+
+  .rank-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.5rem 1rem;
+    margin: 0 0 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+
+  .rank-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .rank-meta dt {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .rank-meta dd {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: var(--text-primary);
+  }
+
+  .rank-cta {
+    color: var(--accent-light);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+
+  .rank-cta:hover { border-color: var(--accent-light); }
+
+  .rank-soon-label {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 0.25rem;
+  }
+
+  .rank-cta-soon {
+    color: var(--text-muted);
+    font-style: italic;
+    border-bottom: 1px dashed var(--border);
+    cursor: default;
+  }
+
+  /* ===== How we test ===== */
+  .how-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .how-card {
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .how-card h3 { font-size: 1rem; color: var(--accent-light); margin: 0 0 0.5rem; }
+  .how-card p { margin: 0; line-height: 1.55; font-size: 0.9375rem; }
+
+  /* ===== Choose guide ===== */
+  .choose-section { background: rgba(255, 255, 255, 0.02); }
+  .choose-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+    max-width: 1080px;
+    margin: 0 auto;
+  }
+
+  .choose-card {
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+  }
+
+  .choose-emoji {
+    font-size: 1.75rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  .choose-card h3 { font-size: 1rem; margin: 0 0 0.5rem; }
+  .choose-card p { margin: 0; font-size: 0.9375rem; color: var(--text-secondary); line-height: 1.55; }
+  .choose-card a { color: var(--accent-light); text-decoration: none; border-bottom: 1px dotted rgba(77, 181, 245, 0.4); }
+  .choose-card a:hover { border-bottom-color: var(--accent-light); }
+
+  /* ===== FAQ ===== */
+  .faq-list { max-width: 720px; margin: 0 auto; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 720px) {
+    .rank-item {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .rank-num { display: none; }
+    .top-pick-body {
+      grid-template-columns: 1fr;
+      text-align: center;
+    }
+    .top-pick-monogram {
+      margin: 0 auto;
+      width: 72px;
+      height: 72px;
+      font-size: 1.75rem;
+    }
+    .best-hero { padding-top: 3.5rem; }
+    .rank-head {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+  }
+</style>

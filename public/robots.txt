@@ -30,53 +30,183 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-# ---- AI Crawlers (allowed — we want to be cited by LLMs) ----
+# ---- AI / LLM Crawlers (allowed — we want to be cited by every major LLM) ----
+# OpenAI (ChatGPT, SearchGPT, Operator)
 User-agent: GPTBot
 Allow: /
-
 User-agent: ChatGPT-User
 Allow: /
-
 User-agent: OAI-SearchBot
 Allow: /
+User-agent: ChatGPTAgent
+Allow: /
+User-agent: OpenAI
+Allow: /
 
+# Anthropic (Claude)
 User-agent: ClaudeBot
 Allow: /
-
 User-agent: Claude-Web
 Allow: /
-
+User-agent: Claude-User
+Allow: /
+User-agent: Claude-SearchBot
+Allow: /
+User-agent: Claude-Code
+Allow: /
 User-agent: anthropic-ai
 Allow: /
 
+# Google (Gemini, Vertex AI, NotebookLM, Deep Research)
 User-agent: Google-Extended
 Allow: /
-
-User-agent: PerplexityBot
+User-agent: GoogleOther
+Allow: /
+User-agent: GoogleOther-Image
+Allow: /
+User-agent: Google-CloudVertexBot
+Allow: /
+User-agent: GoogleAgent-Mariner
+Allow: /
+User-agent: GoogleAgent-URLContext
+Allow: /
+User-agent: Google-NotebookLM
+Allow: /
+User-agent: NotebookLM
+Allow: /
+User-agent: Gemini-Deep-Research
 Allow: /
 
-User-agent: Perplexity-User
+# Apple Intelligence
+User-agent: Applebot
+Allow: /
+User-agent: Applebot-Extended
 Allow: /
 
-User-agent: CCBot
-Allow: /
-
-User-agent: Bytespider
-Allow: /
-
-User-agent: Amazonbot
-Allow: /
-
+# Meta (Llama, Meta AI)
 User-agent: Meta-ExternalAgent
 Allow: /
-
+User-agent: Meta-ExternalFetcher
+Allow: /
+User-agent: facebookexternalhit
+Allow: /
 User-agent: FacebookBot
 Allow: /
 
-User-agent: cohere-ai
+# Amazon (Rufus, Q)
+User-agent: Amazonbot
+Allow: /
+User-agent: Amzn-SearchBot
+Allow: /
+User-agent: Amzn-User
 Allow: /
 
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+User-agent: Perplexity-User
+Allow: /
+
+# Common Crawl (训练数据源)
+User-agent: CCBot
+Allow: /
+
+# Cohere
+User-agent: cohere-ai
+Allow: /
+User-agent: cohere-training-data-crawler
+Allow: /
+
+# You.com
 User-agent: YouBot
+Allow: /
+
+# Mistral AI (Le Chat)
+User-agent: MistralAI-User
+Allow: /
+
+# DeepSeek
+User-agent: DeepSeekBot
+Allow: /
+
+# Alibaba Qwen (通义千问)
+User-agent: TongyiBot
+Allow: /
+
+# Baichuan / Zhipu (智谱清言)
+User-agent: ChatGLM-Spider
+Allow: /
+
+# Moonshot (Kimi)
+User-agent: Kimi-User
+Allow: /
+
+# Baidu (文心一言 / Ernie Bot)
+User-agent: Baiduspider
+Allow: /
+User-agent: Baidu-User
+Allow: /
+User-agent: iaskspider
+Allow: /
+
+# ByteDance (豆包 / Doubao)
+User-agent: Bytespider
+Allow: /
+User-agent: TikTokSpider
+Allow: /
+
+# DuckDuckGo (DuckAssist)
+User-agent: DuckDuckBot
+Allow: /
+User-agent: DuckAssistBot
+Allow: /
+
+# Brave (Leo AI)
+User-agent: Bravebot
+Allow: /
+
+# Microsoft (Copilot / Bing)
+User-agent: MSNBot-Media
+Allow: /
+
+# Kagi (Summarizer)
+User-agent: kagi-fetcher
+Allow: /
+
+# xAI (Grok)
+User-agent: xAI
+Allow: /
+User-agent: GrokBot
+Allow: /
+User-agent: grok-user
+Allow: /
+
+# Hugging Face
+User-agent: HuggingFaceBot
+Allow: /
+User-agent: huggingface-user
+Allow: /
+
+# Allen AI (AI2 / OLMo)
+User-agent: AI2Bot
+Allow: /
+User-agent: ai2bot
+Allow: /
+User-agent: AllenBot
+Allow: /
+
+# Diffbot (Graph RAG 数据源)
+User-agent: Diffbot
+Allow: /
+
+# Seek (search engine + AI)
+User-agent: SeekSpider
+Allow: /
+User-agent: seekbot
+Allow: /
+
+# iAsk (iAsk.ai search + AI answer)
+User-agent: iaskspider-new
 Allow: /
 
 # ---- SEO Scrapers (blocked — they waste bandwidth, no value) ----

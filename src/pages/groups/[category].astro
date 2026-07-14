@@ -11,7 +11,7 @@ import {
   getGroupListingBadge,
   getGroupListingTier,
 } from '../../data/groups';
-import { GROUP_CATEGORY_META, getCategoryMeta } from '../../data/groupCategoryMeta';
+import { GROUP_CATEGORY_META } from '../../data/groupCategoryMeta';
 import CategoryIcon from '../../components/CategoryIcon.astro';
 
 export function getStaticPaths() {
@@ -28,10 +28,10 @@ const groupsInCategory = SORTED_GROUP_DIRECTORY.filter(
   (g) => g.category === meta.label
 );
 
-/* 其他相关分类（前 5 个，排除当前） */
+/* 其他相关分类（全部展示，确保所有 10 个分类互链） */
 const relatedCategories = GROUP_CATEGORY_META
   .filter((m) => m.slug !== meta.slug)
-  .slice(0, 6);
+  .slice(0, 9);
 
 /* JSON-LD: CollectionPage */
 const collectionJsonLd = {
@@ -50,7 +50,7 @@ const collectionJsonLd = {
 ---
 
 <Layout
-  title={`${meta.metaTitle} | XChat Hub`}
+  title={meta.metaTitle}
   description={meta.metaDescription}
   jsonLd={collectionJsonLd}
   canonicalPath={`/groups/${meta.slug}`}
@@ -113,7 +113,11 @@ const collectionJsonLd = {
                   </a>
                   <a
                     class="owner-removal"
-                    href={`mailto:hello@xchat.directory?subject=${encodeURIComponent(`Remove group: ${group.name}`)}&body=${encodeURIComponent(`I am the owner of "${group.name}" (slug: ${group.slug}) and I want it removed from xchat.directory.\n\nPlease confirm by replying within 24h.\n\n— Sent from xchat.directory`)}`}
+                    href={`mailto:hello@xchat.directory?subject=${encodeURIComponent(`Remove group: ${group.name}`)}&body=${encodeURIComponent(`I am the owner of "${group.name}" (slug: ${group.slug}) and I want it removed from xchat.directory.
+
+Please confirm by replying within 24h.
+
+— Sent from xchat.directory`)}`}
                   >
                     Owner? Request removal
                   </a>

@@ -12,11 +12,18 @@
     "llms": "node scripts/build-llms.mjs",
     "check:appstore": "node scripts/check-app-store.mjs",
     "group:add": "node scripts/add-group.mjs",
-    "group:discover": "node scripts/discover-groups.mjs"
+    "group:discover": "node scripts/discover-groups.mjs",
+    "keyword:research": "node scripts/keyword-research.mjs",
+    "keyword:quick": "node scripts/keyword-research.mjs --quick",
+    "keyword:xchat": "node scripts/keyword-research.mjs --seeds=xchat",
+    "keyword:encrypted": "node scripts/keyword-research.mjs --seeds=encrypted",
+    "review": "node scripts/update-last-reviewed.mjs"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.9",
     "@astrojs/partytown": "^2.1.7",
-    "astro": "^4.16.0"
+    "astro": "^4.16.0",
+    "typescript": "^5.9.3"
   },
   "devDependencies": {
     "@resvg/resvg-js": "^2.6.2",

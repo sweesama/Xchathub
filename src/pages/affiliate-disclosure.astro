@@ -1,0 +1,90 @@
+---
+/**
+ * affiliate-disclosure.astro — FTC Affiliate Disclosure
+ *
+ * Why this page exists:
+ *   - The FTC Endorsement Guides (16 CFR Part 255) require clear disclosure of
+ *     material connections between an endorser and an advertiser.
+ *   - AdSense program policies require a dedicated disclosure page reachable
+ *     from every page that contains affiliate links.
+ *   - GDPR/CCPA consent for advertising cookies is handled separately by the
+ *     CookieBanner.
+ */
+import Layout from '../layouts/Layout.astro';
+
+const today = new Date();
+const lastUpdatedISO = today.toISOString().split('T')[0];
+const lastUpdatedDisplay = today.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout
+  title="Affiliate Disclosure | XChat Hub"
+  description="How XChat Hub earns revenue, which links are affiliate links, and how editorial independence is preserved."
+  canonicalPath="/affiliate-disclosure"
+>
+  <section class="section">
+    <div class="container content-page">
+      <h1>Affiliate Disclosure</h1>
+      <p class="text-muted" style="margin-bottom: 2rem;">
+        Last updated: <time datetime={lastUpdatedISO}>{lastUpdatedDisplay}</time>
+      </p>
+
+      <p>
+        In accordance with the <strong>Federal Trade Commission (FTC) Endorsement Guides</strong>,
+        this page explains how <strong>XChat Hub</strong> (<code>xchat.directory</code>) earns
+        revenue and how that might influence the content you read. We are committed to keeping
+        editorial recommendations independent of any compensation we receive.
+      </p>
+
+      <h2>1. How We Earn Revenue</h2>
+      <p>XChat Hub is currently free to use and does not require a subscription. To keep the site running we may earn revenue from the following sources:</p>
+      <ul>
+        <li><strong>Display advertising</strong> — third-party ad networks (e.g., Google AdSense) that serve contextual ads on review and comparison pages.</li>
+        <li><strong>Affiliate referral links</strong> — when we link to a paid app store or to a paid messenger such as Threema, we may earn a small commission if you install or purchase through that link.</li>
+        <li><strong>Group listings (paid)</strong> — public groups in the Groups Directory may be marked as <em>Verified</em> or <em>Featured</em> with a small annual fee that supports moderation.</li>
+      </ul>
+
+      <h2>2. Which Links Are Affiliate Links</h2>
+      <p>Whenever a link on this site qualifies as an affiliate or referral link, we make that clear in two ways:</p>
+      <ul>
+        <li>The link is annotated with <code>rel="sponsored noopener noreferrer"</code> in the underlying HTML.</li>
+        <li>A visible disclosure note (such as <em>"Affiliate link"</em>) appears next to the link on the page where it is most relevant.</li>
+      </ul>
+      <p>The current affiliate programs we participate in are:</p>
+      <ul>
+        <li><strong>Apple Search Ads</strong> — iOS app-store links on review pages carry an <code>at</code> parameter that lets Apple attribute installs to XChat Hub.</li>
+        <li><strong>Google Play Install Referrer</strong> — Android links carry a <code>referrer</code> parameter for attribution.</li>
+        <li><strong>Threema Affiliate Programme</strong> — Threema is a paid app; our link to the App Store or to threema.ch may earn a commission on purchase.</li>
+        <li><strong>Wire Affiliate Programme</strong> (via Impact Radius) — applicable if and when Wire enables paid plans for end users.</li>
+      </ul>
+
+      <h2>3. Editorial Independence</h2>
+      <p>
+        Affiliate status <strong>never</strong> determines the score we give a messenger, the
+        ranking in a comparison table, or the order of our top-N lists. Our review methodology is
+        the same whether an app is free, paid, or part of an affiliate program:
+      </p>
+      <ul>
+        <li>Scores are based on <strong>security model</strong>, <strong>privacy posture</strong>, <strong>cross-platform support</strong>, and <strong>feature completeness</strong>.</li>
+        <li>Apps that pay us nothing (open-source projects like <strong>SimpleX</strong>, <strong>Briar</strong>, and <strong>Session</strong>) are reviewed using the same rubric — they simply don't earn a commission when you click their download link.</li>
+        <li>We do not accept payment to alter a review, raise a score, or place an app higher in a ranking.</li>
+      </ul>
+
+      <h2>4. Pricing Is Not Affected</h2>
+      <p>Affiliate parameters do not change the price you pay for any app or service. Whether you click our link or visit the App Store directly, the price is identical. You do not pay extra to support XChat Hub — the commission comes out of the developer's marketing budget.</p>
+
+      <h2>5. Cookies &amp; Consent</h2>
+      <p>Display advertising and affiliate tracking may involve cookies or similar identifiers placed by the third-party network. We display a cookie consent banner on your first visit, where you can choose to accept analytics and advertising cookies or to limit the site to strictly necessary cookies. You can revisit your choice at any time via the <em>Cookie preferences</em> link in the site footer.</p>
+
+      <h2>6. Questions or Concerns</h2>
+      <p>If you have questions about a specific link, a partnership we participate in, or how a particular recommendation was reached, please reach out via our <a href="/contact">contact page</a>. We respond to editorial inquiries within a few days.</p>
+
+      <h2>7. Policy Updates</h2>
+      <p>We will update this page whenever we add or remove an affiliate program. Material changes will be reflected in the <em>Last updated</em> date at the top of this page. We do not retroactively change the meaning of past disclosures.</p>
+    </div>
+  </section>
+</Layout>

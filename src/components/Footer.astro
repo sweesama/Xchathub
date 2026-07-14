@@ -17,30 +17,67 @@ const year = new Date().getFullYear();
       </p>
       <nav class="footer-nav" aria-label="Footer navigation">
         <div class="footer-col">
-          <span class="footer-heading">Main</span>
-          <a href="/">Home</a>
-          <a href="/groups">Groups</a>
+          <span class="footer-heading">Home</span>
+          <a href="/">Homepage</a>
+          <a href="/best-encrypted-messaging-apps">Best 2026 Ranking</a>
+          <a href="/groups">Groups Directory</a>
           <a href="/faq">FAQ</a>
-          <a href="/launch-countdown">Launch Countdown</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-heading">Reviews</span>
+          <a href="/reviews/signal/">Signal</a>
+          <a href="/reviews/threema/">Threema</a>
+          <a href="/reviews/wire/">Wire</a>
+          <a href="/reviews/session/">Session</a>
+          <a href="/reviews/element/">Element</a>
+          <a href="/reviews/whatsapp/">WhatsApp</a>
+          <a href="/reviews/telegram/">Telegram</a>
+          <a href="/reviews/briar/">Briar</a>
+          <a href="/reviews/simplex/">SimpleX</a>
+          <a href="/reviews/xchat/">XChat</a>
         </div>
         <div class="footer-col">
           <span class="footer-heading">Compare</span>
+          <a href="/compare/signal-vs-threema/">Signal vs Threema</a>
+          <a href="/compare/signal-vs-telegram/">Signal vs Telegram</a>
+          <a href="/compare/whatsapp-vs-signal/">WhatsApp vs Signal</a>
+          <a href="/compare/signal-vs-telegram-security/">Signal vs Telegram Security</a>
+          <a href="/compare/signal-vs-whatsapp-security/">Signal vs WhatsApp Security</a>
+          <a href="/compare/imessage-vs-signal/">iMessage vs Signal</a>
+          <a href="/compare/signal-vs-whatsapp-vs-telegram/">Signal vs WhatsApp vs Telegram</a>
+          <a href="/compare/wire-vs-signal-vs-threema/">Wire vs Signal vs Threema</a>
           <a href="/vs/whatsapp">XChat vs WhatsApp</a>
           <a href="/vs/signal">XChat vs Signal</a>
           <a href="/vs/telegram">XChat vs Telegram</a>
         </div>
         <div class="footer-col">
-          <span class="footer-heading">For Owners</span>
-          <a href="/list-your-group">List Your Group</a>
-          <a href="/about">About</a>
-          <a href="/privacy">Privacy</a>
-        </div>
-        <div class="footer-col">
           <span class="footer-heading">Community</span>
           <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer">Telegram Channel</a>
           <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">Telegram Community</a>
+          <a href="/list-your-group">List Your Group</a>
+          <a href="/communities-shutdown">X Communities Shutdown</a>
+          <a href="/about">About</a>
+          <a href="/contact">Contact</a>
+          <a href="/terms">Terms</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/affiliate-disclosure">Affiliate Disclosure</a>
         </div>
       </nav>
+
+      <script is:inline>
+        // 绑定 cookie preferences 按钮到 CookieBanner 的 openCookiePreferences
+        // is:inline 关闭 TS 处理，绕过 strict mode 对 optional 调用的报错
+        (function () {
+          var prefBtn = document.querySelector('[data-cookie-preferences]');
+          var openFn = window.openCookiePreferences;
+          if (prefBtn && typeof openFn === 'function') {
+            prefBtn.addEventListener('click', function () {
+              openFn();
+            });
+          }
+        })();
+      </script>
+
       <p class="copyright">&copy; {year} XChat Hub. Built for the community.</p>
     </div>
   </div>
@@ -123,5 +160,15 @@ const year = new Date().getFullYear();
       gap: 1.25rem;
       max-width: 260px;
     }
+  }
+
+  /* Coming-soon placeholder (not a link) */
+  .footer-soon {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-top: 0.25rem;
+    padding-top: 0.375rem;
+    border-top: 1px dashed var(--border);
   }
 </style>

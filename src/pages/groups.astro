@@ -23,7 +23,7 @@ const groupsJsonLd = {
 ---
 
 <Layout
-  title="XChat Groups Directory — Find & Share Group Links | XChat Hub"
+  title="XChat Groups Directory — Find & Share Links"
   description={`The first community-powered directory for XChat group links. XChat launched ${XCHAT_LAUNCH_DISPLAY}. Submit your group and help others find your community.`}
   jsonLd={groupsJsonLd}
   canonicalPath="/groups"
@@ -123,7 +123,11 @@ const groupsJsonLd = {
               </div>
               <a
                 class="owner-removal"
-                href={`mailto:hello@xchat.directory?subject=${encodeURIComponent(`Remove group: ${group.name}`)}&body=${encodeURIComponent(`I am the owner of "${group.name}" (slug: ${group.slug}) and I want it removed from xchat.directory.\n\nPlease confirm by replying within 24h.\n\n— Sent from xchat.directory`)}`}
+                href={`mailto:hello@xchat.directory?subject=${encodeURIComponent(`Remove group: ${group.name}`)}&body=${encodeURIComponent(`I am the owner of "${group.name}" (slug: ${group.slug}) and I want it removed from xchat.directory.
+
+Please confirm by replying within 24h.
+
+— Sent from xchat.directory`)}`}
               >
                 Owner? Request removal
               </a>

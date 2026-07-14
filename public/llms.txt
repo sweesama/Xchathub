@@ -15,7 +15,7 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 - **App size**: ~179 MB
 - **Age rating**: 16+
 - **Sign-up requirement**: An X (formerly Twitter) account is mandatory.
-- **Android status**: Not announced — no timeline disclosed by X Corp. Any "XChat APK" found online is unsafe.
+- **Android status**: Released (com.x.chat on Google Play, 50K+ downloads, July 2026) — no timeline disclosed by X Corp. Any "XChat APK" found online is unsafe.
 - **Communities sunset**: X Communities are scheduled to be discontinued — XChat groups are the official replacement for community-style chat.
 
 ## Primary Pages

@@ -1,0 +1,680 @@
+---
+/**
+ * CookieBanner.astro — GDPR / CCPA cookie 同意横幅
+ *
+ * 行为：
+ *   - 首次访问显示横幅（localStorage 无 xchat-cookie-consent）
+ *   - 用户选择"Accept all" → consent=accepted → GA4 正常工作
+ *   - 用户选择"Only necessary" 或点关闭按钮 → consent=necessary → 阻断 GA
+ *   - 之后再访问不显示（除非用户主动重置 / 清 localStorage）
+ *
+ * 设计选择：
+ *   - 底部跨满 banner（桌面端 max-width 880px 居中），避免右下角小方块感
+ *   - 顶部 3px accent 渐变细条作为视觉锚点
+ *   - shield-check icon + 标题 + cookie 副标题
+ *   - 右上角关闭按钮（点击等同于 "Only necessary"）
+ *   - 默认不阻挡交互（不强制 dismiss 才能用站）
+ *
+ * 对接点：
+ *   - Layout.astro 里的 GA4（G-3J5D4C9DPK），需要在 banner 接受前默认禁用
+ *   - 改造方式：Layout <head> 里的 GA4 脚本会读取 window.cookieConsent 决定是否启用
+ */
+---
+
+<div
+  id="cookie-banner"
+  class="cookie-banner"
+  role="dialog"
+  aria-live="polite"
+  aria-label="Cookie consent"
+  hidden
+>
+  <div class="cookie-card">
+    <span class="cookie-accent" aria-hidden="true"></span>
+
+    <button
+      type="button"
+      class="cookie-close"
+      aria-label="Close cookie notice"
+      data-cookie-action="dismiss"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M18 6L6 18M6 6l12 12" />
+      </svg>
+    </button>
+
+    <div class="cookie-content">
+      <div class="cookie-text">
+        <h3 class="cookie-title">
+          <span class="cookie-title-icon" aria-hidden="true">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              <path d="M9 12l2 2 4-4" />
+            </svg>
+          </span>
+          We respect your privacy
+        </h3>
+        <p class="cookie-body">
+          We use cookies for two purposes: <strong>essential</strong> ones keep the site working
+          (language preference, theme), and <strong>analytics</strong> cookies (Google Analytics) help
+          us understand which reviews people find useful. We do not use advertising cookies on this
+          site. You can change your choice any time via the footer link.
+        </p>
+      </div>
+      <div class="cookie-actions">
+        <button type="button" class="cookie-btn cookie-btn-secondary" data-cookie-action="necessary">
+          Only necessary
+        </button>
+        <button type="button" class="cookie-btn cookie-btn-primary" data-cookie-action="accept">
+          Accept all
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = 'xchat-cookie-consent';
+    var GA_ID = 'G-3J5D4C9DPK';
+
+    function readConsent() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeConsent(value) {
+      try {
+        localStorage.setItem(STORAGE_KEY, value);
+      } catch (e) {
+        // localStorage 不可用（隐私模式 / 禁用），banner 仍然显示但状态无法持久化
+      }
+    }
+
+    function applyConsent(value) {
+      window.cookieConsent = value;
+      // GA4 官方提供的禁用开关：在 init 之前设置可以阻止所有 hit 上报
+      if (value === 'necessary') {
+        window['ga-disable-' + GA_ID] = true;
+      } else {
+        delete window['ga-disable-' + GA_ID];
+      }
+      // 触发自定义事件，让 AdSense / 其他第三方按需加载
+      window.dispatchEvent(new CustomEvent('cookie-consent-updated', { detail: { consent: value } }));
+    }
+
+    function showBanner() {
+      var banner = document.getElementById('cookie-banner');
+      if (banner) banner.hidden = false;
+    }
+
+    function hideBanner() {
+      var banner = document.getElementById('cookie-banner');
+      if (banner) banner.hidden = true;
+    }
+
+    function bindActions() {
+      var buttons = document.querySelectorAll('[data-cookie-action]');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function (e) {
+          var action = e.currentTarget.getAttribute('data-cookie-action');
+          if (action === 'accept') {
+            writeConsent('accepted');
+            applyConsent('accepted');
+          } else if (action === 'necessary' || action === 'dismiss') {
+            // 关闭按钮和 Only necessary 等价：拒绝可选项，仅保留必要 cookie
+            writeConsent('necessary');
+            applyConsent('necessary');
+          }
+          hideBanner();
+        });
+      }
+    }
+
+    function init() {
+      var consent = readConsent();
+      if (consent === 'accepted' || consent === 'necessary') {
+        // 已记录过偏好：应用状态 + 不显示 banner
+        applyConsent(consent);
+        return;
+      }
+      // 首次访问：显示 banner
+      applyConsent('necessary'); // 默认按"仅必要"处理直到用户表态
+      showBanner();
+      bindActions();
+    }
+
+    // 提供给 footer "Cookie preferences" 链接的全局入口
+    window.openCookiePreferences = function () {
+      writeConsent(''); // 清空偏好
+      // 移除已记录的 key，下次 init 会重新显示
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      showBanner();
+      bindActions();
+      // 注意：这里不调用 applyConsent，因为 banner 关闭后 init 会重新跑
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+<style>
+  /* ========== Outer container ========== */
+  .cookie-banner {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 100;
+    pointer-events: none; /* 让浮层外的区域仍可点击 */
+    animation: cookie-banner-in 0.4s var(--ease-snap);
+  }
+
+  .cookie-banner[hidden] {
+    display: none;
+  }
+
+  /* ========== Card (bottom-spanning banner) ========== */
+  .cookie-card {
+    pointer-events: auto;
+    position: relative;
+    max-width: 880px;
+    margin: 0 auto;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-xl);
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 16px 40px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(29, 155, 240, 0.06);
+    overflow: hidden;
+  }
+
+  /* ========== Top accent strip (visual anchor) ========== */
+  .cookie-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      rgba(29, 155, 240, 0) 0%,
+      var(--accent) 50%,
+      rgba(29, 155, 240, 0) 100%
+    );
+  }
+
+  /* ========== Close button (top-right) ========== */
+  .cookie-close {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    width: 32px;
+    height: 32px;
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-full);
+    color: var(--text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.15s, background 0.15s;
+    z-index: 1;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cookie-close:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  /* ========== Content layout ========== */
+  .cookie-content {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    padding: 1.375rem 3.25rem 1.375rem 1.625rem; /* extra right padding for close button */
+  }
+
+  .cookie-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  /* ========== Title with icon ========== */
+  .cookie-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.4375rem;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+  }
+
+  .cookie-title-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    border-radius: var(--radius-sm);
+    background: rgba(29, 155, 240, 0.12);
+    color: var(--accent-light);
+    flex-shrink: 0;
+  }
+
+  /* ========== Body copy ========== */
+  .cookie-body {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .cookie-body strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* ========== Actions ========== */
+  .cookie-actions {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .cookie-btn {
+    appearance: none;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    white-space: nowrap;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cookie-btn:active {
+    transform: scale(0.97);
+  }
+
+  .cookie-btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .cookie-btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .cookie-btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border-hover);
+  }
+  .cookie-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  /* ========== Desktop: bottom-spanning banner ========== */
+  @media (min-width: 720px) {
+    .cookie-banner {
+      left: 1.5rem;
+      right: 1.5rem;
+      bottom: 1.5rem;
+    }
+  }
+
+  /* ========== Mobile: stack vertically ========== */
+  @media (max-width: 720px) {
+    .cookie-content {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1.25rem 1.25rem 1.25rem 1.25rem;
+      gap: 1.125rem;
+    }
+    .cookie-actions {
+      width: 100%;
+    }
+    .cookie-btn {
+      flex: 1 1 0;
+      text-align: center;
+      padding: 0.625rem 1rem;
+    }
+  }
+
+  /* ========== Tiny screens ========== */
+  @media (max-width: 380px) {
+    .cookie-banner {
+      left: 0.625rem;
+      right: 0.625rem;
+      bottom: 0.625rem;
+    }
+    .cookie-card {
+      border-radius: var(--radius-lg);
+    }
+    .cookie-title {
+      font-size: 0.875rem;
+    }
+    .cookie-body {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* ========== Entry animation ========== */
+  @keyframes cookie-banner-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>---
+/**
+ * CookieBanner.astro — GDPR / CCPA cookie 同意横幅
+ *
+ * 行为：
+ *   - 首次访问显示横幅（localStorage 无 xchat-cookie-consent）
+ *   - 用户选择"Accept all" → consent=accepted → GA4 正常工作
+ *   - 用户选择"Only necessary" → consent=necessary → 设置 window['ga-disable-XXX']=true
+ *   - 用户选择"Manage" → 展开分类选择（analytics / ads）
+ *   - 之后再访问不显示（除非用户主动重置 / 清 localStorage）
+ *
+ * 设计选择：
+ *   - 纯黑 X 风格：透明黑底 + 极细边框 + X Blue CTA
+ *   - 底部固定浮层，移动端全屏，桌面端右下角
+ *   - 默认不阻挡交互（不强制 dismiss 才能用站）
+ *
+ * 对接点：
+ *   - Layout.astro 里有 GA4（G-3J5D4C9DPK），需要在 banner 接受前默认禁用
+ *   - 改造方式：Layout <head> 里的 GA4 脚本会读取 window.cookieConsent 决定是否启用
+ */
+---
+
+<div
+  id="cookie-banner"
+  class="cookie-banner"
+  role="dialog"
+  aria-live="polite"
+  aria-label="Cookie consent"
+  hidden
+>
+  <div class="cookie-card">
+    <div class="cookie-text">
+      <h3 class="cookie-title">We respect your privacy</h3>
+      <p class="cookie-body">
+        We use cookies for two purposes: <strong>essential</strong> ones keep the site working
+        (language preference, theme), and <strong>analytics</strong> cookies (Google Analytics) help
+        us understand which reviews people find useful. We do not use advertising cookies on this
+        site. You can change your choice any time via the footer link.
+      </p>
+    </div>
+    <div class="cookie-actions">
+      <button type="button" class="cookie-btn cookie-btn-secondary" data-cookie-action="necessary">
+        Only necessary
+      </button>
+      <button type="button" class="cookie-btn cookie-btn-primary" data-cookie-action="accept">
+        Accept all
+      </button>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (function () {
+    var STORAGE_KEY = 'xchat-cookie-consent';
+    var GA_ID = 'G-3J5D4C9DPK';
+
+    function readConsent() {
+      try {
+        return localStorage.getItem(STORAGE_KEY);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function writeConsent(value) {
+      try {
+        localStorage.setItem(STORAGE_KEY, value);
+      } catch (e) {
+        // localStorage 不可用（隐私模式 / 禁用），banner 仍然显示但状态无法持久化
+      }
+    }
+
+    function applyConsent(value) {
+      window.cookieConsent = value;
+      // GA4 官方提供的禁用开关：在 init 之前设置可以阻止所有 hit 上报
+      if (value === 'necessary') {
+        window['ga-disable-' + GA_ID] = true;
+      } else {
+        delete window['ga-disable-' + GA_ID];
+      }
+      // 触发自定义事件，让 AdSense / 其他第三方按需加载
+      window.dispatchEvent(new CustomEvent('cookie-consent-updated', { detail: { consent: value } }));
+    }
+
+    function showBanner() {
+      var banner = document.getElementById('cookie-banner');
+      if (banner) banner.hidden = false;
+    }
+
+    function hideBanner() {
+      var banner = document.getElementById('cookie-banner');
+      if (banner) banner.hidden = true;
+    }
+
+    function init() {
+      var consent = readConsent();
+      if (consent === 'accepted' || consent === 'necessary') {
+        // 已记录过偏好：应用状态 + 不显示 banner
+        applyConsent(consent);
+        return;
+      }
+      // 首次访问：显示 banner
+      applyConsent('necessary'); // 默认按"仅必要"处理直到用户表态
+      showBanner();
+
+      // 绑定按钮事件
+      var buttons = document.querySelectorAll('[data-cookie-action]');
+      for (var i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function (e) {
+          var action = e.currentTarget.getAttribute('data-cookie-action');
+          if (action === 'accept') {
+            writeConsent('accepted');
+            applyConsent('accepted');
+          } else if (action === 'necessary') {
+            writeConsent('necessary');
+            applyConsent('necessary');
+          }
+          hideBanner();
+        });
+      }
+    }
+
+    // 提供给 footer "Cookie preferences" 链接的全局入口
+    window.openCookiePreferences = function () {
+      writeConsent(''); // 清空偏好
+      // 移除已记录的 key，下次 init 会重新显示
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (e) {}
+      showBanner();
+      // 注意：这里不调用 applyConsent，因为 banner 关闭后 init 会重新跑
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 100;
+    pointer-events: none; /* 让浮层外的区域仍可点击 */
+    animation: cookie-banner-in 0.4s var(--ease-snap);
+  }
+
+  .cookie-banner[hidden] {
+    display: none;
+  }
+
+  .cookie-card {
+    pointer-events: auto;
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(10, 10, 10, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem 1.5rem;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.05) inset,
+      0 12px 32px rgba(0, 0, 0, 0.6),
+      0 0 0 1px rgba(29, 155, 240, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .cookie-text {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .cookie-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.375rem;
+    line-height: 1.3;
+  }
+
+  .cookie-body {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  .cookie-body strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .cookie-actions {
+    flex: 0 0 auto;
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .cookie-btn {
+    appearance: none;
+    border: 1px solid transparent;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+
+  .cookie-btn:active {
+    transform: scale(0.97);
+  }
+
+  .cookie-btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .cookie-btn-primary:hover {
+    background: var(--accent-hover);
+  }
+
+  .cookie-btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    border-color: var(--border-hover);
+  }
+  .cookie-btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text-primary);
+    border-color: rgba(255, 255, 255, 0.18);
+  }
+
+  /* 桌面：右下角 */
+  @media (min-width: 720px) {
+    .cookie-banner {
+      left: auto;
+      right: 1.5rem;
+      bottom: 1.5rem;
+      max-width: 460px;
+    }
+  }
+
+  /* 移动端：堆叠 */
+  @media (max-width: 540px) {
+    .cookie-banner {
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+    }
+    .cookie-card {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 1rem 1.125rem;
+      gap: 1rem;
+    }
+    .cookie-actions {
+      width: 100%;
+      justify-content: stretch;
+    }
+    .cookie-btn {
+      flex: 1 1 0;
+      text-align: center;
+    }
+  }
+
+  @keyframes cookie-banner-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

@@ -1,0 +1,179 @@
+---
+/**
+ * terms.astro — Terms of Service（使用条款）
+ * AdSense 审批前置条件 + 法律免责
+ */
+import Layout from '../layouts/Layout.astro';
+import { XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
+
+/* 动态生成 "最后更新" 日期 */
+const today = new Date();
+const lastUpdatedISO = today.toISOString().split('T')[0];
+const lastUpdatedDisplay = today.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Layout
+  title="Terms of Service | XChat Hub"
+  description="Terms of service for XChat Hub — user obligations, content disclaimers, advertising disclosure, intellectual property, and liability limits."
+  canonicalPath="/terms"
+>
+  <section class="section">
+    <div class="container content-page">
+      <h1>Terms of Service</h1>
+      <p class="text-muted" style="margin-bottom: 2rem;">Last updated: <time datetime={lastUpdatedISO}>{lastUpdatedDisplay}</time></p>
+
+      <p>
+        By accessing or using <code>https://xchat.directory</code> ("the Site"), you agree
+        to be bound by these Terms of Service. If you do not agree, please do not use the Site.
+      </p>
+
+      <h2>1. Service description</h2>
+      <p>
+        XChat Hub is an <strong>unofficial, community-driven information site</strong> about
+        XChat and other messaging applications. We provide:
+      </p>
+      <ul>
+        <li>Editorial reviews of encrypted messaging applications</li>
+        <li>Side-by-side comparison pages</li>
+        <li>A public directory of XChat groups, moderated by our editorial team</li>
+        <li>How-to guides and reference material</li>
+      </ul>
+      <p>
+        We are <strong>not affiliated with X Corp, Elon Musk, Signal Foundation, Meta, Telegram,
+        Threema, Wire, Element, SimpleX Chat, or any other platform we review.</strong> All
+        trademarks mentioned on this Site are the property of their respective owners.
+      </p>
+
+      <h2>2. Editorial content disclaimer</h2>
+      <p>
+        All reviews, scores, and opinions on the Site represent the editorial judgement of the
+        XChat Hub team as of the published date shown on each page. We strive for factual accuracy
+        and cross-check claims against primary sources, but:
+      </p>
+      <ul>
+        <li>Software changes. Features, pricing, and security properties of messaging apps evolve. An "excellent" rating today may not reflect the situation in 12 months.</li>
+        <li>Subjective use cases. What works for an activist in Hong Kong may not work for a parent in Texas. Our "best for" recommendations are starting points, not prescriptions.</li>
+        <li>No professional advice. Nothing on this Site constitutes legal, security, medical, or financial advice. For high-risk situations, consult a qualified professional.</li>
+      </ul>
+      <p>
+        If you spot a factual error, please
+        <a href="/contact">contact us</a> with the article URL and a public source.
+      </p>
+
+      <h2>3. Group directory disclaimer</h2>
+      <p>
+        The <a href="/groups">group directory</a> contains links to XChat groups submitted by
+        third parties or discovered from public posts. We do not control, endorse, vet, or
+        warrant the behaviour of any listed group. By using a listed invite link, you accept
+        that:
+      </p>
+      <ul>
+        <li>Group content may change without notice after listing.</li>
+        <li>Group owners may revoke your membership at their discretion.</li>
+        <li>You participate at your own risk.</li>
+        <li>We may remove listings that violate our content policy without notice.</li>
+      </ul>
+      <p>
+        If a group violates our content guidelines (spam, illegal content, hate speech, scams),
+        please report it via the
+        <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">Telegram community</a>.
+      </p>
+
+      <h2>4. User obligations</h2>
+      <p>When using the Site, you agree NOT to:</p>
+      <ul>
+        <li>Submit group listings containing illegal content, malware, or phishing links.</li>
+        <li>Impersonate any person or entity in form submissions.</li>
+        <li>Attempt to scrape, crawl, or systematically harvest content at a rate that exceeds normal browsing.</li>
+        <li>Attempt to circumvent rate limits or access controls on the Site or its APIs.</li>
+        <li>Submit fraudulent Buy Me a Coffee receipts or chargebacks after a paid listing is activated.</li>
+      </ul>
+
+      <h2>5. Advertising and commercial relationships</h2>
+      <p>
+        The Site may display advertisements served by third-party ad networks, including
+        Google AdSense. These providers may use cookies and similar technologies as described in
+        our <a href="/privacy">Privacy Policy</a>.
+      </p>
+      <p>
+        We may also include affiliate links or sponsored placements. Such content is always
+        clearly labelled with <code>Ad</code>, <code>Affiliate</code>, or <code>Sponsored</code>
+        markers, and never influences our editorial scores.
+      </p>
+
+      <h2>6. Intellectual property</h2>
+      <p>
+        Original editorial content on this Site (reviews, comparisons, guides) is licensed
+        under CC BY-NC-SA 4.0 — you may share and adapt with attribution, for non-commercial
+        use, and under the same license.
+      </p>
+      <p>
+        Product names, logos, and trademarks referenced on this Site are the property of their
+        respective owners. Reference to any product does not imply endorsement by the trademark
+        holder.
+      </p>
+      <p>
+        If you believe content on this Site infringes your copyright, send a DMCA notice
+        (with the URL of the allegedly infringing content and a statement of ownership) to
+        our <a href="/contact">contact channel</a>. We will respond within 72 hours.
+      </p>
+
+      <h2>7. Paid listings (Group Directory)</h2>
+      <p>
+        We offer three tiers of paid group listings via Buy Me a Coffee: Free, Featured ($9 /
+        30 days), and Lifetime ($29 one-time). By purchasing a paid tier, you agree that:
+      </p>
+      <ul>
+        <li>Payment is non-refundable once the listing is activated, except in cases of clear editorial error.</li>
+        <li>Featured tiers auto-downgrade to Free at expiry.</li>
+        <li>Lifetime pins remain as long as the directory is operational. If we shut down the directory, we will issue a proportional refund.</li>
+        <li>We may remove a paid listing for content policy violations without refund.</li>
+      </ul>
+
+      <h2>8. Disclaimers and limitation of liability</h2>
+      <p>
+        THE SITE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EXPRESS
+        OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+        PARTICULAR PURPOSE, OR NON-INFRINGEMENT.
+      </p>
+      <p>
+        TO THE MAXIMUM EXTENT PERMITTED BY LAW, XCHAT HUB AND ITS EDITORS SHALL NOT BE LIABLE
+        FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING
+        LOSS OF DATA, LOSS OF GOODWILL, OR OTHER INTANGIBLE LOSSES, RESULTING FROM YOUR USE OF
+        THE SITE.
+      </p>
+
+      <h2>9. Indemnification</h2>
+      <p>
+        You agree to indemnify and hold harmless XChat Hub, its editors, and affiliates from
+        any claim or demand (including reasonable attorneys' fees) arising out of your breach
+        of these Terms or your use of the Site.
+      </p>
+
+      <h2>10. Changes to these Terms</h2>
+      <p>
+        We may update these Terms from time to time. Material changes will be noted with an
+        updated "Last updated" date at the top of this page. Continued use of the Site after
+        changes constitutes acceptance of the new Terms.
+      </p>
+
+      <h2>11. Governing law</h2>
+      <p>
+        These Terms are governed by the laws of the State of Delaware, United States, without
+        regard to its conflict-of-law principles. Any disputes shall be resolved in the courts
+        of Delaware.
+      </p>
+
+      <h2>12. Contact</h2>
+      <p>
+        Questions about these Terms? See our <a href="/contact">Contact page</a> or message us
+        on
+        <a href={XCHAT_TELEGRAM_COMMUNITY_URL} target="_blank" rel="noopener noreferrer">Telegram</a>.
+      </p>
+    </div>
+  </section>
+</Layout>

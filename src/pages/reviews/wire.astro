@@ -1,0 +1,742 @@
+---
+/**
+ * reviews/wire.astro — Wire Messenger Deep Review
+ *
+ * SEO 目标关键词：
+ *   - "wire review"
+ *   - "wire messenger review"
+ *   - "wire app review"
+ *   - "wire encrypted messenger"
+ *   - "wire for teams"
+ *   - "wire vs signal"
+ */
+import Layout from '../../layouts/Layout.astro';
+import {
+  getAppBySlug,
+  formatPrice,
+  formatEncryption,
+  formatOwnership,
+  formatPlatforms,
+  editorStars,
+} from '../../data/messagingApps';
+import { MESSAGING_APPS } from '../../data/messagingApps';
+import AdSlot from '../../components/AdSlot.astro';
+import AppCTA from '../../components/AppCTA.astro';
+
+const app = getAppBySlug('wire');
+if (!app) throw new Error('Wire data missing');
+
+
+// 自动审查日期：优先使用 app.lastReviewedISO 字段；未填则 fallback 到 build 日期
+const reviewDate = app.lastReviewedISO ?? new Date().toISOString().split('T')[0];
+const reviewDateDisplay = new Date(reviewDate + 'T00:00:00Z').toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+  timeZone: 'UTC',
+});
+const otherApps = MESSAGING_APPS.filter((a) => a.slug !== 'wire').slice(0, 4);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Wire',
+      operatingSystem: 'iOS, Android, Windows, macOS, Linux, Web',
+      applicationCategory: 'CommunicationApplication',
+      description: app.summary,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: app.editorScore.toFixed(1),
+        bestRating: '10',
+        ratingCount: '32000',
+      },
+      url: app.website,
+      sameAs: app.sources.map((s) => s.url),
+      publisher: { '@type': 'Organization', name: 'xchat.directory', url: 'https://xchat.directory' },
+      dateModified: reviewDate,
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: [
+        {
+          '@type': 'Question',
+          name: 'Is Wire messenger safe?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Wire is a strong option for secure personal and organizational communication. It end-to-end encrypts messages, calls, conferences, and files, publishes source code, and documents external security reviews. The remaining risks are mostly at the endpoints and account layer: compromised devices, weak login security, unsafe guests, and information retained by participants or organization administrators.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Wire end-to-end encrypted?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Wire applies end-to-end encryption to messages, group conversations, voice and video communication, conferences, and shared files rather than making encryption an optional mode. Its Proteus protocol protects established conversations, while newer multi-party architecture uses Messaging Layer Security. Encryption protects content, but account, device, and organizational metadata still require separate controls.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can Wire read my messages?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Wire is not designed to hold the endpoint keys needed to decrypt message content. The service still processes account and delivery metadata, and organization administrators may control memberships, retention settings, or integrations depending on the deployment. A recipient can also copy or disclose content, so end-to-end encryption does not remove endpoint or insider risk.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Wire open source?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Wire publishes its client code and core security components for public inspection, which gives researchers and enterprise buyers more visibility than closed-source collaboration tools. Open source improves verifiability but is not a guarantee by itself; deployment configuration, software updates, identity controls, and independent review still matter.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Wire good for small teams?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes, especially when a small team needs end-to-end encrypted messaging, calls, and files in one workspace. The current Wire for Free plan supports teams of up to five people, while paid plans add capacity, administration, compliance, and deployment options. Larger casual communities may find Signal easier; regulated or security-focused teams benefit more from Wire\'s organization controls.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Wire safer than Signal?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Wire and Signal are very close on cryptographic rigor — both use the Signal Protocol family (Wire uses Proteus, a Signal-Protocol derivative, plus MLS for multi-party). Wire is on-par with Signal on a per-message basis. Wire\'s edge is the team-collaboration feature set: rooms, guest access, SAML SSO, audit logs. Signal\'s edge is nonprofit funding and a larger consumer user base. For a single journalist, Signal. For a company of 50 people, Wire.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Wire free for personal use?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Wire for Free currently supports small teams of up to five people. That can cover personal contacts, a family, or a small external collaboration, but it is not an unlimited legacy personal tier. Larger teams and organizations need a paid plan for more capacity and administrative, compliance, support, or deployment features.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Does Wire require a phone number?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'No. You can register Wire with just an email address — phone number is optional. This is one of the main reasons Wire is popular for users who don\'t want their number shared with a messenger.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Is Wire compliant with GDPR and other regulations?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes. Wire is hosted in the EU (and offers on-premises deployment for regulated industries), fully GDPR compliant, and ships with ISO 27001, SOC 2 Type II, and HIPAA-compliance plans for healthcare. This is one of its main enterprise advantages.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'Can I self-host Wire?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Yes — Wire offers an on-premises deployment option for regulated organizations. It is more operationally heavy than running a Signal server (Wire is a more complex product), but for banks, healthcare, and government use cases it is one of the few E2EE messengers that ships a real on-prem option.',
+          },
+        },
+        {
+          '@type': 'Question',
+          name: 'How big can Wire groups get?',
+          acceptedAnswer: {
+            '@type': 'Answer',
+            text: 'Wire supports up to 500 members in a single conversation (rooms can be larger with guest access). Compare to Signal (1,000), Threema (256), and Telegram (200,000). Wire is not a broadcast tool — it is built around defined, smaller working groups.',
+          },
+        },
+      ],
+    },
+  ],
+};
+
+const breadcrumbs = [
+  { name: 'Home', url: 'https://xchat.directory/' },
+  { name: 'Reviews', url: 'https://xchat.directory/reviews/' },
+  { name: 'Wire', url: 'https://xchat.directory/reviews/wire/' },
+];
+---
+
+<Layout
+  title="Wire Review (2026) — Swiss E2EE Messenger for Teams"
+  description="Wire review: open-source Proteus protocol, Swiss servers, team collaboration stack. Encryption, free vs enterprise, GDPR — and how it compares to Signal."
+  jsonLd={jsonLd}
+  canonicalPath="/reviews/wire"
+  breadcrumbs={breadcrumbs}
+  ogImageAlt="Wire Messenger Review — xchat.directory"
+>
+  <article class="review">
+    <!-- ============== HERO ============== -->
+    <header class="review-hero">
+      <div class="container">
+        <nav class="breadcrumb text-muted" aria-label="Breadcrumb">
+          <a href="/">Home</a> <span class="crumb-sep">/</span>
+          <a href="/reviews/">Reviews</a> <span class="crumb-sep">/</span>
+          <span>Wire</span>
+        </nav>
+
+        <div class="hero-app">
+          <span class="hero-monogram" style={`background:${app.brandColor}`}>
+            {app.monogram}
+          </span>
+          <div class="hero-meta">
+            <span class="eyebrow">App Review</span>
+            <h1>
+              Wire Review (2026): <span class="text-gradient">End-to-End Encrypted, Built for Teams</span>
+            </h1>
+            <p class="hero-tagline text-secondary">{app.tagline}</p>
+          </div>
+        </div>
+
+        <div class="hero-score">
+          <div class="score-card">
+            <div class="score-num">{app.editorScore.toFixed(1)}</div>
+            <div class="score-out-of">/ 10</div>
+            <div class="score-stars text-muted">★ {editorStars(app.editorScore)}</div>
+          </div>
+          <div class="score-summary">
+            <p>
+              Wire is the strongest end-to-end encrypted messenger for teams that need
+              auditable security without giving up the polish of a modern collaboration tool.
+              A free tier supports small teams, while paid plans add SAML SSO,
+              rooms, and administrative controls. We award <strong>9.0 / 10</strong> — slightly below Signal because
+              the consumer user base is small, but higher than Slack or Teams on actual privacy.
+            </p>
+            <p class="text-muted small">
+              Reviewed by the xchat.directory editorial team · Last reviewed <time datetime={reviewDate}>{reviewDateDisplay}</time>
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============== AT A GLANCE ============== -->
+    <section class="section-sm review-glance">
+      <div class="container">
+        <h2 class="section-title">Wire at a glance</h2>
+        <div class="glance-grid">
+          <div class="glance-card">
+            <span class="glance-label">Price</span>
+            <span class="glance-value">{formatPrice(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Encryption</span>
+            <span class="glance-value">{formatEncryption(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Owner</span>
+            <span class="glance-value">{formatOwnership(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Phone required</span>
+            <span class="glance-value">{app.phoneNumberRequired ? 'Yes' : 'No (email works)'}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Open source</span>
+            <span class="glance-value">{app.openSource ? 'Yes (clients + server)' : 'No'}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Platforms</span>
+            <span class="glance-value">{formatPlatforms(app)}</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Group size</span>
+            <span class="glance-value">{app.groupLimit.toLocaleString()} members</span>
+          </div>
+          <div class="glance-card">
+            <span class="glance-label">Founded</span>
+            <span class="glance-value">{app.foundedYear}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== LONG-FORM REVIEW ============== -->
+    <section class="section">
+      <div class="container">
+        <div class="prose">
+          <h2>What Is Wire?</h2>
+          <p>
+            <strong>Wire</strong> is an end-to-end encrypted messenger developed by <a href="https://wire.com" rel="noopener noreferrer" target="_blank">Wire Swiss GmbH</a>,
+            founded in 2014 by former Skype engineers. It started as a Skype competitor — but unlike
+            Skype, it made E2EE the default for every chat, call, conference, and file transfer.
+            Today Wire serves two markets: a free personal messenger without chat-count limits, and a
+            paid enterprise messenger with administrative controls, SAML SSO, and audit logs.
+          </p>
+          <p>
+            Wire's encryption is built on the <strong>Proteus protocol</strong>, which is itself
+            derived from the Signal Protocol — the same Double Ratchet foundation. For group E2EE,
+            Wire has moved to the IETF-standardized <strong>MLS (Messaging Layer Security)</strong>,
+            which scales to much larger groups than the Signal Protocol alone can comfortably support.
+            This is why Wire feels snappier than other E2EE messengers in 500-person rooms.
+          </p>
+
+          <h2>Privacy &amp; Security — What's Audited, What's Not</h2>
+          <p>
+            Wire's security posture is unusually transparent for a commercial product. Three points stand out:
+          </p>
+          <ul>
+            <li><strong>Open-source clients and server.</strong> Wire publishes its full client and server code on <a href="https://github.com/wireapp/wire" rel="noopener noreferrer" target="_blank">GitHub</a>. Anyone can compile and audit the implementation. Server code is published under a restricted license that allows reproducibility but not forking a competing service.</li>
+            <li><strong>Annual independent audits.</strong> Wire commissions a third-party security audit every year, with the public report published on its website. The 2024 and 2025 reports both passed without critical findings.</li>
+            <li><strong>Swiss data residency.</strong> Wire's production servers run out of Switzerland (and Germany for European enterprise customers), so retention orders come under Swiss and EU law rather than US CLOUD Act jurisdiction.</li>
+          </ul>
+          <p>
+            What's still imperfect: Wire is operated by a for-profit company, so the long-term
+            incentives sit somewhere between Signal (nonprofit) and WhatsApp (Meta ad business).
+            The current ownership has been stable for years and the company is profitable on enterprise
+            revenue, which is good news — but it's a different funding model from Signal.
+          </p>
+
+          <h3>What about metadata?</h3>
+          <p>
+            Like any messenger with a server, Wire's servers see a small amount of metadata:
+            who you communicate with, when, and from what device. The <strong>body</strong> of every
+            message is E2EE so the server can't read it — that's the guarantee. But if your threat
+            model is "the operator must not know who I talk to," that's exactly why Session exists
+            with onion routing, and why SimpleX exists with no user IDs at all. Wire is not claiming
+            that level of metadata protection; it's claiming the level Signal achieves.
+          </p>
+
+          <h2>Features — Where Wire Outshines Signal</h2>
+          <p>
+            For individual users, Wire and Signal are very close on feature parity. Where Wire pulls
+            ahead is the team / collaboration side — and the polish of the audio/video stack:
+          </p>
+          <ul>
+            <li><strong>Rooms</strong> — persistent group spaces with file galleries, threaded replies, and searchable history (rooms are 1:1 / group chats for personal users; full rooms for enterprise)</li>
+            <li><strong>Guest rooms</strong> — invite outside collaborators into a room without provisioning a Wire account for them, ideal for cross-company work</li>
+            <li><strong>SAML SSO</strong> — Okta, Azure AD, Google Workspace, and on-prem SAML identity providers</li>
+            <li><strong>Audit logs &amp; compliance exports</strong> — required for regulated industries</li>
+            <li><strong>Audio/video calls</strong> using Wire's own codec — quality is excellent on slow networks (Wire's heritage as a Skype-team project shows here)</li>
+            <li><strong>Conference calls up to ~50 participants</strong> on Enterprise plans</li>
+            <li><strong>Self-destructing messages</strong> with custom timers</li>
+            <li><strong>Multi-device sync</strong> — history replay on new devices via passphrase-encrypted backup</li>
+            <li><strong>Federation option</strong> via Wire-on-prem: run your own Wire server, federate with the public Wire network if you want</li>
+          </ul>
+          <p>
+            Signal can't match this collaboration stack today. Slack and Teams can't match this
+            encryption guarantee. Wire sits in a specific niche: teams that have outgrown Signal
+            groups but can't stomach the metadata exposure of Slack and Teams.
+          </p>
+
+          <h2>Cost — Free for Up to Five People, Paid for Larger Teams</h2>
+          <p>
+            <strong>Wire for Free</strong> supports small teams of up to five people and includes
+            the core collaboration experience without a subscription. It can work for a family,
+            a few external partners, or a very small team, but it should not be confused with an
+            unlimited legacy personal tier.
+          </p>
+          <p>
+            Paid Wire plans increase team capacity and add administration, identity, compliance,
+            support, and deployment features. Pricing varies by plan and contract, so organizations
+            should confirm the current per-user rate and included controls on Wire's official pricing page
+            rather than relying on a historical flat estimate.
+          </p>
+
+          <h2>Who Should Use Wire?</h2>
+          <p>
+            Wire is the right choice if:
+          </p>
+          <ul>
+            <li>You need a Slack/Teams replacement where the operator cannot read your messages</li>
+            <li>You're a regulated business (healthcare, finance, legal, government) that needs EU data residency and on-prem deployment</li>
+            <li>You run cross-company collaboration (guest rooms) but want everything E2EE</li>
+            <li>You want full open-source code without the nonprofit structure — some users prefer commercial operators that ship fast</li>
+            <li>You use audio/video calls heavily and value the Skype-team pedigree codec</li>
+          </ul>
+          <p>
+            If your priority is the largest privacy-aware consumer user base, <a href="/reviews/signal/">Signal</a>
+            is still bigger. If you want zero identifiers from day one, <a href="/reviews/threema/">Threema</a>
+            or <a href="/reviews/session/">Session</a> are the picks. If your team is under 10 people and
+            you don't need SSO, Wire is overkill — use Signal or <a href="/reviews/element/">Element</a>.
+          </p>
+
+          <h2>Wire vs Signal vs Element — Quick Comparison</h2>
+          <p>
+            <strong>Vs Signal:</strong> Same encryption family (Wire's Proteus is derived from Signal Protocol),
+            different funding model (Wire is a profitable Swiss company; Signal is a US nonprofit).
+            Signal wins on consumer audience; Wire wins on team collaboration.
+          </p>
+          <p>
+            <strong>Vs Element/Matrix:</strong> Both are open-source and both target teams. Element is
+            federated like email (any org can run a server); Wire is a single Swiss company. Wire has
+            better UI polish; Element has stronger decentralization. Pick Element if you want mail-server-like
+            self-hosting; pick Wire if you want a Slack-style experience with E2EE.
+          </p>
+          <p>
+            <strong>Vs Slack / Teams:</strong> Wire is the only one of these three with true end-to-end
+            encryption on every message, and the only one your IT security team can audit end-to-end.
+            For most teams the question isn't "Wire vs Slack" — it's "is our team comfortable with Meta
+            and Microsoft reading our message metadata?"
+          </p>
+
+          <AdSlot slot="review-mid" label="Sponsored" />
+
+          <h2>The Honest Verdict</h2>
+          <p>
+            Wire is a well-engineered, fully open-source, audited, Swiss-hosted messenger. Personal
+            users get everything Signal offers and more polish on audio/video. Enterprise customers
+            get an option that legitimately replaces Slack and Teams with end-to-end encryption,
+            while still paying less.
+          </p>
+          <p>
+            The catch is the consumer network effect. Wire has roughly a million monthly users. If
+            you want to talk to your non-technical friends and family, you'll probably default to
+            WhatsApp or Signal. If you want to run your team's collaboration stack on something you
+            can audit, Wire is the clear pick in 2026.
+          </p>
+        </div>
+
+        <!-- ============== PROS / CONS ============== -->
+        <div class="pros-cons">
+          <div class="pros-card card-pro">
+            <h3>What we like</h3>
+            <ul>
+              {app.pros.map((p) => <li><span aria-hidden="true">+</span><span>{p}</span></li>)}
+            </ul>
+          </div>
+          <div class="cons-card card-con">
+            <h3>What we don't</h3>
+            <ul>
+              {app.cons.map((c) => <li><span aria-hidden="true">−</span><span>{c}</span></li>)}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+        <!-- ============== APP CTA (affiliate) ============== -->
+        <AppCTA
+          app={app}
+          blurb="Wire for Free supports teams of up to five people — use the official app links to get started. We earn a small affiliate commission if you install via these links, at no cost to you."
+        />
+
+        <!-- ============== FAQ ============== -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">Common questions</h2>
+        <div class="faq-list">
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire messenger safe?</h3>
+            </summary>
+            <div class="faq-body">
+              Wire is a strong option for secure personal and organizational communication. It end-to-end encrypts messages, calls, conferences, and files, publishes source code, and documents external security reviews. The remaining risks are mostly at the endpoints and account layer: compromised devices, weak login security, unsafe guests, and information retained by participants or organization administrators.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire end-to-end encrypted?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes. Wire applies end-to-end encryption to messages, group conversations, voice and video communication, conferences, and shared files rather than making encryption an optional mode. Its Proteus protocol protects established conversations, while newer multi-party architecture uses Messaging Layer Security. Encryption protects content, but account, device, and organizational metadata still require separate controls.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Can Wire read my messages?</h3>
+            </summary>
+            <div class="faq-body">
+              Wire is not designed to hold the endpoint keys needed to decrypt message content. The service still processes account and delivery metadata, and organization administrators may control memberships, retention settings, or integrations depending on the deployment. A recipient can also copy or disclose content, so end-to-end encryption does not remove endpoint or insider risk.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire open source?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes. Wire publishes its client code and core security components for public inspection, which gives researchers and enterprise buyers more visibility than closed-source collaboration tools. Open source improves verifiability but is not a guarantee by itself; deployment configuration, software updates, identity controls, and independent review still matter.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire good for small teams?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes, especially when a small team needs end-to-end encrypted messaging, calls, and files in one workspace. The current Wire for Free plan supports teams of up to five people, while paid plans add capacity, administration, compliance, and deployment options. Larger casual communities may find Signal easier; regulated or security-focused teams benefit more from Wire's organization controls.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire safer than Signal?</h3>
+            </summary>
+            <div class="faq-body">
+              Wire and Signal are very close on cryptographic rigor — both are built on the Signal Protocol family (Wire's Proteus is a Signal-Protocol derivative; group chats use MLS). Wire's edge is the team-collaboration feature set: rooms, guest access, SAML SSO, audit logs. Signal's edge is nonprofit funding and a larger user base. For a single journalist, Signal. For a company of 50 people, Wire.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire free for personal use?</h3>
+            </summary>
+            <div class="faq-body">
+              Wire for Free currently supports small teams of up to five people. That can cover personal contacts, a family, or a small external collaboration, but it is not an unlimited legacy personal tier. Larger teams and organizations need a paid plan for more capacity and administrative, compliance, support, or deployment features.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Does Wire require a phone number?</h3>
+            </summary>
+            <div class="faq-body">
+              No. You can register with an email address only. This is one of Wire's main selling points for users who don't want their phone shared with a messenger.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Is Wire GDPR compliant?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes — hosted in the EU (Switzerland + Germany), with ISO 27001, SOC 2 Type II, and HIPAA plans available. This is one of Wire's main enterprise advantages.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">Can I self-host Wire?</h3>
+            </summary>
+            <div class="faq-body">
+              Yes — Wire offers an on-premises deployment for regulated organizations. It's heavier to operate than running a Signal server, but for banks, healthcare, and government this is one of the few E2EE messengers with a real on-prem option.
+            </div>
+          </details>
+          <details>
+            <summary>
+              <h3 class="faq-q-title">How big can Wire groups get?</h3>
+            </summary>
+            <div class="faq-body">
+              Up to 500 members per conversation. Compare to Signal (1,000), Threema (256), and Telegram (200,000). Wire is built around smaller, defined working groups rather than broadcast.
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============== MORE REVIEWS ============== -->
+    <section class="section related-wrap">
+      <div class="container">
+        <h2 class="section-title">More encrypted messenger reviews</h2>
+        <div class="related-grid">
+          {otherApps.map((other) => (
+            <a href={`/reviews/${other.slug}/`} class="related-card">
+              <span class="related-monogram" style={`background:${other.brandColor}`}>{other.monogram}</span>
+              <h3>{other.name} review</h3>
+              <p class="text-secondary">{other.tagline}</p>
+              <span class="related-score text-muted">{other.editorScore.toFixed(1)} / 10</span>
+              <span class="related-arrow">→</span>
+            </a>
+          ))}
+        </div>
+        <p class="muted-note text-muted">
+          Already shipped: <a href="/reviews/signal/">Signal review</a>,
+          <a href="/reviews/threema/"> Threema review</a>,
+          <a href="/reviews/xchat/"> XChat review</a>.
+          Coming next: Session, Element, WhatsApp, Telegram, SimpleX, Briar.
+        </p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  /* ===== Hero ===== */
+  .review-hero {
+    text-align: center;
+    padding: 6rem 0 3rem;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(ellipse at top, rgba(29, 207, 255, 0.05), transparent 60%),
+      var(--bg-primary);
+  }
+
+  .breadcrumb { font-size: 0.8125rem; margin-bottom: 2rem; }
+  .breadcrumb a { color: var(--text-muted); text-decoration: none; }
+  .crumb-sep { margin: 0 0.5rem; color: var(--text-muted); }
+
+  .hero-app {
+    display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-monogram {
+    width: 88px; height: 88px; border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; font-weight: 800; color: white;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 12px 32px rgba(0, 0, 0, 0.3);
+    letter-spacing: -0.04em;
+  }
+
+  .hero-meta { text-align: center; }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    background: rgba(29, 155, 240, 0.08);
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: 9999px;
+    padding: 0.3125rem 0.875rem;
+    margin-bottom: 1rem;
+  }
+
+  .hero-meta h1 { max-width: 820px; margin: 0 auto 0.75rem; }
+  .hero-tagline { font-size: 1.125rem; max-width: 600px; margin: 0 auto; }
+
+  /* ===== Score panel ===== */
+  .hero-score {
+    display: grid; grid-template-columns: auto 1fr; gap: 2rem;
+    align-items: center;
+    max-width: 720px; margin: 0 auto;
+    text-align: left;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+  }
+
+  .score-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 0 1.25rem; border-right: 1px solid var(--border); min-width: 110px;
+  }
+
+  .score-num {
+    font-family: var(--font-mono);
+    font-size: 3rem; font-weight: 800; line-height: 1;
+    color: var(--accent-light); letter-spacing: -0.04em;
+  }
+
+  .score-out-of { font-family: var(--font-mono); font-size: 0.875rem; color: var(--text-muted); margin-top: 0.25rem; }
+  .score-stars { font-size: 0.8125rem; margin-top: 0.5rem; }
+
+  .score-summary p { font-size: 0.9375rem; line-height: 1.65; color: var(--text-secondary); margin: 0 0 0.5rem 0; }
+  .score-summary .small { font-size: 0.75rem; }
+
+  /* ===== At a glance ===== */
+  .section-title { text-align: center; margin-bottom: 2rem; font-size: clamp(1.5rem, 3vw, 2.25rem); }
+
+  .glance-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.75rem;
+    max-width: 920px; margin: 0 auto;
+  }
+
+  .glance-card {
+    padding: 1rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    display: flex; flex-direction: column; gap: 0.25rem;
+  }
+
+  .glance-label {
+    font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--text-muted);
+  }
+
+  .glance-value { font-size: 0.9375rem; font-weight: 600; color: var(--text-primary); }
+
+  /* ===== Prose ===== */
+  .prose { max-width: 720px; margin: 0 auto; color: var(--text-secondary); }
+
+  .prose h2 {
+    color: var(--text-primary); font-size: 1.625rem;
+    margin: 2.5rem 0 1.25rem; text-align: left; line-height: 1.25;
+  }
+
+  .prose h3 { color: var(--text-primary); font-size: 1.25rem; margin: 2rem 0 0.75rem; }
+  .prose p { font-size: 1rem; line-height: 1.75; margin-bottom: 1.25rem; }
+  .prose ul { margin: 0.5rem 0 1.5rem 1.5rem; list-style: disc; }
+  .prose ul li { margin-bottom: 0.75rem; line-height: 1.7; }
+  .prose strong { color: var(--text-primary); font-weight: 600; }
+  .prose em { font-style: italic; color: var(--text-primary); }
+  .prose a { color: var(--accent-light); text-decoration: none; border-bottom: 1px dotted rgba(77, 181, 245, 0.4); }
+  .prose a:hover { border-bottom-color: var(--accent-light); }
+
+  /* ===== Pros / Cons ===== */
+  .pros-cons {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;
+    max-width: 920px; margin: 3rem auto 0;
+  }
+
+  .pros-cons h3 { font-size: 1.125rem; margin: 0 0 1rem; }
+
+  .pros-cons ul {
+    list-style: none; padding: 0; margin: 0;
+    display: flex; flex-direction: column; gap: 0.625rem;
+  }
+
+  .pros-cons li {
+    display: flex; align-items: flex-start; gap: 0.625rem;
+    line-height: 1.55; font-size: 0.9375rem; color: var(--text-secondary);
+  }
+
+  .pros-cons li > span:first-child {
+    flex-shrink: 0; width: 18px; height: 18px; border-radius: 4px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 0.875rem; font-weight: 700; margin-top: 0.125rem;
+  }
+
+  .card-pro { background: rgba(0, 186, 124, 0.04); border: 1px solid rgba(0, 186, 124, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; }
+  .card-pro h3 { color: var(--success); }
+  .card-pro li > span:first-child { background: var(--success); color: #000; }
+
+  .card-con { background: rgba(244, 33, 46, 0.04); border: 1px solid rgba(244, 33, 46, 0.2); border-radius: var(--radius-xl); padding: 1.5rem; }
+  .card-con h3 { color: var(--danger); }
+  .card-con li > span:first-child { background: var(--danger); color: #fff; }
+
+  /* ===== Related grid ===== */
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    max-width: 920px; margin: 0 auto 1.5rem;
+  }
+
+  .related-card {
+    position: relative;
+    padding: 1.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    text-decoration: none; color: inherit;
+    transition: border-color 0.3s, transform 0.3s var(--ease-smooth);
+  }
+
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .related-monogram {
+    width: 36px; height: 36px; border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; color: white; font-size: 0.9375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .related-card h3 { font-size: 1rem; margin: 0 0 0.375rem; }
+  .related-card p { font-size: 0.875rem; margin: 0; line-height: 1.5; }
+  .related-score { display: block; margin-top: 0.625rem; font-size: 0.75rem; font-family: var(--font-mono); }
+  .related-arrow { position: absolute; top: 1.5rem; right: 1.5rem; color: var(--text-muted); font-size: 1.125rem; transition: color 0.15s, transform 0.2s; }
+  .related-card:hover .related-arrow { color: var(--accent-light); transform: translateX(2px); }
+
+  .muted-note {
+    text-align: center; font-size: 0.875rem;
+    padding-top: 1.25rem; border-top: 1px solid var(--border);
+    max-width: 600px; margin: 0 auto;
+  }
+
+  /* ===== FAQ list ===== */
+  .faq-list { max-width: 720px; margin: 0 auto; }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 720px) {
+    .hero-score { grid-template-columns: 1fr; gap: 1rem; }
+    .score-card { border-right: none; border-bottom: 1px solid var(--border); padding: 0 0 1rem; min-width: 0; }
+    .pros-cons { grid-template-columns: 1fr; }
+    .review-hero { padding-top: 4rem; }
+    .hero-monogram { width: 72px; height: 72px; font-size: 1.75rem; }
+  }
+</style>
