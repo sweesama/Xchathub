@@ -27,11 +27,15 @@ export interface MessagingApp {
   brandColor: string;
   /** 用于小 logo 的 emoji 或简短字符（无版权问题） */
   monogram: string;
-  /** simple-icons.org 上的品牌 SVG slug（如 'signal'、'threema'）。
-   *  设了这里就用 simple-icons CDN 渲染 logo（统一矢量、可着色）；
-   *  留空时回退到 monogram （briar / xchat 在 simple-icons 库中不存在）。
+  /** simple-icons.org 上的品牌 SVG slug（如 'signal'、'threema'、'x'）。
+   *  设了这里就用 simple-icons CDN 渲染 logo，CSS mask 把 SVG 当 alpha 蒙版，
+   *  再用 brandColor 铺底 + 白色填 logo 形状 —— 得到「品牌色方块 + 白 logo」的一致效果。
    *  商用请遵守 simple-icons 商标政策。 */
   simpleIconsSlug?: string;
+  /** 本地真彩色图标 URL（相对于站点根，如 `/app-icons/briar.png`）。
+   *  优先级最高：设了它，AppIcon 会渲染为 <img>，保留原始颜色。
+   *  用途：simple-icons 库里没有的品牌（Briar 等）。 */
+  logoUrl?: string;
   /** 官网 */
   website: string;
   /** 是否公开源代码（客户端 + 服务端） */
@@ -487,6 +491,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     description: "Briar is unique in the encrypted messaging field: it's a peer-to-peer messenger that doesn't depend on a central server. When the internet is available, it routes over Tor. When the internet is restricted, it syncs over Wi-Fi or Bluetooth between devices in physical proximity. For journalists in conflict zones, activists during internet shutdowns, or anyone preparing for civil-liberties emergencies, Briar is the closest thing to a survival messenger. The user interface is utilitarian and the user base is tiny, but the security model is well thought through.",
     brandColor: '#ff5722',
     monogram: 'B',
+    logoUrl: '/app-icons/briar.png',
     website: 'https://briarproject.org',
     openSource: true,
     encryptionDefault: 'always',
@@ -531,8 +536,9 @@ export const MESSAGING_APPS: MessagingApp[] = [
     tagline: 'New encrypted messenger from X',
     summary: 'Brand-new end-to-end encrypted messenger launched April 2026 inside the X (Twitter) ecosystem.',
     description: "XChat is the encrypted messaging app launched inside X (formerly Twitter) on April 24, 2026. It uses E2EE by default, supports group chats up to 1,000 members (350 at launch, growing), voice/video calls, screenshot blocking, and disappearing messages — all gated behind an X account rather than a phone number. XChat has no published third-party audit yet. The killer features vs Signal and Threema are the X social-graph integration (you already know who's online) and no phone number — but those come with the trade-off of an X account tied to encrypted identity and no public audit to verify the cryptography yet.",
-    brandColor: '#1d9bf0',
+    brandColor: '#000000',
     monogram: 'X',
+    simpleIconsSlug: 'x',
     website: 'https://x.com',
     openSource: false,
     encryptionDefault: 'always',

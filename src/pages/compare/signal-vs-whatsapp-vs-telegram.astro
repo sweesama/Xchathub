@@ -195,7 +195,7 @@ const breadcrumbs = [
 
       <article class="app-card">
         <header class="app-card-head">
-          <span class="trio-monogram" style={`background:${signal.brandColor}`}>S</span>
+          <AppIcon app={signal} class="trio-monogram" />
           <h3>Signal — best for audited privacy by default</h3>
           <span class="trio-score">{signal.editorScore.toFixed(1)} / 10</span>
         </header>
@@ -217,7 +217,7 @@ const breadcrumbs = [
 
       <article class="app-card">
         <header class="app-card-head">
-          <span class="trio-monogram" style={`background:${whatsapp.brandColor}`}>W</span>
+          <AppIcon app={whatsapp} class="trio-monogram" />
           <h3>WhatsApp — best because everyone is already there</h3>
           <span class="trio-score">{whatsapp.editorScore.toFixed(1)} / 10</span>
         </header>
@@ -239,7 +239,7 @@ const breadcrumbs = [
 
       <article class="app-card">
         <header class="app-card-head">
-          <span class="trio-monogram" style={`background:${telegram.brandColor}`}>Tg</span>
+          <AppIcon app={telegram} class="trio-monogram" />
           <h3>Telegram — best for channels, bots, and cloud sync</h3>
           <span class="trio-score">{telegram.editorScore.toFixed(1)} / 10</span>
         </header>

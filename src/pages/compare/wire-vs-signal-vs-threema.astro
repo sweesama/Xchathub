@@ -176,7 +176,7 @@ const breadcrumbs = [
 
       <article class="app-card">
         <header class="app-card-head">
-          <span class="trio-monogram" style={`background:${wire.brandColor}`}>W</span>
+          <AppIcon app={wire} class="trio-monogram" />
           <h3>Wire — best for teams</h3>
           <span class="trio-score">{wire.editorScore.toFixed(1)} / 10</span>
         </header>
@@ -198,7 +198,7 @@ const breadcrumbs = [
 
       <article class="app-card">
         <header class="app-card-head">
-          <span class="trio-monogram" style={`background:${signal.brandColor}`}>S</span>
+          <AppIcon app={signal} class="trio-monogram" />
           <h3>Signal — best for everyday E2EE</h3>
           <span class="trio-score">{signal.editorScore.toFixed(1)} / 10</span>
         </header>
@@ -220,7 +220,7 @@ const breadcrumbs = [
 
       <article class="app-card">
         <header class="app-card-head">
-          <span class="trio-monogram" style={`background:${threema.brandColor}`}>T</span>
+          <AppIcon app={threema} class="trio-monogram" />
           <h3>Threema — best for true anonymity</h3>
           <span class="trio-score">{threema.editorScore.toFixed(1)} / 10</span>
         </header>

@@ -9,6 +9,7 @@
  */
 
 import type { MessagingApp } from '../data/messagingApps';
+import AppIcon from './AppIcon.astro';
 
 export interface Props {
   app: MessagingApp;
@@ -32,7 +33,7 @@ const hasAndroid = !!app.playStorePackage;
 
 <aside class="app-cta card" aria-label={`Download ${app.name}`}>
   <div class="cta-head">
-    <span class="cta-monogram" style={`background:${app.brandColor}`}>{app.monogram}</span>
+    <AppIcon app={app} class="cta-monogram" />
     <div>
       <h3>Try {app.name}</h3>
       <p class="text-secondary">
@@ -84,15 +85,8 @@ const hasAndroid = !!app.playStorePackage;
   }
 
   .cta-monogram {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-weight: 700;
-    font-size: 1rem;
+    /* size + shape 由 AppIcon 全局 .app-icon[class*="cta-monogram"] 提供，
+       这里只控制布局 */
     flex-shrink: 0;
   }
 

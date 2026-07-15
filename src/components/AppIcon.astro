@@ -1,21 +1,19 @@
 ---
 /**
- * AppIcon.astro — App 图标组件
+ * AppIcon.astro — App 图标组件（真 logo，永远一致）
  *
- * 策略：
- *   1. 优先用 simple-icons.org 的 SVG（高质矢量）→ 通过 CSS mask 机制
- *      把 SVG 当作 alpha 蒙版，再用 brandColor 当作填充色，得到「彩色块 + 白色 logo」
- *   2. simpleIconsSlug 缺失（briar / xchat 不在库中）→ 回退到 brandColor 块 + 白色 monogram
- *   3. 不再用 Google Favicon —— 它返回的是各家网站的浏览器 favicon，
- *      长宽比 / 颜色 / 形状都不可控，导致"size 不一致"
+ * 三种渲染模式，按优先级：
+ *   1. `logoUrl`   —— 本地真彩色图（Briar 用它，因为 simple-icons 里没有）。
+ *                      渲染为 <img>，保留原色（PNG/SVG 都可）。
+ *   2. `simpleIconsSlug` —— 从 simple-icons CDN 拿 SVG 当 CSS mask 用，
+ *                            白色填 logo 形状铺在 brandColor 底上 ——
+ *                            得到「品牌色方块 + 白 logo」的一致效果。
+ *   3. fallback     —— brandColor 底 + 白 monogram（最后兜底）。
  *
- * 视觉一致性：
- *   - 同一个尺寸的容器内，logo 永远填到 100%
- *   - 通过 mask 显示，永远是矢量渲染（任意缩放都清晰）
- *   - 颜色永远由 brandColor 决定（不会出现 favicon 自带颜色破坏页面色系）
- *
- * 用法：
- *   <AppIcon app={app} class="top-monogram" />
+ * 视觉规则：
+ *   - 容器方块 = brandColor（没有白边、没有透明缝）
+ *   - logo 永远白色（mask）或原色（image），
+ *     size 由外部 class 控制（top-monogram / vs-monogram / trio-monogram 等）
  */
 
 interface App {
@@ -24,6 +22,8 @@ interface App {
   brandColor: string;
   website: string;
   simpleIconsSlug?: string;
+  /** 本地图标 URL（相对于站点根，例如 `/app-icons/briar.png`）*/
+  logoUrl?: string;
 }
 
 interface Props {
@@ -34,73 +34,90 @@ interface Props {
 const { app, class: className = '' } = Astro.props;
 
 const SIMPLE_ICONS_CDN = 'https://cdn.jsdelivr.net/npm/simple-icons@latest/icons';
-const iconUrl = app.simpleIconsSlug
+
+// 优先级：本地 logoUrl > simple-icons > monogram
+const renderMode: 'image' | 'mask' | 'monogram' = app.logoUrl
+  ? 'image'
+  : app.simpleIconsSlug
+    ? 'mask'
+    : 'monogram';
+
+const maskUrl = renderMode === 'mask'
   ? `${SIMPLE_ICONS_CDN}/${app.simpleIconsSlug}.svg`
   : '';
 ---
 
-<span class={`app-icon ${className}`} data-has-svg={iconUrl ? 'true' : 'false'}>
-  {iconUrl && (
+<span
+  class={`app-icon ${className}`}
+  data-mode={renderMode}
+  style={`background:${app.brandColor};`}
+>
+  {renderMode === 'image' && (
+    <img
+      class="app-icon-img"
+      src={app.logoUrl}
+      alt={`${app.name} logo`}
+      loading="lazy"
+      decoding="async"
+      width="120"
+      height="120"
+    />
+  )}
+  {renderMode === 'mask' && (
     <span
-      class="app-icon-svg"
-      style={`background-color:${app.brandColor}; --mask:url(${iconUrl});`}
+      class="app-icon-mask"
+      style={`--mask:url(${maskUrl});`}
       role="img"
       aria-label={`${app.name} logo`}
     ></span>
   )}
-  <span class="app-icon-monogram" style={`background:${app.brandColor}; color:white;`}>{app.monogram}</span>
+  {renderMode === 'monogram' && (
+    <span class="app-icon-monogram" aria-label={`${app.name} logo`}>{app.monogram}</span>
+  )}
 </span>
 
 <style is:global>
-  /* 消除 Astro scoped CSS 跨组件的隔离问题：直接在 AppIcon 里定义所有 size variants
-     这样即便 `class="vs-monogram"` 写在 page 里，AppIcon 渲染的元素也会拿到 size。  */
-  .app-icon[class*="top-monogram"] {
-    width: 60px; height: 60px; border-radius: 14px;
-  }
-  .app-icon[class*="vs-monogram"] {
-    width: 48px; height: 48px; border-radius: 12px;
-  }
-  .app-icon[class*="related-monogram"] {
-    width: 44px; height: 44px; border-radius: 10px;
-  }
-  .app-icon[class*="pick-monogram"] {
-    width: 48px; height: 48px; border-radius: 12px;
-  }
-  .app-icon[class*="rank-monogram"] {
-    width: 40px; height: 40px; border-radius: 10px;
-  }
-  .app-icon[class*="hero-monogram"] {
-    width: 88px; height: 88px; border-radius: 20px;
-  }
-  .app-icon[class*="trio-monogram"] {
-    width: 56px; height: 56px; border-radius: 14px;
-  }
+  /* Astro scoped CSS 隔离问题：所有 size variants 放在 :global，
+     这样 page 里给 AppIcon 加 `class="vs-monogram"` 等就能命中 */
+  .app-icon[class*="top-monogram"]     { width: 60px;  height: 60px;  border-radius: 14px; }
+  .app-icon[class*="vs-monogram"]      { width: 48px;  height: 48px;  border-radius: 12px; }
+  .app-icon[class*="related-monogram"] { width: 44px;  height: 44px;  border-radius: 10px; }
+  .app-icon[class*="pick-monogram"]    { width: 48px;  height: 48px;  border-radius: 12px; }
+  .app-icon[class*="rank-monogram"]    { width: 40px;  height: 40px;  border-radius: 10px; }
+  .app-icon[class*="hero-monogram"]    { width: 88px;  height: 88px;  border-radius: 20px; }
+  .app-icon[class*="trio-monogram"]    { width: 56px;  height: 56px;  border-radius: 14px; }
+  .app-icon[class*="cta-monogram"]     { width: 48px;  height: 48px;  border-radius: 12px; }
 </style>
 
 <style>
-  /* 容器：方形，白色背景卡片 —— 任何 size 都 100% 一致 */
+  /* 容器：品牌色方块，无白边（背景由 inline style 设 brandColor）*/
   .app-icon {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    background: white;
     overflow: hidden;
-    /* 1px 半透明白边让卡片在深色背景下有边 */
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08);
   }
 
-  /* SVG 用 CSS mask 渲染：背景色 = brandColor，alpha mask = simple-icons SVG
-     这样不管 simple-icons 默认是黑是白，我们都能精确控制颜色 */
-  .app-icon-svg {
-    position: relative;
+  /* image 模式：原色 <img>，contain 保证 logo 完整可见，
+     宽高留白 6% 让 logo 边缘不贴死 */
+  .app-icon-img {
     display: block;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    object-position: center;
     pointer-events: none;
     user-select: none;
+  }
+
+  /* mask 模式：SVG 当 alpha 蒙版，logo 形状显示为白色 */
+  .app-icon-mask {
+    display: block;
+    width: 62%;
+    height: 62%;
+    background: #fff;
     -webkit-mask-image: var(--mask);
             mask-image: var(--mask);
     -webkit-mask-size: contain;
@@ -109,26 +126,23 @@ const iconUrl = app.simpleIconsSlug
             mask-repeat: no-repeat;
     -webkit-mask-position: center;
             mask-position: center;
-  }
-
-  /* monogram fallback：占满整个容器 */
-  .app-icon-monogram {
-    position: absolute;
-    inset: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 800;
-    color: white;
-    font-size: 0.5em;
-    line-height: 1;
-    letter-spacing: -0.02em;
     pointer-events: none;
     user-select: none;
   }
 
-  /* 有 SVG 的容器完全隐藏 monogram（z-index 0 即可，但用 hidden 更稳）*/
-  .app-icon[data-has-svg="true"] .app-icon-monogram {
-    display: none;
+  /* monogram 兜底：占满容器，白色粗体字 */
+  .app-icon-monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-weight: 800;
+    color: white;
+    font-size: 0.42em;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    pointer-events: none;
+    user-select: none;
   }
 </style>

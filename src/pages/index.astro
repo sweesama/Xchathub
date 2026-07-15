@@ -253,7 +253,7 @@ const pageJsonLd = {
     <div class="container">
       <div class="xchat-card card">
         <div class="xchat-pitch">
-          <span class="xchat-monogram">X</span>
+          <AppIcon app={ranked.find((a) => a.slug === 'xchat')!} class="xchat-monogram trio-monogram" />
           <div class="xchat-content">
             <span class="badge badge-live">
               <span class="pulse-dot pulse-dot-live"></span>
@@ -653,16 +653,7 @@ const pageJsonLd = {
   }
 
   .xchat-monogram {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #1d9bf0, #4db5f5);
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: 800;
+    /* size + shape 由 AppIcon 的 .app-icon[class*="trio-monogram"] 全局样式提供（真的 X logo）*/
     flex-shrink: 0;
   }
 
