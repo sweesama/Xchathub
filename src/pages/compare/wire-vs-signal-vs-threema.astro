@@ -32,7 +32,6 @@ if (!signal || !threema || !wire) throw new Error('Three-way comparison data mis
 
 type App = typeof signal;
 const apps: App[] = [wire, signal, threema];
-const labels = ['Wire', 'Signal', 'Threema'] as const;
 
 interface Row {
   label: string;

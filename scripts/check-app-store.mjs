@@ -1,92 +1,92 @@
+/**
+ * check-app-store.mjs — 通过 Apple iTunes Lookup API 验证本地 xchat.json 数据是否与线上一致。
+ *
+ * 用法: node scripts/check-app-store.mjs
+ *
+ * 如果有字段不一致，脚本打印 mismatch 并以 exitCode=1 退出。
+ * CI 或本地手动跑都可以。
+ */
 import xchat from '../src/data/xchat.json' with { type: 'json' };
 
-const MONTHS = {
-  Jan: '01',
-  Feb: '02',
-  Mar: '03',
-  Apr: '04',
-  May: '05',
-  Jun: '06',
-  Jul: '07',
-  Aug: '08',
-  Sep: '09',
-  Oct: '10',
-  Nov: '11',
-  Dec: '12',
-};
+const ITUNES_LOOKUP = 'https://itunes.apple.com/lookup?id=6760873038&country=us';
 
-function formatIsoFromExpected(match) {
-  const [, month, day, year] = match;
-  const monthNumber = MONTHS[month];
-  const paddedDay = String(day).padStart(2, '0');
-  return `${year}-${monthNumber}-${paddedDay}`;
-}
-
-function toLongDisplay(isoDate) {
-  return new Date(`${isoDate}T00:00:00Z`).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    timeZone: 'UTC',
-  });
+function bytesToDisplay(bytes) {
+  const mb = Number(bytes) / (1024 * 1024);
+  return `~${Math.round(mb)} MB`;
 }
 
 async function main() {
-  const url = `${xchat.appStoreUrl}?l=en-US`;
-  const response = await fetch(url, {
+  const response = await fetch(ITUNES_LOOKUP, {
     headers: {
       'user-agent': 'Mozilla/5.0 (compatible; XChatHubBot/1.0; +https://xchat.directory)',
-      accept: 'text/html,application/xhtml+xml',
+      accept: 'application/json',
     },
   });
 
   if (!response.ok) {
-    throw new Error(`App Store request failed: ${response.status} ${response.statusText}`);
+    throw new Error(`iTunes API request failed: ${response.status} ${response.statusText}`);
   }
 
-  const html = await response.text();
+  const data = await response.json();
 
-  const expectedMatch = html.match(/Expected ([A-Z][a-z]{2}) (\d{1,2}), (\d{4})/);
-  const iosMatch = html.match(/Requires iOS ([0-9.]+) or later/);
-
-  if (!expectedMatch) {
-    throw new Error('Could not find an "Expected" launch date on the App Store page.');
+  if (!data.results || data.results.length === 0) {
+    throw new Error('iTunes API returned 0 results — app may have been removed.');
   }
 
-  if (!iosMatch) {
-    throw new Error('Could not find the iOS requirement on the App Store page.');
-  }
+  const app = data.results[0];
 
-  const remoteLaunchDate = formatIsoFromExpected(expectedMatch);
-  const remoteLaunchDisplay = toLongDisplay(remoteLaunchDate);
-  const remoteIosRequirement = `iOS ${iosMatch[1]}+`;
+  // Extract fields
+  const remoteVersion = app.version;
+  const remoteReleaseDate = app.releaseDate?.split('T')[0] || '';
+  const remoteCurrentVersionDate = app.currentVersionReleaseDate?.split('T')[0] || '';
+  const remoteMinOS = `iOS ${app.minimumOsVersion?.replace(/\.0$/, '')}+`;
+  const remoteAppSize = bytesToDisplay(app.fileSizeBytes);
+  const remoteAgeRating = app.contentAdvisoryRating;
+  const remoteLanguages = app.languageCodesISO2A?.length || 0;
+  const remoteRating = app.averageUserRating?.toFixed(2);
+  const remoteRatingCount = app.userRatingCount;
+
+  console.log('[check-app-store] Live iTunes data:');
+  console.log(`  version:          ${remoteVersion}`);
+  console.log(`  releaseDate:      ${remoteReleaseDate}`);
+  console.log(`  lastUpdate:       ${remoteCurrentVersionDate}`);
+  console.log(`  minimumOS:        ${remoteMinOS}`);
+  console.log(`  appSize:          ${remoteAppSize}`);
+  console.log(`  ageRating:        ${remoteAgeRating}`);
+  console.log(`  languages:        ${remoteLanguages}`);
+  console.log(`  avgRating:        ${remoteRating} (${remoteRatingCount} reviews)`);
+  console.log('');
 
   const mismatches = [];
 
-  if (remoteLaunchDate !== xchat.launchDate) {
-    mismatches.push(`launchDate local=${xchat.launchDate} remote=${remoteLaunchDate}`);
+  if (remoteReleaseDate !== xchat.launchDate) {
+    mismatches.push(`launchDate: local="${xchat.launchDate}" remote="${remoteReleaseDate}"`);
   }
 
-  if (remoteLaunchDisplay !== xchat.launchDisplay) {
-    mismatches.push(`launchDisplay local="${xchat.launchDisplay}" remote="${remoteLaunchDisplay}"`);
+  if (remoteMinOS !== xchat.iosRequirement) {
+    mismatches.push(`iosRequirement: local="${xchat.iosRequirement}" remote="${remoteMinOS}"`);
   }
 
-  if (remoteIosRequirement !== xchat.iosRequirement) {
-    mismatches.push(`iosRequirement local="${xchat.iosRequirement}" remote="${remoteIosRequirement}"`);
+  if (remoteAppSize !== xchat.appSize) {
+    mismatches.push(`appSize: local="${xchat.appSize}" remote="${remoteAppSize}"`);
   }
 
-  console.log('[check-app-store] Official App Store snapshot');
-  console.log(`- launchDate: ${remoteLaunchDate}`);
-  console.log(`- launchDisplay: ${remoteLaunchDisplay}`);
-  console.log(`- iosRequirement: ${remoteIosRequirement}`);
+  if (remoteAgeRating !== xchat.ageRating) {
+    mismatches.push(`ageRating: local="${xchat.ageRating}" remote="${remoteAgeRating}"`);
+  }
+
+  if (remoteLanguages !== xchat.languages) {
+    mismatches.push(`languages: local=${xchat.languages} remote=${remoteLanguages}`);
+  }
 
   if (mismatches.length === 0) {
-    console.log('[check-app-store] Local config matches App Store.');
+    console.log('[check-app-store] ✓ Local config matches live App Store data.');
     return;
   }
 
-  console.log('[check-app-store] Mismatch detected:');
-  mismatches.forEach((item) => console.log(`- ${item}`));
+  console.log('[check-app-store] ✗ Mismatches detected:');
+  mismatches.forEach((m) => console.log(`  - ${m}`));
+  console.log('');
   console.log('[check-app-store] Update src/data/xchat.json and rebuild.');
   process.exitCode = 1;
 }
@@ -95,3 +95,28 @@ main().catch((error) => {
   console.error(`[check-app-store] ${error.message}`);
   process.exitCode = 1;
 });
+
+// ---- Google Play basic availability check ----
+async function checkPlayStore() {
+  const url = xchat.androidPlayStoreUrl;
+  if (!url) {
+    console.log('[check-play-store] No androidPlayStoreUrl configured, skipping.');
+    return;
+  }
+  try {
+    const res = await fetch(url, {
+      headers: { 'user-agent': 'Mozilla/5.0 (compatible; XChatHubBot/1.0)' },
+      redirect: 'follow',
+    });
+    if (res.ok) {
+      console.log(`[check-play-store] \u2713 Google Play page is live (${res.status})`);
+    } else {
+      console.log(`[check-play-store] \u2717 Google Play returned ${res.status} — app may have been removed.`);
+      process.exitCode = 1;
+    }
+  } catch (e) {
+    console.log(`[check-play-store] \u2717 Could not reach Google Play: ${e.message}`);
+  }
+}
+
+checkPlayStore();

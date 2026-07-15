@@ -55,6 +55,9 @@ public/icon-192.png
 public/icon-512.png
 public/apple-touch-icon.png
 
+# Generated lastmod data (re-created by prebuild from git log)
+src/data/_lastmod.json
+
 # Playwright isolated profile (do not commit)
 .playwright-profile/
 

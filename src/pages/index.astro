@@ -15,6 +15,7 @@ import Layout from '../layouts/Layout.astro';
 import AppIcon from '../components/AppIcon.astro';
 import {
   XCHAT_ANDROID_STATUS,
+  XCHAT_ANDROID_DOWNLOADS,
   XCHAT_IOS_REQUIREMENT,
   XCHAT_LAUNCH_DISPLAY,
   XCHAT_TELEGRAM_CHANNEL_URL,
@@ -288,7 +289,7 @@ const pageJsonLd = {
           </div>
           <div class="fact">
             <span class="fact-label">Android</span>
-            <span class="fact-val">{XCHAT_ANDROID_STATUS.split(',')[0]}</span>
+            <span class="fact-val">{XCHAT_ANDROID_STATUS} ({XCHAT_ANDROID_DOWNLOADS})</span>
           </div>
           <div class="fact">
             <span class="fact-label">Group Size</span>

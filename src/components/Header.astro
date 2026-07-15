@@ -1,19 +1,15 @@
 ---
+import LaunchBanner from './LaunchBanner.astro';
+
+const currentPath = Astro.url.pathname;
+/** 判断 nav-link 是否为当前页 */
+function isActive(href: string): boolean {
+  if (href === '/') return currentPath === '/' || currentPath === '';
+  return currentPath.startsWith(href);
+}
 ---
 
-<div id="launch-banner" class="launch-banner" hidden>
-  <div class="container launch-banner-inner">
-    <span class="banner-pulse" aria-hidden="true"></span>
-    <span class="banner-text">
-      XChat is <strong>live on iOS</strong> — <a href="https://apps.apple.com/us/app/xchat/id6760873038" class="banner-cta" target="_blank" rel="noopener noreferrer">download now →</a>
-    </span>
-    <button id="launch-banner-close" class="banner-close" aria-label="Dismiss">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
-        <path d="M18 6L6 18M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-</div>
+<LaunchBanner />
 
 <header class="site-header">
   <div class="container header-inner">
@@ -25,7 +21,7 @@
     </a>
 
     <nav class="header-nav desktop-nav" aria-label="Main navigation">
-      <a href="/" class="nav-link">Home</a>
+      <a href="/" class:list={['nav-link', { active: isActive('/') }]} aria-current={isActive('/') ? 'page' : undefined}>Home</a>
 
       <div class="nav-dropdown" data-dropdown>
         <button class="nav-link nav-dropdown-trigger" type="button" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
@@ -141,9 +137,9 @@
         </div>
       </div>
 
-      <a href="/groups" class="nav-link">Groups</a>
-      <a href="/faq" class="nav-link">FAQ</a>
-      <a href="/contact" class="nav-link">Contact</a>
+      <a href="/groups" class:list={['nav-link', { active: isActive('/groups') }]} aria-current={isActive('/groups') ? 'page' : undefined}>Groups</a>
+      <a href="/faq" class:list={['nav-link', { active: isActive('/faq') }]} aria-current={isActive('/faq') ? 'page' : undefined}>FAQ</a>
+      <a href="/contact" class:list={['nav-link', { active: isActive('/contact') }]} aria-current={isActive('/contact') ? 'page' : undefined}>Contact</a>
       <a href="https://t.me/Xchathubcommunity" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm nav-cta">Join Community</a>
     </nav>
 
@@ -197,6 +193,11 @@
         <a href="/compare/signal-vs-threema/" class="drawer-link">Signal vs Threema</a>
         <a href="/compare/signal-vs-telegram/" class="drawer-link">Signal vs Telegram</a>
         <a href="/compare/whatsapp-vs-signal/" class="drawer-link">WhatsApp vs Signal</a>
+        <a href="/compare/signal-vs-whatsapp-security/" class="drawer-link">Signal vs WhatsApp Security</a>
+        <a href="/compare/signal-vs-telegram-security/" class="drawer-link">Signal vs Telegram Security</a>
+        <a href="/compare/imessage-vs-signal/" class="drawer-link">iMessage vs Signal</a>
+        <a href="/compare/signal-vs-whatsapp-vs-telegram/" class="drawer-link">Signal vs WhatsApp vs Telegram</a>
+        <a href="/compare/wire-vs-signal-vs-threema/" class="drawer-link">Wire vs Signal vs Threema</a>
         <a href="/vs/whatsapp" class="drawer-link">XChat vs WhatsApp</a>
         <a href="/vs/signal" class="drawer-link">XChat vs Signal</a>
         <a href="/vs/telegram" class="drawer-link">XChat vs Telegram</a>
@@ -313,83 +314,6 @@
 </script>
 
 <style>
-  .launch-banner {
-    position: sticky;
-    top: 0;
-    z-index: 101;
-    background:
-      linear-gradient(90deg,
-        rgba(29, 155, 240, 0.12),
-        rgba(29, 155, 240, 0.18),
-        rgba(29, 155, 240, 0.12)
-      );
-    border-bottom: 1px solid rgba(29, 155, 240, 0.25);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    font-size: 0.8125rem;
-    line-height: 1;
-  }
-
-  .launch-banner-inner {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.625rem;
-    padding: 0.5rem 1rem;
-    position: relative;
-    color: var(--text-primary);
-    text-align: center;
-  }
-
-  .banner-pulse {
-    width: 7px;
-    height: 7px;
-    background: #1d9bf0;
-    border-radius: 50%;
-    box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.7);
-    animation: banner-pulse 2s infinite;
-    flex-shrink: 0;
-  }
-
-  @keyframes banner-pulse {
-    0% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0.7); }
-    70% { box-shadow: 0 0 0 8px rgba(29, 155, 240, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(29, 155, 240, 0); }
-  }
-
-  .banner-text { color: var(--text-secondary); }
-  .banner-text strong { color: var(--text-primary); font-weight: 600; }
-
-  .banner-cta {
-    color: var(--accent-light);
-    font-weight: 600;
-    text-decoration: none;
-    margin-left: 0.125rem;
-    white-space: nowrap;
-  }
-
-  .banner-cta:hover { text-decoration: underline; }
-
-  .banner-close {
-    position: absolute;
-    right: 0.75rem;
-    top: 50%;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 0.375rem;
-    display: inline-flex;
-    border-radius: var(--radius-full);
-    transition: color 0.15s, background 0.15s;
-  }
-
-  .banner-close:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.05);
-  }
-
   .site-header {
     position: sticky;
     top: 0;
@@ -445,6 +369,22 @@
   }
 
   .nav-link:hover { color: var(--text-primary); }
+
+  .nav-link.active {
+    color: var(--text-primary);
+    position: relative;
+  }
+
+  .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 1px;
+  }
 
   .nav-dropdown { position: relative; }
 
@@ -624,15 +564,6 @@
   @media (max-width: 900px) {
     .desktop-nav { display: none; }
     .mobile-menu-btn { display: inline-flex; }
-  }
-
-  @media (max-width: 480px) {
-    .launch-banner-inner {
-      padding: 0.5rem 2.5rem 0.5rem 0.75rem;
-      font-size: 0.75rem;
-    }
-
-    .banner-text { line-height: 1.3; }
   }
 
   /* === Coming-soon placeholders (not links, just info) === */

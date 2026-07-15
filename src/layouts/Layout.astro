@@ -96,6 +96,8 @@ const orgSchema = {
   <link rel="preconnect" href="https://t.me" crossorigin />
   <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
   <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+  <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
 
   <link rel="alternate" type="text/plain" title="LLMs.txt" href="/llms.txt" />
 
@@ -118,18 +120,18 @@ const orgSchema = {
 
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
-  <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
 
   {jsonLd && (
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   )}
 
   {breadcrumbSchema && (
-    <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
   )}
 
-  <script type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-3J5D4C9DPK"></script>
-  <script type="text/partytown">
+  <script is:inline type="text/partytown" async src="https://www.googletagmanager.com/gtag/js?id=G-3J5D4C9DPK"></script>
+  <script is:inline type="text/partytown">
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
@@ -172,8 +174,9 @@ const orgSchema = {
   <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-REPLACE_ME" crossorigin="anonymous"></script> -->
 </head>
 <body>
+  <a href="#main-content" class="skip-link">Skip to content</a>
   <Header />
-  <main>
+  <main id="main-content">
     <slot />
   </main>
   <Footer />

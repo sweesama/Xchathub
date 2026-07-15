@@ -6,8 +6,10 @@
   "launchDate": "2026-04-24",
   "launchDisplay": "April 24, 2026",
   "launchShortDisplay": "April 24",
-  "iosRequirement": "iOS 16+",
-  "androidStatus": "Released (com.x.chat on Google Play, 50K+ downloads, July 2026)",
+  "iosRequirement": "iOS 26+",
+  "androidStatus": "Released",
+  "androidDownloads": "50K+",
+  "androidLastVerified": "2026-07-08",
   "androidPlayStoreUrl": "https://play.google.com/store/apps/details?id=com.x.chat",
   "groupLimit": 350,
   "hasLaunched": true,
@@ -16,7 +18,7 @@
   "screenshotBlocking": true,
   "groupChatLinks": true,
   "carplay": false,
-  "appSize": "~179 MB",
-  "languages": 46,
-  "ageRating": "16+"
+  "appSize": "~164 MB",
+  "languages": 45,
+  "ageRating": "17+"
 }

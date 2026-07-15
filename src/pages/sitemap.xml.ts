@@ -13,6 +13,7 @@
 import type { APIRoute } from 'astro';
 import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
 import { MESSAGING_APPS } from '../data/messagingApps';
+import lastmodMap from '../data/_lastmod.json';
 
 /** Review 评测页白名单（只列出已存在页面的 slug，避免 sitemap 里出现死链）。
  *  新增评测页时，同时把 slug 加到这里。 */
@@ -98,13 +99,13 @@ const pages = [
 ];
 
 export const GET: APIRoute = () => {
-  const lastmod = new Date().toISOString().split('T')[0];
+  const fallback = new Date().toISOString().split('T')[0];
 
   const urlEntries = pages
     .map(
       (p) => `  <url>
     <loc>${SITE}${p.path}</loc>
-    <lastmod>${lastmod}</lastmod>
+    <lastmod>${(lastmodMap as Record<string, string>)[p.path] || fallback}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority.toFixed(2)}</priority>
   </url>`

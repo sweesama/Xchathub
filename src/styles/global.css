@@ -500,3 +500,23 @@ html { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparen
   background: rgba(29, 155, 240, 0.3);
   color: #fff;
 }
+
+/* ---------- Skip Link (a11y) ---------- */
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.75rem 1.25rem;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.875rem;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 1rem;
+}
