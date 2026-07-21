@@ -7,6 +7,7 @@
     "dev": "astro dev",
     "prebuild": "node scripts/build-lastmod.mjs && node scripts/build-images.mjs && node scripts/build-llms.mjs",
     "build": "astro build",
+    "postbuild": "node scripts/check-csp-hashes.mjs",
     "preview": "astro preview",
     "images": "node scripts/build-images.mjs",
     "llms": "node scripts/build-llms.mjs",
