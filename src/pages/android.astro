@@ -1,33 +1,41 @@
 ---
 /**
- * android.astro — XChat Android 状态追踪 + 解决方案页
+ * android.astro — XChat Android 下载 + 状态页
  *
- * 关键事实（截至 2026-04-27）：
- * - XChat 仅 iOS 上架（2026-04-24）
- * - X Corp 未公布 Android 任何具体时间
- * - "Expected soon" 是唯一官方表态（来源：metricool / 9to5mac）
- * - 假冒 XChat.apk 流传严重，是真实安全风险
- * - 唯一安全替代：chat.x.com 网页版
+ * 关键事实（截至 2026-07-08 核实）：
+ * - XChat 安卓版已上线 Google Play（2026-06-29，官方 @chat 账号宣布）
+ * - 包名 com.x.chat，开发者 X Corp；100K+ 下载，3.9★，1K+ 评价，分级 12+
+ * - iOS 先行（2026-04-24），安卓晚约两个月
+ * - 假冒 XChat.apk 仍在钓鱼站流传：务必只从 Google Play 安装
+ * - 另有一个 Nostr 协议的同名 "XChat"（com.oxchat.lite），与 X Corp 无关
+ * - chat.x.com 网页版仍可用，作为「不想装 app」的备选
  *
  * SEO 战略：捕获最大量级 Android 相关流量：
- * - "xchat android"（核心高量词）
- * - "xchat for android", "xchat apk", "xchat android download"
- * - "when will xchat be on android", "xchat android release date"
- * - "is xchat available on android", "xchat android app"
+ * - "xchat android", "xchat for android", "xchat apk", "xchat android download"
+ * - "is xchat available on android", "xchat android app", "xchat google play"
  *
- * 同时承担安全教育功能：警告假冒 APK 风险。
+ * 同时承担安全教育功能：引导用户走官方 Google Play，警告假冒 APK。
  */
 import Layout from '../layouts/Layout.astro';
-import { XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
+import {
+  XCHAT_TELEGRAM_CHANNEL_URL,
+  XCHAT_TELEGRAM_COMMUNITY_URL,
+  XCHAT_ANDROID_PLAY_STORE_URL,
+  XCHAT_ANDROID_LAUNCH_DISPLAY,
+  XCHAT_ANDROID_DOWNLOADS,
+  XCHAT_ANDROID_RATING,
+  XCHAT_ANDROID_REVIEWS,
+} from '../data/xchat';
 
 const CHAT_URL = 'https://chat.x.com';
+const PLAY_URL = XCHAT_ANDROID_PLAY_STORE_URL;
 
 /* JSON-LD: Article + FAQPage */
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: 'XChat Android Release Status — No Official Date Yet (2026 Tracker)',
-  description: 'XChat launched on iOS April 24, 2026. Android timing has not been announced by X Corp. Track the status, avoid fake APKs, and use chat.x.com as the official workaround.',
+  headline: 'XChat for Android Is Live — Official Google Play Download (2026)',
+  description: `XChat for Android launched ${XCHAT_ANDROID_LAUNCH_DISPLAY} on Google Play (com.x.chat, by X Corp). Download the official app, avoid fake APKs, and see how the Android version compares to iOS.`,
   author: { '@type': 'Organization', name: 'XChat Hub' },
   publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
   datePublished: '2026-04-24',
@@ -37,10 +45,10 @@ const articleJsonLd = {
 const timeline = [
   { date: 'May 2025',     label: 'Internal beta',       desc: 'X starts internal testing of XChat with employees and select beta users.' },
   { date: 'Dec 2025',     label: 'chat.x.com launches', desc: 'X quietly releases a standalone web version at chat.x.com — accessible from any browser including Android.' },
-  { date: 'Mar 2026',     label: 'Public iOS beta',     desc: 'XChat enters public TestFlight beta on iOS only. No Android beta.' },
-  { date: 'Apr 17, 2026', label: 'iOS launch delayed',  desc: 'Original launch date pushed back; speculation about Android delay too.' },
-  { date: 'Apr 24, 2026', label: 'iOS public launch',   desc: 'XChat officially launches on Apple App Store. Android: still no announcement.' },
-  { date: 'Apr 27, 2026', label: 'Today',               desc: 'X Corp has not publicly committed to an Android release date. Reporting from 9to5mac says "expected soon" without specifics.' },
+  { date: 'Mar 2026',     label: 'Public iOS beta',     desc: 'XChat enters public TestFlight beta on iOS. No Android beta yet.' },
+  { date: 'Apr 24, 2026', label: 'iOS public launch',   desc: 'XChat officially launches on the Apple App Store for iPhone and iPad.' },
+  { date: 'May 27, 2026', label: 'Android pre-registration', desc: 'X opens Google Play pre-registration for the Android version of XChat.' },
+  { date: 'Jun 29, 2026', label: 'Android public launch', desc: 'XChat for Android goes live on Google Play (com.x.chat, by X Corp) — announced on the official @chat account.' },
 ];
 
 const fakeApkRedFlags = [
@@ -54,36 +62,36 @@ const fakeApkRedFlags = [
 
 const faqs = [
   {
-    q: 'When will XChat launch on Android?',
-    a: 'There is no official Android release date as of April 27, 2026. X Corp has only said the Android version is "expected soon" without specifics. We update this page the moment any official statement is made.',
+    q: 'Is XChat available on Android?',
+    a: `<strong>Yes.</strong> XChat for Android launched ${XCHAT_ANDROID_LAUNCH_DISPLAY} and is available now on <a href="${PLAY_URL}" target="_blank" rel="noopener noreferrer">Google Play</a>. The official listing is published by <strong>X Corp</strong> (package <code>com.x.chat</code>) and the app is free.`,
   },
   {
-    q: 'Is there a real XChat APK I can download?',
-    a: '<strong>No.</strong> X Corp has not released any official APK file. Any website offering "XChat.apk" is either fake or a clone of an unrelated app. The safe alternative is to use <a href="https://chat.x.com" target="_blank" rel="noopener noreferrer">chat.x.com</a> in your Android browser.',
+    q: 'What is the official XChat Android download link?',
+    a: `The only official source is the Google Play listing by X Corp: <a href="${PLAY_URL}" target="_blank" rel="noopener noreferrer">play.google.com/store/apps/details?id=com.x.chat</a>. Do not download "XChat.apk" from any other website.`,
   },
   {
-    q: 'There are apps called "XChat" on Google Play. Are those real?',
-    a: 'No — those are <strong>different apps with the same name</strong>. The most common one is a Nostr-protocol messenger unrelated to X Corp. There is currently <strong>no XChat by X Corp on Google Play</strong>.',
+    q: 'Should I download an XChat APK from a third-party site?',
+    a: '<strong>No.</strong> Now that the official app is on Google Play, there is no reason to sideload an APK. Sites offering "XChat.apk" are unnecessary and often bundle malware or credential stealers. Install from Google Play only.',
   },
   {
-    q: 'How do I use XChat on Android right now?',
-    a: 'Open <a href="https://chat.x.com" target="_blank" rel="noopener noreferrer">chat.x.com</a> in Chrome (or any browser) and sign in with your X account. All your XChat messages, group chats, and contacts work in the browser. The interface is desktop-optimized but functional on phones. <a href="/web">See full Android-on-web guide</a>.',
+    q: 'There are several apps called "XChat" on Google Play. Which is the real one?',
+    a: 'The official X Corp app is <strong>developer "X Corp." with package <code>com.x.chat</code></strong>. A separate, unrelated "XChat" built on the Nostr protocol (<code>com.oxchat.lite</code>) also exists — it is <strong>not</strong> from X Corp. Always check the developer name before installing.',
   },
   {
-    q: 'Why is XChat iOS-only at launch?',
-    a: 'X has not given a public reason. Industry speculation: iOS first lets the team validate encryption and product design with a smaller, more uniform device fleet before tackling Android\'s fragmentation. Apple\'s App Store review may also have been a forcing function for the launch deadline.',
+    q: 'Do my XChat messages sync across iOS, Android, and Web?',
+    a: 'Yes. All XChat surfaces (iOS app, Android app, chat.x.com web, and the main X app) share the same X account backend. Log in once and your messages, groups, and contacts appear everywhere.',
   },
   {
-    q: 'Can I get notified when XChat for Android is released?',
-    a: `Yes. Subscribe to our Telegram channel — <a href="${XCHAT_TELEGRAM_CHANNEL_URL}" target="_blank" rel="noopener noreferrer">${XCHAT_TELEGRAM_CHANNEL_URL.replace('https://', '')}</a> — we post the moment X makes any Android announcement.`,
+    q: 'Can I use XChat on Android without installing the app?',
+    a: `Yes. <a href="${CHAT_URL}" target="_blank" rel="noopener noreferrer">chat.x.com</a> works in Chrome or any mobile browser and syncs the same account — a good option if you prefer not to install. The native app adds push notifications and a smoother mobile experience.`,
   },
   {
-    q: 'Will the Android version cost money?',
-    a: 'Almost certainly free. The iOS version is free with no ads. X CEO Elon Musk has publicly committed to keeping XChat free.',
+    q: 'Did XChat launch on iOS before Android?',
+    a: 'Yes. XChat launched on the Apple App Store on April 24, 2026, and the Android version followed on Google Play on June 29, 2026 — roughly two months later.',
   },
   {
-    q: 'Will my XChat messages sync across iOS, Android, and Web?',
-    a: 'Yes. All XChat surfaces (iOS app, chat.x.com web, X main app, and a future Android app) use the same X account backend. Once you log in, your messages and groups are everywhere.',
+    q: 'Does the Android version cost money?',
+    a: 'No. XChat is free on both Android and iOS, with no ads. An X (formerly Twitter) account is required to sign in.',
   },
 ];
 
@@ -102,8 +110,8 @@ const faqJsonLd = {
 ---
 
 <Layout
-  title="XChat for Android — Release Date & Workaround"
-  description="XChat is iOS-only as of April 2026. No Android release date yet. Avoid fake APKs — use the official chat.x.com web workaround instead."
+  title="XChat for Android — Official Google Play Download (2026)"
+  description="XChat for Android is live on Google Play (launched June 29, 2026, by X Corp). Get the official download link and listing details, and learn how to avoid fake APKs."
   jsonLd={[articleJsonLd, faqJsonLd]}
   canonicalPath="/android"
   breadcrumbs={[
@@ -114,25 +122,25 @@ const faqJsonLd = {
   <!-- ==================== HERO ==================== -->
   <section class="section hero">
     <div class="container">
-      <span class="status-pill" aria-label="Android release status">
+      <span class="status-pill status-live" aria-label="Android release status">
         <span class="status-dot" aria-hidden="true"></span>
-        Not Released · Tracker Live
+        Live on Google Play
       </span>
       <h1>
         XChat for Android:<br />
-        <span class="text-gradient">Status &amp; Safe Workaround.</span>
+        <span class="text-gradient">Now Live on Google Play.</span>
       </h1>
       <p class="lead text-secondary prose-body">
-        XChat launched on iOS April 24, 2026. <strong>X Corp has not announced an Android release date.</strong>
-        While you wait, the official replacement is <a href={CHAT_URL} target="_blank" rel="noopener noreferrer">chat.x.com</a>
-        in your Android browser — same encryption, same messages, no APK needed.
+        XChat for Android launched <strong>{XCHAT_ANDROID_LAUNCH_DISPLAY}</strong>. Download the official app free
+        from Google Play (by X Corp, <code>com.x.chat</code>) — end-to-end encrypted, sign in with your X account.
+        Below: the verified listing details, plus how to avoid fake APKs.
       </p>
       <div class="cta-buttons">
-        <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-          Use chat.x.com on Android →
+        <a href={PLAY_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          Download on Google Play →
         </a>
-        <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
-          Get Release Alerts
+        <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+          Use chat.x.com (no install)
         </a>
       </div>
     </div>
@@ -147,15 +155,16 @@ const faqJsonLd = {
           <h3>iOS Status</h3>
           <p class="status-value good">Live since April 24, 2026</p>
           <p class="text-secondary">
-            Available on iPhone &amp; iPad, requires iOS 16+.
+            Available on iPhone &amp; iPad, requires iOS 26+.
           </p>
         </article>
         <article class="status-card">
           <div class="status-icon" aria-hidden="true">🤖</div>
           <h3>Android Status</h3>
-          <p class="status-value bad">Not released · No date announced</p>
+          <p class="status-value good">Live since {XCHAT_ANDROID_LAUNCH_DISPLAY}</p>
           <p class="text-secondary">
-            X has only said "expected soon". No public timeline.
+            On <a href={PLAY_URL} target="_blank" rel="noopener noreferrer">Google Play</a> (com.x.chat).
+            {XCHAT_ANDROID_DOWNLOADS} downloads · {XCHAT_ANDROID_RATING}★ ({XCHAT_ANDROID_REVIEWS} ratings).
           </p>
         </article>
         <article class="status-card">
@@ -195,26 +204,26 @@ const faqJsonLd = {
       <div class="warning-card">
         <div class="warning-head">
           <span class="warning-icon" aria-hidden="true">⚠️</span>
-          <h2>Warning: Fake XChat APKs Are Circulating</h2>
+          <h2>Warning: Fake XChat APKs Still Circulate</h2>
         </div>
         <p class="text-secondary prose-body">
-          Because Android users are searching for XChat in large numbers and no official APK exists,
-          scammers have published <strong>fake "XChat.apk" files</strong> on phishing sites.
-          These can contain malware, credential stealers, or crypto wallet drainers.
+          XChat now has an <strong>official Android app on Google Play</strong> — but because so many people still
+          search for "XChat APK", scammers keep publishing <strong>fake "XChat.apk" files</strong> on phishing sites.
+          These can contain malware, credential stealers, or crypto wallet drainers. Only install from Google Play.
         </p>
         <h3 class="warning-subhead">Red flags to watch for:</h3>
         <ul class="warning-list">
           {fakeApkRedFlags.map((flag) => <li>{flag}</li>)}
         </ul>
-        <h3 class="warning-subhead">Apps named "XChat" on Google Play are <em>not</em> the X Corp app</h3>
+        <h3 class="warning-subhead">Not every "XChat" on Google Play is the X Corp app</h3>
         <p class="text-secondary">
-          Several unrelated apps share the "XChat" name (the most popular is a Nostr-based messenger).
-          As of April 27, 2026, <strong>X Corp has not published anything to Google Play</strong>.
-          If you see an "XChat" listing, check the developer name — only an "X Corp" listing would be legitimate.
+          The official app is published by <strong>X Corp</strong> (package <code>com.x.chat</code>). A separate,
+          unrelated messenger built on the Nostr protocol also uses the "XChat" name (<code>com.oxchat.lite</code>).
+          Before installing, confirm the developer is <strong>"X Corp."</strong> — that is the only legitimate listing.
         </p>
         <div class="cta-buttons" style="justify-content: flex-start; margin-top: 1.5rem;">
-          <a href={CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
-            Use chat.x.com Instead
+          <a href={PLAY_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+            Get the Official App on Google Play
           </a>
         </div>
       </div>
@@ -224,12 +233,12 @@ const faqJsonLd = {
   <!-- ==================== WORKAROUND ==================== -->
   <section class="section workaround-section">
     <div class="container">
-      <h2 class="section-title">The Official Android Workaround</h2>
+      <h2 class="section-title">Prefer Not to Install? Use the Web</h2>
       <div class="workaround-grid">
         <div class="workaround-text">
           <p class="text-secondary prose-body">
-            X built <strong>chat.x.com</strong> as a standalone web messenger in December 2025 —
-            months before the iOS app launched. It works in any modern browser, including Chrome on Android.
+            The Google Play app is the recommended way to use XChat on Android. But if you'd rather not install anything,
+            X also runs <strong>chat.x.com</strong> — a standalone web messenger that works in Chrome or any modern browser and syncs the same account.
           </p>
           <ul class="checklist">
             <li>End-to-end encrypted (set passcode on first login)</li>
@@ -251,8 +260,8 @@ const faqJsonLd = {
             <li><span class="check">✓</span> Invite links</li>
             <li><span class="check">✓</span> File sharing</li>
             <li><span class="check">✓</span> Disappearing messages</li>
-            <li><span class="x">✗</span> Voice calls (iOS only)</li>
-            <li><span class="x">✗</span> Video calls (iOS only)</li>
+            <li><span class="x">✗</span> Voice calls (app only)</li>
+            <li><span class="x">✗</span> Video calls (app only)</li>
             <li><span class="x">✗</span> Native push notifications</li>
             <li><span class="x">✗</span> Screenshot blocking</li>
           </ul>
@@ -330,6 +339,17 @@ const faqJsonLd = {
     border-radius: 50%;
     background: #ff9966;
     animation: pulse 2s infinite;
+  }
+
+  /* 已上线的绿色变体（覆盖默认橘色 pill） */
+  .status-pill.status-live {
+    color: #4ade80;
+    border-color: rgba(74, 222, 128, 0.35);
+    background: rgba(74, 222, 128, 0.06);
+  }
+
+  .status-pill.status-live .status-dot {
+    background: #4ade80;
   }
 
   @keyframes pulse {

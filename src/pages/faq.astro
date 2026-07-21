@@ -16,6 +16,8 @@ import Layout from '../layouts/Layout.astro';
 import {
   XCHAT_APP_STORE_URL,
   XCHAT_LAUNCH_DISPLAY,
+  XCHAT_ANDROID_LAUNCH_DISPLAY,
+  XCHAT_ANDROID_PLAY_STORE_URL,
 } from '../data/xchat';
 
 const buildDate = new Date();
@@ -38,23 +40,23 @@ const faqs = [
   },
   {
     q: 'Has XChat launched yet?',
-    a: `Yes. XChat launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong> and is <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">available for download</a> on the iOS App Store. iPhone and iPad only — Android has not been announced.`,
+    a: `Yes. XChat launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong> and is <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">available for download</a> on the iOS App Store. It came to iPhone and iPad first, and the Android version followed on Google Play on <strong>${XCHAT_ANDROID_LAUNCH_DISPLAY}</strong>.`,
     keywords: ['is xchat launched', 'has xchat launched', 'when was xchat launched'],
   },
   {
     q: 'When did XChat launch?',
-    a: `XChat launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong> for iPhone and iPad. Android availability has <strong>not been announced</strong>. No beta or release window exists for Android users as of today.`,
+    a: `XChat launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong> for iPhone and iPad. The Android version came later, going live on Google Play on <strong>${XCHAT_ANDROID_LAUNCH_DISPLAY}</strong>.`,
     keywords: ['when did xchat launch', 'xchat launch date', 'xchat release date'],
   },
   {
     q: 'Is XChat available on Android?',
-    a: 'No. XChat is iOS-only (launched April 24, 2026). X Corp has given no release date, beta program, or signup list for Android. If you use Android and want to stay in XChat communities, your only option today is opening X on a mobile browser (x.com) and accessing XChat group threads via the web interface.',
+    a: `Yes. XChat for Android is live on <a href="${XCHAT_ANDROID_PLAY_STORE_URL}" target="_blank" rel="noopener noreferrer">Google Play</a> as of <strong>${XCHAT_ANDROID_LAUNCH_DISPLAY}</strong>, published by X Corp (package <code>com.x.chat</code>). It is free. See our <a href="/android">XChat for Android</a> page for the verified listing and how to avoid fake APKs.`,
     keywords: ['is xchat available on android', 'xchat android', 'does xchat work on android'],
   },
   {
-    q: 'Will XChat ever come to Android?',
-    a: 'Almost certainly yes — Android has over 70% of the global smartphone market, and no serious messenger stays iOS-only long term. However, X Corp has given no timeline since the April 24, 2026 iOS launch. Based on how previous X features rolled out, a realistic estimate is <strong>3 to 9 months after iOS launch</strong>. We maintain a dedicated Android tracker at <a href="/">xchat.directory</a> that updates the moment anything official drops.',
-    keywords: ['xchat for android when', 'xchat android release'],
+    q: 'Which "XChat" on Google Play is the real one?',
+    a: 'The official app is published by <strong>developer "X Corp."</strong> with package <code>com.x.chat</code>. A separate, unrelated messenger built on the Nostr protocol (<code>com.oxchat.lite</code>) also uses the "XChat" name — it is not from X Corp. Always confirm the developer before installing, and only download from Google Play. See our <a href="/android">Android page</a> for details.',
+    keywords: ['xchat for android which', 'real xchat android', 'fake xchat apk'],
   },
   {
     q: 'Is XChat safe and secure?',

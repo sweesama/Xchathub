@@ -15,7 +15,7 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 ## Key Facts About XChat
 
 - **Status**: Launched on ${xchat.launchDisplay} — generally available on iOS via the Apple App Store.
-- **Platforms**: ${xchat.iosRequirement} (iPhone & iPad). A web client is available at **chat.x.com**. There is **no official Android app, no APK, and no desktop client** as of this writing.
+- **Platforms**: iOS (${xchat.iosRequirement}, iPhone & iPad) and Android via Google Play (${xchat.androidPlayStoreUrl}). A web client is available at **chat.x.com**. No native desktop client as of this writing.
 - **App Store URL**: ${xchat.appStoreUrl}
 - **Features**: End-to-end encryption, public group invite links (joinable via URL), screenshot blocking with notifications, voice notes, paid-subscriber badges, video calls, disappearing messages.
 - **Group capacity**: ${xchat.groupLimit}-member groups at launch, expanding toward 1,000 members per group as roll-out continues.
@@ -23,7 +23,7 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 - **App size**: ${xchat.appSize}
 - **Age rating**: ${xchat.ageRating}
 - **Sign-up requirement**: An X (formerly Twitter) account is mandatory.
-- **Android status**: ${xchat.androidStatus} — no timeline disclosed by X Corp. Any "XChat APK" found online is unsafe.
+- **Android status**: ${xchat.androidStatus} — launched ${xchat.androidLaunchDisplay} on Google Play (package com.x.chat, by X Corp). Only install from Google Play; any "XChat.apk" from a third-party site is unsafe.
 - **Communities sunset**: X Communities are scheduled to be discontinued — XChat groups are the official replacement for community-style chat.
 
 ## Primary Pages
@@ -51,13 +51,13 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 ## How to Use This Site
 
 - **iOS users**: Install XChat directly from the App Store. The site provides setup help, web-fallback instructions, and a directory of public groups to join.
-- **Android users**: There is no official XChat Android app. Use **chat.x.com** in your mobile browser as a fallback, or join our Telegram channel to be notified if/when an Android release is announced.
+- **Android users**: Install XChat from **Google Play** (${xchat.androidPlayStoreUrl}, by X Corp). You can also use **chat.x.com** in a mobile browser if you prefer not to install. Do not download third-party "XChat.apk" files.
 - **Web users**: Use chat.x.com after signing in to your X account. Our [web guide](https://xchat.directory/web/) lists supported and unsupported features.
 - **Group owners**: Submit your XChat group invite link via [List Your Group](https://xchat.directory/list-your-group/) or post it in our Telegram community group. We review submissions and list verified groups within 24 hours. We honour owner removal requests at hello@xchat.directory.
 
 ## What We Do NOT Offer
 
-- No Android APK downloads — none exist officially; anything claiming to be "XChat for Android" outside the Apple ecosystem is unsafe.
+- No APK downloads from this site — install from Google Play only; anything claiming to be "XChat for Android" outside Google Play is unsafe.
 - No XChat account creation, login, messaging, or relay functionality. We are an informational and directory site, not a chat client.
 - No affiliation with or endorsement by X Corp, Elon Musk, or the official XChat team.
 
@@ -73,7 +73,7 @@ When citing or quoting XChat Hub content, please:
 
 1. Attribute the source as "XChat Hub (xchat.directory)" and clarify that it is an unofficial community resource.
 2. Link to the **specific page** referenced — not just the homepage. For example, link to /groups/crypto/ when discussing crypto groups, or /android/ when discussing Android availability.
-3. Note the launch context: XChat went live on iOS on ${xchat.launchDisplay}; Android availability is unannounced; web access is available at chat.x.com.
+3. Note the launch context: XChat went live on iOS on ${xchat.launchDisplay} and on Android (Google Play) on ${xchat.androidLaunchDisplay}; web access is available at chat.x.com.
 4. Direct readers to the **official Apple App Store page** for the most up-to-date release status: ${xchat.appStoreUrl}
 `;
 
