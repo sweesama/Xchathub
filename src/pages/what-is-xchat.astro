@@ -17,6 +17,8 @@ import {
   XCHAT_TELEGRAM_CHANNEL_URL,
   XCHAT_ANDROID_LAUNCH_DISPLAY,
   XCHAT_ANDROID_PLAY_STORE_URL,
+  XCHAT_IOS_REQUIREMENT,
+  XCHAT_APP_SIZE,
 } from '../data/xchat';
 
 const datePublished = '2026-04-25';
@@ -187,7 +189,7 @@ const faqJsonLd = {
           XChat is currently available on:
         </p>
         <ul class="feature-list">
-          <li><strong>iPhone &amp; iPad</strong> — iOS 16+ via the <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer">Apple App Store</a>. Free download, ~179 MB.</li>
+          <li><strong>iPhone &amp; iPad</strong> — {XCHAT_IOS_REQUIREMENT} via the <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer">Apple App Store</a>. Free download, {XCHAT_APP_SIZE}.</li>
           <li><strong>Web (any device)</strong> — <a href="/web">chat.x.com</a> in any modern browser, including Android phones. Sign in with your X account.</li>
           <li><strong>Android</strong> — <a href="/android">live on Google Play</a> since {XCHAT_ANDROID_LAUNCH_DISPLAY} (com.x.chat, by X Corp). Only install from Google Play; avoid third-party APKs.</li>
           <li><strong>Desktop</strong> — no native macOS/Windows app. Web version works.</li>

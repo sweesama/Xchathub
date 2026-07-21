@@ -567,7 +567,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
     cons: [
       'No published independent audit of the cryptography',
       'Closed source — implementation cannot be verified',
-      'No iPad, Mac, or Windows desktop app at launch',
+      'No Mac or Windows desktop app at launch',
       'Identity is tied to your X account profile (pseudonymous by default but not anonymous)',
     ],
     bestFor: [

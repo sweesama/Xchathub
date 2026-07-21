@@ -16,6 +16,7 @@ import {
   XCHAT_GROUP_LIMIT,
   XCHAT_LAUNCH_DISPLAY,
   XCHAT_TELEGRAM_CHANNEL_URL,
+  XCHAT_IOS_REQUIREMENT,
 } from '../data/xchat';
 
 /* Communities 官方关停时间 */
@@ -43,7 +44,7 @@ const migrationSteps = [
   {
     step: 1,
     title: 'Download XChat',
-    desc: `Get the app free from the <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">App Store</a> (iOS 16+). Sign in with your existing X account — no new signup needed.`,
+    desc: `Get the app free from the <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">App Store</a> (${XCHAT_IOS_REQUIREMENT}). Sign in with your existing X account — no new signup needed.`,
   },
   {
     step: 2,
