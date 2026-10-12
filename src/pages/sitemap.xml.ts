@@ -104,7 +104,7 @@ export const GET: APIRoute = () => {
   const urlEntries = pages
     .map(
       (p) => `  <url>
-    <loc>${SITE}${p.path}</loc>
+    <loc>${SITE}${p.path === '/' ? '/' : p.path.replace(/\/$/, '')}</loc>
     <lastmod>${(lastmodMap as Record<string, string>)[p.path] || fallback}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority.toFixed(2)}</priority>
