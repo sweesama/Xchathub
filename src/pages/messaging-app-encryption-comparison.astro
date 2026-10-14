@@ -1,0 +1,182 @@
+---
+/**
+ * messaging-app-encryption-comparison.astro — 主流通讯软件加密/元数据/开源/注册要求对比表
+ * 外链诱饵型数据页：每个单元格都附官方来源链接，方便老师、记者、博客引用。
+ * 只写官方文档能核实的事实，不写评分或用户量。
+ */
+import Layout from '../layouts/Layout.astro';
+
+const dateModified = '2026-10-14';
+
+type Cell = { text: string; src: string; srcLabel: string };
+type Row = { app: string; review?: string; e2ee: Cell; metadata: Cell; open: Cell; signup: Cell };
+
+const rows: Row[] = [
+  {
+    app: 'Signal', review: '/reviews/signal/',
+    e2ee: { text: 'On by default for every chat, group and call (Signal Protocol).', src: 'https://signal.org/bigbrother/', srcLabel: 'signal.org' },
+    metadata: { text: 'In its published subpoena responses, Signal says it could only provide the account creation date and the last connection date.', src: 'https://signal.org/bigbrother/', srcLabel: 'Signal: Government requests' },
+    open: { text: 'Clients and server are open source.', src: 'https://github.com/signalapp', srcLabel: 'github.com/signalapp' },
+    signup: { text: 'Phone number required; optional usernames can be shared instead of the number.', src: 'https://signal.org/blog/phone-number-privacy-usernames/', srcLabel: 'Signal blog' },
+  },
+  {
+    app: 'WhatsApp', review: '/reviews/whatsapp/',
+    e2ee: { text: 'On by default for personal messages and calls (Signal Protocol). Chat backups are end-to-end encrypted only if you turn that option on.', src: 'https://faq.whatsapp.com/820124435853543', srcLabel: 'WhatsApp Help Center' },
+    metadata: { text: 'The privacy policy lists usage and log data, device and connection data and contacts information that WhatsApp collects.', src: 'https://www.whatsapp.com/legal/privacy-policy', srcLabel: 'WhatsApp Privacy Policy' },
+    open: { text: 'Closed source.', src: 'https://faq.whatsapp.com/820124435853543', srcLabel: 'WhatsApp Help Center' },
+    signup: { text: 'Phone number required.', src: 'https://faq.whatsapp.com/820124435853543', srcLabel: 'WhatsApp Help Center' },
+  },
+  {
+    app: 'Telegram', review: '/reviews/telegram/',
+    e2ee: { text: 'Not by default. Normal “cloud chats” and all groups use client-server encryption; end-to-end encryption only in opt-in one-to-one Secret Chats.', src: 'https://telegram.org/faq', srcLabel: 'Telegram FAQ' },
+    metadata: { text: 'Cloud chats, including group content, are stored on Telegram’s servers so they sync across devices.', src: 'https://telegram.org/faq', srcLabel: 'Telegram FAQ' },
+    open: { text: 'Client apps are open source; the server code is not published.', src: 'https://telegram.org/apps', srcLabel: 'telegram.org/apps' },
+    signup: { text: 'Phone number required.', src: 'https://telegram.org/faq', srcLabel: 'Telegram FAQ' },
+  },
+  {
+    app: 'iMessage (Apple)',
+    e2ee: { text: 'On by default between Apple devices. SMS/RCS fallback messages (green bubbles) are not covered.', src: 'https://support.apple.com/guide/security/imessage-security-overview-secd9764312f/web', srcLabel: 'Apple Platform Security' },
+    metadata: { text: 'Messages in iCloud is end-to-end encrypted, but iCloud Backup keys are held by Apple unless Advanced Data Protection is turned on.', src: 'https://support.apple.com/en-us/102651', srcLabel: 'Apple: iCloud data security' },
+    open: { text: 'Closed source.', src: 'https://support.apple.com/guide/security/imessage-security-overview-secd9764312f/web', srcLabel: 'Apple Platform Security' },
+    signup: { text: 'Apple Account plus a phone number or email address; Apple devices only.', src: 'https://support.apple.com/guide/security/imessage-security-overview-secd9764312f/web', srcLabel: 'Apple Platform Security' },
+  },
+  {
+    app: 'Facebook Messenger',
+    e2ee: { text: 'Meta began rolling out default end-to-end encryption for personal chats and calls in December 2023.', src: 'https://about.fb.com/news/2023/12/default-end-to-end-encryption-on-messenger/', srcLabel: 'Meta Newsroom' },
+    metadata: { text: 'Runs inside the Facebook account system; Meta’s general data policy applies to account and usage data.', src: 'https://about.fb.com/news/2023/12/default-end-to-end-encryption-on-messenger/', srcLabel: 'Meta Newsroom' },
+    open: { text: 'Closed source.', src: 'https://about.fb.com/news/2023/12/default-end-to-end-encryption-on-messenger/', srcLabel: 'Meta Newsroom' },
+    signup: { text: 'Facebook / Meta account.', src: 'https://about.fb.com/news/2023/12/default-end-to-end-encryption-on-messenger/', srcLabel: 'Meta Newsroom' },
+  },
+  {
+    app: 'Threema', review: '/reviews/threema/',
+    e2ee: { text: 'Always on for all messages, groups and calls.', src: 'https://threema.ch/en/open-source', srcLabel: 'threema.ch' },
+    metadata: { text: 'Threema publishes a transparency report on what data it could hand over to authorities.', src: 'https://threema.ch/en/transparencyreport', srcLabel: 'Threema Transparency Report' },
+    open: { text: 'Apps are open source; the server is not.', src: 'https://threema.ch/en/open-source', srcLabel: 'Threema: Open source' },
+    signup: { text: 'No phone number or email needed: a random Threema ID. Paid app.', src: 'https://threema.ch/en/open-source', srcLabel: 'threema.ch' },
+  },
+  {
+    app: 'Session', review: '/reviews/session/',
+    e2ee: { text: 'Always on.', src: 'https://getsession.org/faq', srcLabel: 'Session FAQ' },
+    metadata: { text: 'Messages are routed through an onion-routing network of community-run nodes to hide IP addresses.', src: 'https://getsession.org/faq', srcLabel: 'Session FAQ' },
+    open: { text: 'Open source.', src: 'https://github.com/session-foundation', srcLabel: 'github.com/session-foundation' },
+    signup: { text: 'No phone number or email: an Account ID generated on your device.', src: 'https://getsession.org/faq', srcLabel: 'Session FAQ' },
+  },
+  {
+    app: 'SimpleX Chat', review: '/reviews/simplex/',
+    e2ee: { text: 'Always on (double ratchet, with post-quantum key exchange).', src: 'https://simplex.chat/', srcLabel: 'simplex.chat' },
+    metadata: { text: 'No user identifiers of any kind; contacts connect through one-time links and per-contact message queues.', src: 'https://simplex.chat/', srcLabel: 'simplex.chat' },
+    open: { text: 'Clients and servers are open source.', src: 'https://github.com/simplex-chat/simplex-chat', srcLabel: 'GitHub' },
+    signup: { text: 'No phone number, email or username.', src: 'https://simplex.chat/', srcLabel: 'simplex.chat' },
+  },
+  {
+    app: 'Wire', review: '/reviews/wire/',
+    e2ee: { text: 'Always on for messages, files and calls.', src: 'https://wire.com/en/security', srcLabel: 'Wire Security' },
+    metadata: { text: 'Company-run service based in the EU; see Wire’s security page for what is stored.', src: 'https://wire.com/en/security', srcLabel: 'Wire Security' },
+    open: { text: 'Open source.', src: 'https://github.com/wireapp', srcLabel: 'github.com/wireapp' },
+    signup: { text: 'Email address (personal accounts) or organisation account.', src: 'https://wire.com/en/security', srcLabel: 'Wire Security' },
+  },
+  {
+    app: 'Element (Matrix)', review: '/reviews/element/',
+    e2ee: { text: 'On by default for private chats; can be turned off for public rooms.', src: 'https://element.io/features/end-to-end-encryption', srcLabel: 'Element' },
+    metadata: { text: 'Federated: the homeserver you choose (or run yourself) sees room membership and timing data.', src: 'https://element.io/features/end-to-end-encryption', srcLabel: 'Element' },
+    open: { text: 'Clients and the Synapse server are open source.', src: 'https://github.com/element-hq', srcLabel: 'github.com/element-hq' },
+    signup: { text: 'Username on a homeserver; email or phone only if that server asks.', src: 'https://element.io/features/end-to-end-encryption', srcLabel: 'Element' },
+  },
+  {
+    app: 'XChat (X)', review: '/what-is-xchat/',
+    e2ee: { text: 'X describes XChat as end-to-end encrypted. No protocol specification or independent audit had been published at the time of writing.', src: 'https://help.x.com/en/using-x/encrypted-direct-messages', srcLabel: 'X Help Center' },
+    metadata: { text: 'Tied to your X account, so X’s account and usage data applies.', src: 'https://help.x.com/en/using-x/encrypted-direct-messages', srcLabel: 'X Help Center' },
+    open: { text: 'Closed source.', src: 'https://apps.apple.com/us/app/xchat/id6760873038', srcLabel: 'App Store listing' },
+    signup: { text: 'X account; no separate phone number needed.', src: 'https://apps.apple.com/us/app/xchat/id6760873038', srcLabel: 'App Store listing' },
+  },
+];
+
+const cols: { key: 'e2ee' | 'metadata' | 'open' | 'signup'; label: string }[] = [
+  { key: 'e2ee', label: 'End-to-end encryption' },
+  { key: 'metadata', label: 'Metadata & server data' },
+  { key: 'open', label: 'Open source' },
+  { key: 'signup', label: 'What you need to sign up' },
+];
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'Messaging App Encryption Comparison Table (with Sources)',
+  dateModified,
+  author: { '@type': 'Organization', name: 'XChat Hub' },
+  mainEntityOfPage: 'https://xchat.directory/messaging-app-encryption-comparison',
+};
+---
+
+<Layout
+  title="Messaging App Encryption Comparison Table (Sourced)"
+  description="Signal, WhatsApp, Telegram, iMessage, Messenger, Threema, Session, SimpleX, Wire, Element and XChat compared on end-to-end encryption, metadata, open source and sign-up requirements, with a source link for every cell."
+  jsonLd={articleJsonLd}
+  canonicalPath="/messaging-app-encryption-comparison"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'Messaging App Encryption Comparison', url: 'https://xchat.directory/messaging-app-encryption-comparison' },
+  ]}
+>
+  <article>
+    <section class="section hero">
+      <div class="container">
+        <span class="eyebrow">Reference table · Updated {dateModified}</span>
+        <h1>Messaging app encryption comparison table</h1>
+        <p class="lead text-secondary prose-body">
+          Eleven popular messengers compared on four facts: whether chats are end-to-end encrypted by default, what the operator says about metadata,
+          whether the code is open source, and what you must hand over to sign up. Every cell links to the official page it is based on, so you can check it and cite it.
+        </p>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="cmp-wrap">
+          <table class="cmp">
+            <thead>
+              <tr><th scope="col">App</th>{cols.map((c) => <th scope="col">{c.label}</th>)}</tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr>
+                  <th scope="row">{r.review ? <a href={r.review}>{r.app}</a> : r.app}</th>
+                  {cols.map((c) => (
+                    <td>
+                      {r[c.key].text}{' '}
+                      <a class="src" href={r[c.key].src} rel="noopener nofollow" target="_blank">[{r[c.key].srcLabel}]</a>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-secondary small">Sources were checked on {dateModified}. Policies change; if you spot something out of date, tell us on the <a href="/contact">contact page</a>.</p>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container prose-body">
+        <h2>How to read this table</h2>
+        <ul>
+          <li><strong>End-to-end encryption</strong> protects message content from the operator. It says nothing about who you talk to, when, or how often: that is <strong>metadata</strong>.</li>
+          <li><strong>Open source</strong> lets outsiders check that the app does what the company says. Open clients with a closed server (Telegram, Threema) still let you verify the encryption on your device.</li>
+          <li><strong>Sign-up requirements</strong> decide how easily an account can be linked to your real identity. A phone number is usually tied to an ID document.</li>
+        </ul>
+        <p>For a ranked recommendation, see <a href="/best-encrypted-messaging-apps/">the best encrypted messaging apps</a>, or head-to-head pages such as <a href="/compare/signal-vs-telegram/">Signal vs Telegram</a> and <a href="/compare/signal-vs-threema/">Signal vs Threema</a>.</p>
+        <h2>Cite this table</h2>
+        <p>You are welcome to reference or reproduce this table in articles, classes and guides. Please link to <code>https://xchat.directory/messaging-app-encryption-comparison</code> so readers get the updated version.</p>
+      </div>
+    </section>
+  </article>
+</Layout>
+
+<style>
+  .cmp-wrap { overflow-x: auto; }
+  .cmp { width: 100%; border-collapse: collapse; font-size: 0.9rem; min-width: 900px; }
+  .cmp th, .cmp td { border: 1px solid var(--border, #2a2a2a); padding: 0.6rem; vertical-align: top; text-align: left; }
+  .cmp thead th { position: sticky; top: 0; background: var(--bg-elevated, #111); }
+  .cmp .src { font-size: 0.75rem; white-space: nowrap; }
+  .small { font-size: 0.85rem; margin-top: 0.75rem; }
+</style>
