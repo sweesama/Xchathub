@@ -1,0 +1,437 @@
+---
+/**
+ * zh/xchat-groups.astro — XChat 群组中文指南
+ *
+ * SEO：GSC 中 "xchat群组" / "xchat 群组" 排在第 21–22 名，落地页是英文的 /groups。
+ * 这一页用中文回答同一个搜索意图：去哪找群、怎么加入、怎么建群、上限多少，
+ * 再把流量导回 /groups 和英文详细教程。所有数字都来自 src/data/xchat.json。
+ */
+import Layout from '../../layouts/Layout.astro';
+import {
+  XCHAT_APP_STORE_URL,
+  XCHAT_GROUP_LIMIT,
+  XCHAT_IOS_REQUIREMENT,
+  XCHAT_LAUNCH_DISPLAY,
+  XCHAT_ANDROID_LAUNCH_DISPLAY,
+  XCHAT_ANDROID_PLAY_STORE_URL,
+} from '../../data/xchat';
+import { GROUP_CATEGORY_META } from '../../data/groupCategoryMeta';
+
+const dateModified = '2026-10-14';
+const categoryCount = GROUP_CATEGORY_META.length;
+
+const steps = [
+  {
+    n: 1,
+    title: '找到真实的群组邀请链接',
+    body: 'XChat 的公开群链接都以 <code>https://x.com/i/chat/group_join/</code> 开头。可以在 <a href="/groups">XChat Hub 群组目录</a>按主题浏览，或者看群主在 X 上置顶的推文。其他格式的链接都不是 XChat 群链接。',
+  },
+  {
+    n: 2,
+    title: '在装了 XChat 的设备上打开',
+    body: `iPhone / iPad（需要 ${XCHAT_IOS_REQUIREMENT}）装好 XChat 后直接点链接即可。Android 可以用官方 App，或者在浏览器登录 <a href="/web">chat.x.com</a> 后粘贴链接；电脑同样用 chat.x.com。`,
+  },
+  {
+    n: 3,
+    title: '点击“Request to Join”（申请加入）',
+    body: 'XChat 会先显示群名、简介、成员数和管理员。点申请加入后，按钮变成 Pending（等待中）。',
+  },
+  {
+    n: 4,
+    title: '等管理员批准',
+    body: '管理员在群资料里审核申请，通过后你会收到通知，群会出现在收件箱里。如果 48 小时还没通过，可以换一个同主题的群。',
+  },
+];
+
+const faqs = [
+  {
+    q: 'XChat 群组最多能有多少人？',
+    a: `目前上限是 ${XCHAT_GROUP_LIMIT} 人。热门群满员后可能暂停邀请，可以换一个同主题、人数较少的群。`,
+  },
+  {
+    q: 'XChat 群组是公开的吗？',
+    a: '群链接默认不公开列出，拿到链接的人才能申请加入，而且要管理员批准。XChat 官方没有群组总目录，<a href="/groups">XChat Hub</a> 收录的是群主自愿公开的链接。',
+  },
+  {
+    q: '加群需要 X Premium 吗？',
+    a: '不需要。XChat 本身免费，加入普通公开群不需要订阅。',
+  },
+  {
+    q: '管理员能看到我的手机号或 IP 吗？',
+    a: '不能。管理员只能看到你的 X 用户名、头像和认证标识。',
+  },
+  {
+    q: 'XChat 群和 X Communities（社群）是一回事吗？',
+    a: '不是。XChat 群是私信里的群聊，需要邀请链接加入；Communities 是 X 时间线上的公开讨论区。两者的区别和社群功能的变化可以看<a href="/communities-shutdown">这篇说明</a>。',
+  },
+  {
+    q: '怎样把自己的群收录到目录？',
+    a: '先按<a href="/how-to-create-group-link">建群教程</a>打开公开链接，再到<a href="/list-your-group">提交页面</a>填写，免费。',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: 'zh-CN',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') },
+  })),
+};
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'XChat 群组指南：去哪找群、怎么加入、怎么建群',
+  inLanguage: 'zh-CN',
+  dateModified,
+  author: { '@type': 'Organization', name: 'XChat Hub' },
+  mainEntityOfPage: 'https://xchat.directory/zh/xchat-groups',
+};
+---
+
+<Layout
+  title="XChat 群组指南：去哪找群、怎么加入、怎么建群（中文）"
+  description={`XChat 群组中文指南：去哪找真实的 XChat 群链接，iPhone、Android 和电脑怎么加群，群上限 ${XCHAT_GROUP_LIMIT} 人，以及怎样建群并提交到目录。`}
+  jsonLd={articleJsonLd}
+  canonicalPath="/zh/xchat-groups"
+  ogImage="/og-groups.png"
+  ogImageAlt="XChat 群组中文指南 — xchat.directory"
+  lang="zh-CN"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'XChat 群组指南', url: 'https://xchat.directory/zh/xchat-groups' },
+  ]}
+>
+  <article>
+    <section class="section hero">
+      <div class="container">
+        <span class="eyebrow">中文指南 · 更新于 {dateModified}</span>
+        <h1>XChat 群组指南：去哪找群、怎么加入、怎么建群</h1>
+        <p class="lead text-secondary prose-body">
+          XChat 是 X 的独立聊天应用，iOS 版于 {XCHAT_LAUNCH_DISPLAY} 上线，Android 版于 {XCHAT_ANDROID_LAUNCH_DISPLAY} 上线。
+          它的群聊通过邀请链接加入，没有官方的公开群列表。这页用中文讲清楚找群、加群、建群的流程和常见问题。
+        </p>
+        <div class="cta-buttons">
+          <a href="/groups" class="btn btn-primary btn-lg">浏览 XChat 群组目录 →</a>
+          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">下载 XChat（iOS）</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="tldr-card">
+          <h2>一分钟总结</h2>
+          <ol>
+            <li>真实群链接以 <code>https://x.com/i/chat/group_join/</code> 开头。</li>
+            <li>去哪找：<a href="/groups">XChat Hub 目录</a>（{categoryCount} 个分类）、群主的推文、熟人分享。</li>
+            <li>怎么加：点链接 → Request to Join → 等管理员批准。</li>
+            <li>每个群最多 {XCHAT_GROUP_LIMIT} 人。</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section steps-section" id="steps">
+      <div class="container">
+        <h2 class="section-title">怎么加入 XChat 群组</h2>
+        <div class="steps">
+          {steps.map((s) => (
+            <article class="step-card">
+              <div class="step-num" aria-hidden="true">{s.n}</div>
+              <div class="step-body">
+                <h3>{s.title}</h3>
+                <p class="text-secondary" set:html={s.body} />
+              </div>
+            </article>
+          ))}
+        </div>
+        <p class="prose-body text-secondary" style="max-width:760px;margin:1rem auto 0">
+          链接打不开、一直 Pending 等问题，可以看英文版的<a href="/how-to-join-xchat-group#troubleshooting">加群排错说明</a>。
+        </p>
+      </div>
+    </section>
+
+    <section class="section-sm content-section" id="where">
+      <div class="container">
+        <h2>去哪找 XChat 群</h2>
+        <ul class="feature-list">
+          {GROUP_CATEGORY_META.map((c) => (
+            <li><a href={`/groups/${c.slug}`}>{c.emoji} {c.label}</a></li>
+          ))}
+        </ul>
+        <div class="callout callout-warning">
+          <strong>注意：</strong>匿名机器人账号发的“XChat 邀请”、经过不明短链跳转的链接，或者要求你输入 X 密码“验证”的页面，都不是真正的 XChat 群。加群从来不需要密码。
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm content-section" id="create">
+      <div class="container">
+        <h2>怎么创建自己的 XChat 群</h2>
+        <p class="prose-body text-secondary">
+          在 XChat 里新建群聊，至少拉一位成员，给群起名，然后进入 Group invite link，打开 Group link 开关，就能把链接分享出去，之后在群里审批加入申请。完整步骤见<a href="/how-to-create-group-link">建群与生成邀请链接教程</a>。
+          想让更多人找到你的群，可以<a href="/list-your-group">免费提交到 XChat Hub 目录</a>。
+        </p>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="container">
+        <h2 class="section-title">常见问题</h2>
+        <div class="faq-list">
+          {faqs.map((f) => (
+            <details class="faq-item">
+              <summary>{f.q}</summary>
+              <p class="text-secondary" set:html={f.a} />
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section related-section">
+      <div class="container">
+        <h2 class="section-title">下一步</h2>
+        <div class="related-grid">
+          <a href="/groups" class="related-card"><h3>XChat 群组目录 →</h3><p class="text-secondary">按主题浏览公开群链接。</p></a>
+          <a href="/what-is-xchat" class="related-card"><h3>XChat 是什么 →</h3><p class="text-secondary">功能、加密和与 X 私信的区别（英文）。</p></a>
+          <a href={XCHAT_ANDROID_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" class="related-card"><h3>XChat Android 版 →</h3><p class="text-secondary">Google Play 下载。</p></a>
+          <a href="/xchat-group-chat-safety" class="related-card"><h3>群聊防骗清单 →</h3><p class="text-secondary">识别假群链接和常见骗局（英文）。</p></a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .hero h1 {
+    max-width: 820px;
+    margin: 0 auto 1.25rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .lead {
+    font-size: 1.0625rem;
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .tldr-card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .tldr-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .tldr-card ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.85;
+  }
+
+  .tldr-card li + li {
+    margin-top: 0.375rem;
+  }
+
+  .tldr-card code,
+  .content-section code {
+    background: rgba(29, 155, 240, 0.08);
+    color: var(--accent-light);
+    padding: 0.1em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  .steps {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .step-card {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(29, 155, 240, 0.12);
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .step-body h3 {
+    font-size: 1.0625rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-tip {
+    margin-top: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    border-left: 3px solid var(--accent);
+    background: rgba(29, 155, 240, 0.05);
+    border-radius: 0 0.375rem 0.375rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .content-section h2 {
+    max-width: 760px;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+  }
+
+  .content-section .prose-body,
+  .content-section .feature-list,
+  .content-section .faq-list {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .feature-list li + li {
+    margin-top: 0.5rem;
+  }
+
+  .feature-list a {
+    color: var(--accent-light);
+  }
+
+  .callout {
+    max-width: 760px;
+    margin: 1.5rem auto 0;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+  }
+
+  .callout-warning {
+    background: rgba(245, 197, 24, 0.06);
+    border-color: rgba(245, 197, 24, 0.25);
+    color: #f5c518;
+  }
+
+  .faq-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .faq-item p {
+    margin-top: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .related-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .related-card h3 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-card p {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+</style>
