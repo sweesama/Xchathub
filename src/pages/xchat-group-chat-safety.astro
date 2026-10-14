@@ -1,0 +1,400 @@
+---
+/**
+ * xchat-group-chat-safety.astro — 公开 XChat 群聊的安全清单
+ *
+ * SEO：GSC 中 "xchat group chats"(#8)、"xchat group chat"(#11)、"x chat groups"(#8)、
+ * "x group chat"(#24) 都落在 /groups。浏览公开群的人最常遇到的问题是假链接和骗局，
+ * 这页给出可核对的检查清单，再导回 /groups 和加群教程。不含任何统计数字。
+ */
+import Layout from '../layouts/Layout.astro';
+import { XCHAT_GROUP_LIMIT } from '../data/xchat';
+
+const dateModified = '2026-10-14';
+
+const checks = [
+  {
+    n: 1,
+    title: 'Check the link format before you tap',
+    body: 'A real XChat group invite always starts with <code>https://x.com/i/chat/group_join/</code>. Shortened links, look-alike domains or links to a “verification” site are not XChat invites.',
+  },
+  {
+    n: 2,
+    title: 'Never type your X password to “verify” a group',
+    body: 'Joining a group only takes a tap on <strong>Request to Join</strong> inside XChat or <a href="/web">chat.x.com</a>. Any page that asks for your password, a 2FA code or a wallet seed phrase is phishing.',
+  },
+  {
+    n: 3,
+    title: 'Look at who runs the group',
+    body: 'The join preview shows the group name, member count and admin handles. Open the admins’ X profiles: a real owner usually has a history of posts about the topic and often pins the invite link.',
+  },
+  {
+    n: 4,
+    title: 'Treat guaranteed returns and “support” DMs as red flags',
+    body: 'Groups that promise guaranteed profits, ask you to send crypto first, or are followed by private messages from “admins” or “support staff” fit common investment and impersonation scams. Real admins rarely DM new members to ask for money.',
+  },
+  {
+    n: 5,
+    title: 'Use XChat’s privacy controls',
+    body: 'Admins only see your X handle, profile photo and badges, not your phone number. XChat also offers disappearing messages and screenshot blocking for conversations you want to keep private.',
+  },
+  {
+    n: 6,
+    title: 'Leave and report when something feels wrong',
+    body: 'Open the group info panel and tap <strong>Leave Group</strong>; leaving is silent. Report spam or scam accounts through X so they can be reviewed.',
+  },
+];
+
+const faqs = [
+  {
+    q: 'Are public XChat group chats safe to join?',
+    a: 'Most are ordinary topic groups, but anyone with a link can create one. Check the link format and the admins before joining, and never share passwords, codes or money with group members.',
+  },
+  {
+    q: 'Can other members see my phone number in an XChat group?',
+    a: 'No. Members and admins see your X handle, profile photo and verification badges.',
+  },
+  {
+    q: 'How many people can be in an XChat group chat?',
+    a: `The current cap is ${XCHAT_GROUP_LIMIT} members per group.`,
+  },
+  {
+    q: 'How does XChat Hub review listed groups?',
+    a: 'Groups are submitted by their owners through <a href="/list-your-group">List your group</a> and reviewed before they appear in the <a href="/groups">directory</a>. If a listed group turns out to be a scam, tell us through the <a href="/contact">contact page</a> and we remove it.',
+  },
+];
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a.replace(/<[^>]+>/g, '') },
+  })),
+};
+
+const articleJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: 'XChat Group Chat Safety: How to Spot Fake Invite Links and Scam Groups',
+  dateModified,
+  author: { '@type': 'Organization', name: 'XChat Hub' },
+  mainEntityOfPage: 'https://xchat.directory/xchat-group-chat-safety',
+};
+---
+
+<Layout
+  title="XChat Group Chat Safety: Spot Fake Links & Scam Groups"
+  description="A practical checklist for joining public XChat group chats: how to recognise a real invite link, check the admins, avoid crypto and impersonation scams, and leave or report a group."
+  jsonLd={articleJsonLd}
+  canonicalPath="/xchat-group-chat-safety"
+  ogImage="/og-groups.png"
+  ogImageAlt="XChat group chat safety checklist — xchat.directory"
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'XChat Group Chat Safety', url: 'https://xchat.directory/xchat-group-chat-safety' },
+  ]}
+>
+  <article>
+    <section class="section hero">
+      <div class="container">
+        <span class="eyebrow">Guide · Updated {dateModified}</span>
+        <h1>XChat Group Chat Safety: How to Spot Fake Invite Links and Scam Groups</h1>
+        <p class="lead text-secondary prose-body">
+          Public XChat group chats are a quick way to find people who share an interest, but an invite link can be posted by anyone.
+          Run through this six-point checklist before you join a group you found online.
+        </p>
+        <div class="cta-buttons">
+          <a href="/groups" class="btn btn-primary btn-lg">Browse XChat Group Chats →</a>
+          <a href="/how-to-join-xchat-group" class="btn btn-secondary btn-lg">How to join a group</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="tldr-card">
+          <h2>Quick Summary</h2>
+          <ol>
+            <li>Real invites start with <code>https://x.com/i/chat/group_join/</code>.</li>
+            <li>Joining never needs your password, a 2FA code or a payment.</li>
+            <li>Check the admins’ X profiles before you request to join.</li>
+            <li>Leave and report groups that push guaranteed profits or private “support” DMs.</li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <section class="section steps-section" id="checklist">
+      <div class="container">
+        <h2 class="section-title">The Checklist</h2>
+        <div class="steps">
+          {checks.map((s) => (
+            <article class="step-card">
+              <div class="step-num" aria-hidden="true">{s.n}</div>
+              <div class="step-body">
+                <h3>{s.title}</h3>
+                <p class="text-secondary" set:html={s.body} />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="faq-list">
+          {faqs.map((f) => (
+            <details class="faq-item">
+              <summary>{f.q}</summary>
+              <p class="text-secondary" set:html={f.a} />
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section related-section">
+      <div class="container">
+        <h2 class="section-title">Next Steps</h2>
+        <div class="related-grid">
+          <a href="/groups" class="related-card"><h3>XChat Groups Directory →</h3><p class="text-secondary">Browse public group chats by topic.</p></a>
+          <a href="/how-to-join-xchat-group" class="related-card"><h3>How to Join an XChat Group →</h3><p class="text-secondary">Step-by-step, with troubleshooting.</p></a>
+          <a href="/how-to-create-group-link" class="related-card"><h3>Create a Group Link →</h3><p class="text-secondary">Run your own group chat.</p></a>
+          <a href="/zh/xchat-groups" class="related-card" hreflang="zh-CN"><h3>XChat 群组中文指南 →</h3><p class="text-secondary">Chinese-language guide to XChat groups.</p></a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .hero h1 {
+    max-width: 820px;
+    margin: 0 auto 1.25rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .lead {
+    font-size: 1.0625rem;
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .tldr-card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .tldr-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.125rem;
+  }
+
+  .tldr-card ol {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.85;
+  }
+
+  .tldr-card li + li {
+    margin-top: 0.375rem;
+  }
+
+  .tldr-card code,
+  .content-section code {
+    background: rgba(29, 155, 240, 0.08);
+    color: var(--accent-light);
+    padding: 0.1em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  .steps {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .step-card {
+    display: flex;
+    gap: 1.25rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .step-num {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(29, 155, 240, 0.12);
+    color: var(--accent-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .step-body h3 {
+    font-size: 1.0625rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .step-tip {
+    margin-top: 0.625rem;
+    padding: 0.625rem 0.875rem;
+    border-left: 3px solid var(--accent);
+    background: rgba(29, 155, 240, 0.05);
+    border-radius: 0 0.375rem 0.375rem 0;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .content-section h2 {
+    max-width: 760px;
+    margin: 0 auto 1rem;
+    font-size: 1.5rem;
+  }
+
+  .content-section .prose-body,
+  .content-section .feature-list,
+  .content-section .faq-list {
+    max-width: 760px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .feature-list {
+    list-style: disc;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+
+  .feature-list li + li {
+    margin-top: 0.5rem;
+  }
+
+  .feature-list a {
+    color: var(--accent-light);
+  }
+
+  .callout {
+    max-width: 760px;
+    margin: 1.5rem auto 0;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+  }
+
+  .callout-warning {
+    background: rgba(245, 197, 24, 0.06);
+    border-color: rgba(245, 197, 24, 0.25);
+    color: #f5c518;
+  }
+
+  .faq-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .faq-item p {
+    margin-top: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .related-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .related-card h3 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-card p {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+</style>
