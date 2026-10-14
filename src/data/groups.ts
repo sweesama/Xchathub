@@ -27,7 +27,12 @@ export interface GroupDirectoryEntry {
   inviteUrl: string;
   sourceType: 'official' | 'community-submitted' | 'public-post' | 'manual-review';
   sourceUrl?: string;
-  verifiedAt?: string;
+  /**
+   * Verified-on date for manual curation. ISO calendar date (YYYY-MM-DD) a person
+   * last confirmed this invite still opens the group. Set it by hand — do not
+   * invent a date for a link nobody checked. Shown on cards as "Verified on".
+   */
+  verifiedAt: string;
   listingTier?: GroupListingTier;
   pinnedUntil?: string;
   paidAt?: string;
@@ -57,8 +62,42 @@ export function getGroupListingBadge(group: GroupDirectoryEntry): string {
   return GROUP_LISTING_BADGES[getGroupListingTier(group)];
 }
 
-// Keep this list empty until real XChat groups can be verified.
-// Once invite links exist, add reviewed entries here.
+/**
+ * Paid featured ($9 / 30 days) and lifetime pin ($29) tiers.
+ * Keep false until the directory is large enough that a pin is meaningful.
+ * Flipping this back on restores the pricing cards, form options, and Offer schema.
+ */
+export const PAID_GROUP_LISTINGS_ENABLED = false;
+
+/** English indefinite article for a category label ("an AI group", "a Crypto group"). */
+export function indefiniteArticle(word: string): 'a' | 'an' {
+  return /^[aeiou]/i.test(word.trim()) ? 'an' : 'a';
+}
+
+/** Format a verified-on ISO date for display. Uses UTC so YYYY-MM-DD does not shift a day. */
+export function formatVerifiedOn(isoDate: string, locale = 'en-US'): string {
+  const date = new Date(`${isoDate}T00:00:00Z`);
+  if (Number.isNaN(date.getTime())) return isoDate;
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(date);
+}
+
+/**
+ * hreflang pair for the English directory and the Chinese groups guide.
+ * These answer the same "where are the XChat groups" query in two languages.
+ */
+export const GROUP_DIRECTORY_ALTERNATES = [
+  { hreflang: 'en', href: 'https://xchat.directory/groups' },
+  { hreflang: 'zh-CN', href: 'https://xchat.directory/zh/xchat-groups' },
+  { hreflang: 'x-default', href: 'https://xchat.directory/groups' },
+] as const;
+
+// Add a group only after a person has opened the invite and checked the topic.
+// Set verifiedAt to the day of that check. Do not invent groups or dates.
 export const GROUP_DIRECTORY: GroupDirectoryEntry[] = [
   {
     slug: 'griiim-pod-business-podcast',
@@ -90,6 +129,18 @@ export const GROUP_DIRECTORY: GroupDirectoryEntry[] = [
   },
 ];
 
+export function latestVerifiedAt(groups: readonly Pick<GroupDirectoryEntry, 'verifiedAt'>[] = GROUP_DIRECTORY): string | null {
+  let latest = '';
+  for (const group of groups) {
+    if (group.verifiedAt > latest) latest = group.verifiedAt;
+  }
+  return latest || null;
+}
+
+export function countGroupsInCategory(category: string): number {
+  return GROUP_DIRECTORY.filter((group) => group.category === category).length;
+}
+
 export const SORTED_GROUP_DIRECTORY = [...GROUP_DIRECTORY].sort((a, b) => {
   const tierDiff = GROUP_LISTING_RANK[getGroupListingTier(a)] - GROUP_LISTING_RANK[getGroupListingTier(b)];
   if (tierDiff !== 0) return tierDiff;
@@ -115,9 +166,12 @@ export const GROUP_ENTRY_TEMPLATE: GroupDirectoryEntry = {
   listingTier: 'free',
 };
 
-export const GROUP_DISCOVERY_SIGNALS = [
-  'Public invite links shared on X posts, profiles, or replies',
-  'Direct submissions from owners through Telegram community',
-  'Links surfaced in screenshots, launch threads, or tutorials',
-  'Manual review after the app launches to confirm how invites work',
+export const GROUP_LISTING_RULES = [
+  'The invite is a public https://x.com/i/chat/group_join/ link, and someone has opened it.',
+  'The topic is a normal community. Adult, follow-for-follow, and engagement-bait groups stay out.',
+  'Each listing stores a verified-on date (verifiedAt). Update that date only when you re-check the link.',
+  'Owners can ask for removal from the card on the group, or by emailing hello@xchat.directory.',
 ];
+
+/** @deprecated Use GROUP_LISTING_RULES. Kept so older notes still import. */
+export const GROUP_DISCOVERY_SIGNALS = GROUP_LISTING_RULES;

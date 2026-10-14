@@ -2,14 +2,8 @@
 /**
  * index.astro — 首页
  *
- * 2026 重新定位：从 "XChat only" 目录站升级为 "加密通信垂类 + XChat hub" 站点
- *
- * 三大模块（新定位）：
- *   1. Hero — 加密通信垂类 + XChat 自家位置
- *   2. Top ranked apps 卡片（前 5 名）
- *   3. XChat 保留位（自家品牌）
- *   4. How we rate（信誉信号）
- *   5. FAQ
+ * 首屏是 XChat 群组 + 使用指南（搜索点击主要落在 /groups）。
+ * 加密通信评测和对比留在页面后半，入口还在，不再当首页标题。
  */
 import Layout from '../layouts/Layout.astro';
 import AppIcon from '../components/AppIcon.astro';
@@ -18,16 +12,19 @@ import {
   XCHAT_ANDROID_DOWNLOADS,
   XCHAT_IOS_REQUIREMENT,
   XCHAT_LAUNCH_DISPLAY,
-  XCHAT_TELEGRAM_CHANNEL_URL,
 } from '../data/xchat';
 import {
   getAppsRanked,
   formatPrice,
   formatEncryption,
 } from '../data/messagingApps';
+import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
+import { SORTED_GROUP_DIRECTORY } from '../data/groups';
+
+const listedGroupCount = SORTED_GROUP_DIRECTORY.length;
+const categoryCount = GROUP_CATEGORY_META.length;
 
 const buildDate = new Date();
-const buildDateISO = buildDate.toISOString().split('T')[0];
 const buildDateDisplay = buildDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long' });
 const currentYear = 2026;
 
@@ -36,6 +33,16 @@ const topFive = ranked.slice(0, 5);
 
 /* FAQ — 改写为新垂类 */
 const faqs = [
+  {
+    question: 'Where can I find XChat groups?',
+    answer:
+      'XChat has no built-in group search. The <a href="/groups">XChat groups directory</a> lists public invite links after a manual check, and each card shows the date that link was last verified. There is also a <a href="/zh/xchat-groups">Chinese guide</a>.',
+  },
+  {
+    question: 'How do I join an XChat group?',
+    answer:
+      'Open a link that starts with https://x.com/i/chat/group_join/ in the XChat app, then tap Request to Join and wait for an admin. The <a href="/how-to-join-xchat-group">join guide</a> covers iOS, Android, and the web client, plus what to do if a request stays pending.',
+  },
   {
     question: 'What is the safest encrypted messaging app?',
     answer:
@@ -110,10 +117,12 @@ const pageJsonLd = {
 ---
 
 <Layout
-  title="Encrypted Messenger Directory: Compare 10 Secure Chat Apps"
-  description="The honest directory for encrypted messaging. Compare Signal, Threema, Wire, Session, WhatsApp, XChat and more. Long-form reviews and the 2026 ranked list."
+  title="XChat Groups & Guides — Public Links and How to Join"
+  description="Find public XChat group links and the guides for joining, creating, and using group chat safely. Encrypted messenger comparisons are further down the page."
   jsonLd={pageJsonLd}
-  canonicalPath=""
+  canonicalPath="/"
+  ogImage="/og-groups.png"
+  ogImageAlt="XChat groups and guides — public invite links and how to join"
   breadcrumbs={[{ name: 'Home', url: 'https://xchat.directory/' }]}
 >
   <!-- ========================= HERO ========================= -->
@@ -123,59 +132,105 @@ const pageJsonLd = {
       <div class="status-bar">
         <span class="badge badge-live">
           <span class="pulse-dot pulse-dot-live"></span>
-          {ranked.length} apps reviewed
+          Live on iOS &amp; Android
         </span>
         <span class="badge badge-pending">
           <span class="pulse-dot pulse-dot-pending"></span>
-          Updated monthly
+          Launched {XCHAT_LAUNCH_DISPLAY}
         </span>
       </div>
 
       <h1 class="hero-title">
-        Find the <span class="text-gradient">encrypted messenger</span><br />
-        that actually protects you.
+        <span class="text-gradient">XChat Groups &amp; Guides</span>
       </h1>
       <p class="hero-subtitle text-secondary prose-body">
-        An independent, ad-free directory of encrypted messaging apps.
-        Side-by-side comparisons, in-depth reviews, and a transparent ranking —
-        covering Signal, Threema, Wire, XChat, and a dozen others.
-        Updated <time datetime={buildDateISO}>{buildDateDisplay} {currentYear}</time>.
+        XChat has no built-in group search. Browse public groups we have checked by hand,
+        then use the guides to join, create a link, or stay safer in group chat.
+        Encrypted messenger comparisons are <a href="#encryption">further down this page</a>.
       </p>
 
       <div class="cta-buttons hero-cta">
-        <a href="/best-encrypted-messaging-apps" class="btn btn-primary btn-lg">
-          See the 2026 Ranking →
+        <a href="/groups" class="btn btn-primary btn-lg">
+          Browse XChat Groups →
         </a>
-        <a href="/reviews/signal/" class="btn btn-secondary btn-lg">
-          Read Signal Review
+        <a href="/how-to-join-xchat-group" class="btn btn-secondary btn-lg">
+          How to Join a Group
         </a>
       </div>
 
       <div class="stats-row">
         <div class="stat-item">
-          <span class="stat-number">{ranked.length}</span>
-          <span class="stat-label text-muted">Apps Reviewed</span>
+          <span class="stat-number">{listedGroupCount}</span>
+          <span class="stat-label text-muted">Groups listed</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">100%</span>
-          <span class="stat-label text-muted">Independent</span>
+          <span class="stat-number">{categoryCount}</span>
+          <span class="stat-label text-muted">Categories</span>
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">0</span>
-          <span class="stat-label text-muted">Sponsored Picks</span>
+          <span class="stat-number">Manual</span>
+          <span class="stat-label text-muted">Verified by hand</span>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ========================= TOP 5 RANKED ========================= -->
-  <section class="section" id="top-picks">
+  <!-- ========================= GUIDES ========================= -->
+  <section class="section" id="guides">
     <div class="container">
       <div class="section-header">
-        <h2>The 2026 Top 5</h2>
-        <p class="text-secondary">Our editorial ranking based on encryption, audits, ownership, and real-world use. <a href="/best-encrypted-messaging-apps">See all 10 ranked →</a></p>
+        <h2>Groups, then the guides</h2>
+        <p class="text-secondary">Start with the directory. The short guides cover joining, creating a link, and what to watch for in a group chat. <a href="/zh/xchat-groups" hreflang="zh-CN" lang="zh-CN">中文指南</a> covers the same questions in Chinese.</p>
+      </div>
+      <div class="compare-grid">
+        <a href="/groups" class="compare-card compare-card-xchat">
+          <div class="compare-vs">Directory</div>
+          <h3>Public XChat groups</h3>
+          <p class="text-secondary">{listedGroupCount} groups listed, each with the date the invite was last checked.</p>
+          <span class="card-arrow">→</span>
+        </a>
+        <a href="/how-to-join-xchat-group" class="compare-card">
+          <div class="compare-vs">Guide</div>
+          <h3>How to join a group</h3>
+          <p class="text-secondary">Open an invite on iOS, Android, or chat.x.com, then request to join.</p>
+          <span class="card-arrow">→</span>
+        </a>
+        <a href="/how-to-create-group-link" class="compare-card">
+          <div class="compare-vs">Guide</div>
+          <h3>Create a group link</h3>
+          <p class="text-secondary">Turn on a public invite and share a link that starts with x.com/i/chat/group_join/.</p>
+          <span class="card-arrow">→</span>
+        </a>
+        <a href="/xchat-group-chat-safety" class="compare-card">
+          <div class="compare-vs">Guide</div>
+          <h3>Group chat safety</h3>
+          <p class="text-secondary">What a real XChat invite looks like, and which links to leave alone.</p>
+          <span class="card-arrow">→</span>
+        </a>
+        <a href="/what-is-xchat" class="compare-card">
+          <div class="compare-vs">Guide</div>
+          <h3>What is XChat?</h3>
+          <p class="text-secondary">Platforms, encryption, group limits, and how it differs from X Communities.</p>
+          <span class="card-arrow">→</span>
+        </a>
+        <a href="/zh/xchat-groups" class="compare-card" hreflang="zh-CN" lang="zh-CN">
+          <div class="compare-vs">中文</div>
+          <h3>XChat 群组指南</h3>
+          <p class="text-secondary">去哪找群、怎么加入、怎么建群，用中文写的同一套说明。</p>
+          <span class="card-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= ENCRYPTION COMPARISONS ========================= -->
+  <section class="section" id="encryption">
+    <div class="container">
+      <div class="section-header">
+        <h2>Encrypted messenger comparisons</h2>
+        <p class="text-secondary">If you are choosing an app, not looking for an XChat group, the ranking below is independent and unsponsored. <a href="/best-encrypted-messaging-apps">See all {ranked.length} ranked →</a></p>
       </div>
 
       <div class="top-list">
@@ -260,20 +315,20 @@ const pageJsonLd = {
               <span class="pulse-dot pulse-dot-live"></span>
               Live on iOS & Android
             </span>
-            <h2>Still tracking XChat? We've got you.</h2>
+            <h2>XChat group chat is live on iOS and Android</h2>
             <p class="text-secondary">
-              XChat is one of the apps we track closely. Get the Android status, group directory,
-              web access guide, and side-by-side comparisons — everything an XChat user needs.
+              The app launched {XCHAT_LAUNCH_DISPLAY}. Use the directory for public invites,
+              the Android page for the Play Store build, and the web guide for chat.x.com.
             </p>
             <div class="cta-buttons">
-              <a href="/what-is-xchat" class="btn btn-primary btn-sm">
-                XChat Overview →
+              <a href="/groups" class="btn btn-primary btn-sm">
+                Public Groups →
               </a>
               <a href="/android" class="btn btn-secondary btn-sm">
-                Android Status
+                Android
               </a>
-              <a href="/groups" class="btn btn-secondary btn-sm">
-                Public Groups
+              <a href="/web" class="btn btn-secondary btn-sm">
+                Web
               </a>
             </div>
           </div>
@@ -360,16 +415,16 @@ const pageJsonLd = {
   <section class="section final-cta-section">
     <div class="container">
       <div class="final-cta-card">
-        <h2 class="final-cta-title">Stay in the loop</h2>
+        <h2 class="final-cta-title">List a group, or compare apps</h2>
         <p class="text-secondary final-cta-desc">
-          We re-rank the top 10 every quarter. Get notified when major changes hit — like a new audit, a protocol change, or a Messenger shutdown.
+          Group listings are free and reviewed by hand. The encryption rankings stay on this site if you are still choosing a messenger.
         </p>
         <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
-          <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-            Subscribe on Telegram
+          <a href="/list-your-group" class="btn btn-primary btn-lg">
+            List your group
           </a>
-          <a href="/faq" class="btn btn-secondary btn-lg">
-            See all FAQs →
+          <a href="/best-encrypted-messaging-apps" class="btn btn-secondary btn-lg">
+            Messenger ranking →
           </a>
         </div>
       </div>

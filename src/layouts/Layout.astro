@@ -17,6 +17,10 @@ interface Props {
   ogImageAlt?: string;
   /** 页面语言，默认 en（中文页传 zh-CN） */
   lang?: string;
+  /** 空分类页等薄页面：noindex,follow。有内容后不要传。 */
+  noindex?: boolean;
+  /** 互指的语言版本。传入后替换默认的单语言 hreflang。 */
+  alternates?: { hreflang: string; href: string }[];
 }
 
 const {
@@ -28,6 +32,8 @@ const {
   ogImage = '/og-image.png',
   ogImageAlt = 'XChat Hub — Public XChat groups directory & launch tracker',
   lang = 'en',
+  noindex = false,
+  alternates = [],
 } = Astro.props;
 
 const breadcrumbSchema = breadcrumbs.length > 0 ? {
@@ -68,7 +74,11 @@ const orgSchema = {
   <title>{title}</title>
   <meta name="description" content={description} />
   <link rel="canonical" href={canonicalUrl} />
-  <link rel="alternate" hreflang={lang} href={canonicalUrl} />
+  {alternates.length > 0 ? (
+    alternates.map((alt) => <link rel="alternate" hreflang={alt.hreflang} href={alt.href} />)
+  ) : (
+    <link rel="alternate" hreflang={lang} href={canonicalUrl} />
+  )}
 
   <!-- ==== Search Console Verification ====
        拿到 token 后填入以下 content="..." 即可。空 token 时不输出 meta，避免空 meta 污染 head。
@@ -121,7 +131,10 @@ const orgSchema = {
   <meta name="twitter:image" content={`${siteUrl}${ogImage}`} />
   <meta name="twitter:image:alt" content={ogImageAlt} />
 
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large" />
+  <meta
+    name="robots"
+    content={noindex ? 'noindex, follow' : 'index, follow, max-snippet:-1, max-image-preview:large'}
+  />
 
   <script is:inline type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
 

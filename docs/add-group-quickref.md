@@ -43,7 +43,7 @@
   inviteUrl: 'https://x.com/i/chat/group_join/g.../...',
   sourceType: 'public-post',                         // 默认值
   sourceUrl: 'https://x.com/some_user/status/...',   // 可选 — 链接发现来源
-  verifiedAt: '2026-04-27',                          // 自动填今天
+  verifiedAt: '2026-04-27',                          // 核实日期（verified on）。必须是有人当天打开过邀请链接，不要编造
   listingTier: 'free',                               // 默认 free
 }
 ```

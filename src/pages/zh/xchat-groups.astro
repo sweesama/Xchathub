@@ -16,6 +16,11 @@ import {
   XCHAT_ANDROID_PLAY_STORE_URL,
 } from '../../data/xchat';
 import { GROUP_CATEGORY_META } from '../../data/groupCategoryMeta';
+import { GROUP_DIRECTORY_ALTERNATES, SORTED_GROUP_DIRECTORY, formatVerifiedOn, latestVerifiedAt } from '../../data/groups';
+
+const listedCount = SORTED_GROUP_DIRECTORY.length;
+const lastVerified = latestVerifiedAt();
+const lastVerifiedLabel = lastVerified ? formatVerifiedOn(lastVerified, 'zh-CN') : '';
 
 const dateModified = '2026-10-14';
 const categoryCount = GROUP_CATEGORY_META.length;
@@ -100,6 +105,7 @@ const articleJsonLd = {
   ogImage="/og-groups.png"
   ogImageAlt="XChat 群组中文指南 — xchat.directory"
   lang="zh-CN"
+  alternates={[...GROUP_DIRECTORY_ALTERNATES]}
   breadcrumbs={[
     { name: 'Home', url: 'https://xchat.directory/' },
     { name: 'XChat 群组指南', url: 'https://xchat.directory/zh/xchat-groups' },
@@ -127,7 +133,7 @@ const articleJsonLd = {
           <h2>一分钟总结</h2>
           <ol>
             <li>真实群链接以 <code>https://x.com/i/chat/group_join/</code> 开头。</li>
-            <li>去哪找：<a href="/groups">XChat Hub 目录</a>（{categoryCount} 个分类）、群主的推文、熟人分享。</li>
+            <li>去哪找：<a href="/groups">XChat Hub 目录</a>（目前 {listedCount} 个已核实的群，{categoryCount} 个分类）、群主的推文、熟人分享。</li>
             <li>怎么加：点链接 → Request to Join → 等管理员批准。</li>
             <li>每个群最多 {XCHAT_GROUP_LIMIT} 人。</li>
           </ol>
@@ -163,6 +169,11 @@ const articleJsonLd = {
             <li><a href={`/groups/${c.slug}`}>{c.emoji} {c.label}</a></li>
           ))}
         </ul>
+        <p class="prose-body text-secondary">
+          目录里的每一条都会标上核实日期（Verified on），也就是有人打开邀请链接、确认群还在的那一天。
+          {lastVerified && <>目前最新的核实日期是 {lastVerifiedLabel}。</>}
+          没有群的分类页不会放进站点地图，等该分类有群之后会自动加回去。
+        </p>
         <div class="callout callout-warning">
           <strong>注意：</strong>匿名机器人账号发的“XChat 邀请”、经过不明短链跳转的链接，或者要求你输入 X 密码“验证”的页面，都不是真正的 XChat 群。加群从来不需要密码。
         </div>
@@ -174,7 +185,7 @@ const articleJsonLd = {
         <h2>怎么创建自己的 XChat 群</h2>
         <p class="prose-body text-secondary">
           在 XChat 里新建群聊，至少拉一位成员，给群起名，然后进入 Group invite link，打开 Group link 开关，就能把链接分享出去，之后在群里审批加入申请。完整步骤见<a href="/how-to-create-group-link">建群与生成邀请链接教程</a>。
-          想让更多人找到你的群，可以<a href="/list-your-group">免费提交到 XChat Hub 目录</a>。
+          想让更多人找到你的群，可以<a href="/list-your-group">免费提交到 XChat Hub 目录</a>。目前只收免费收录，不提供付费置顶。
         </p>
       </div>
     </section>
