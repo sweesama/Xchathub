@@ -28,16 +28,16 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 
 ## Primary Pages
 
-- [Home](https://xchat.directory/): Overview hub linking to all tools — launch status, group directory, web access guide, Android tracker, comparisons.
-- [Groups Directory](https://xchat.directory/groups/): Curated, searchable list of public XChat group invite links submitted by group owners. Browsable by category (Crypto, Tech, AI, News, Sports, Gaming, Business, Entertainment, Education, Local).
-- [Groups by category](https://xchat.directory/groups/crypto/): Each of the 10 categories has its own SEO-optimised landing page with examples of group types, intro copy, and a submission CTA. Pattern: \`/groups/{slug}/\` for slugs crypto, tech, ai, news, sports, gaming, business, entertainment, education, local.
+- [Home](https://xchat.directory/): XChat groups and guides, with encrypted-messenger comparisons further down the page.
+- [Groups Directory](https://xchat.directory/groups/): Public XChat group invite links checked by hand. Each card has a verified-on date. Browsable by category (Crypto, Tech, AI, News, Sports, Gaming, Business, Entertainment, Education, Local).
+- [Groups by category](https://xchat.directory/groups/business/): Category pages exist for every topic, but only categories that currently have groups are in the sitemap. Empty categories are noindex until a group is added. Pattern: \`/groups/{slug}/\` for slugs crypto, tech, ai, news, sports, gaming, business, entertainment, education, local.
 - [What Is XChat? (Complete Guide)](https://xchat.directory/what-is-xchat/): Long-form intro — origin story, full feature list, platforms, comparisons, FAQ. Best entry point for users new to XChat.
 - [How to Join an XChat Group](https://xchat.directory/how-to-join-xchat-group/): Step-by-step guide for joining via a public invite link, including troubleshooting (pending requests, expired links, full groups).
 - [Web Access Guide](https://xchat.directory/web/): How to use XChat in a desktop browser via chat.x.com — features supported, limitations vs the iOS app, FAQ.
 - [Android Tracker](https://xchat.directory/android/): Live status of any official XChat Android release plus warnings about fake APKs.
 - [How to Create a Group Link](https://xchat.directory/how-to-create-group-link/): Step-by-step tutorial for group owners to generate and share a public invite URL.
 - [Communities Shutdown](https://xchat.directory/communities-shutdown/): What X Communities users need to do before the shutdown deadline, and how to migrate community membership into XChat groups.
-- [List Your Group](https://xchat.directory/list-your-group/): Free submission form for group owners who want to be listed in the directory.
+- [List Your Group](https://xchat.directory/list-your-group/): Free submission form for group owners. Paid pins are not offered.
 - [FAQ](https://xchat.directory/faq/): Most-asked questions — pricing, age requirements, multi-device, encryption details, Android timeline.
 - [Launch Countdown / Recap](https://xchat.directory/launch-countdown/): Original launch-day live page; now serves as a historical record of the rollout.
 - [vs WhatsApp](https://xchat.directory/vs/whatsapp/), [vs Signal](https://xchat.directory/vs/signal/), [vs Telegram](https://xchat.directory/vs/telegram/): Side-by-side comparisons of features, encryption, group limits, and target audiences.

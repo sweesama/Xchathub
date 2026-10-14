@@ -1,6 +1,8 @@
 # Group Publishing Workflow
 
-Use this when someone submits or pays for an XChat group listing.
+Use this when someone submits an XChat group listing.
+
+Paid featured ($9) and lifetime ($29) cards are hidden. `PAID_GROUP_LISTINGS_ENABLED` in `src/data/groups.ts` is `false`. Do not promise a pin until that flag is turned back on. Every published group needs a real `verifiedAt` date — the day a person opened the invite. Do not invent groups or dates.
 
 ## What is already ready
 

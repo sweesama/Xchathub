@@ -12,6 +12,7 @@
  */
 import type { APIRoute } from 'astro';
 import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
+import { countGroupsInCategory } from '../data/groups';
 import { MESSAGING_APPS } from '../data/messagingApps';
 import lastmodMap from '../data/_lastmod.json';
 
@@ -87,12 +88,15 @@ const comparePages = [
   { path: '/compare/imessage-vs-signal/', priority: 0.9, changefreq: 'monthly' as const },
 ];
 
-/** Groups by category（自动生成）*/
-const categoryPages = GROUP_CATEGORY_META.map((m) => ({
-  path: `/groups/${m.slug}/`,
-  priority: 0.75,
-  changefreq: 'weekly' as const,
-}));
+/** Groups by category. Empty categories stay as pages (noindex) but leave the sitemap
+ *  until at least one group is listed, then they come back on the next build. */
+const categoryPages = GROUP_CATEGORY_META
+  .filter((m) => countGroupsInCategory(m.label) > 0)
+  .map((m) => ({
+    path: `/groups/${m.slug}/`,
+    priority: 0.75,
+    changefreq: 'weekly' as const,
+  }));
 
 const pages = [
   ...corePages,

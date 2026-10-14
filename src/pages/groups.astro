@@ -3,21 +3,25 @@ import Layout from '../layouts/Layout.astro';
 import { XCHAT_GROUP_LIMIT, XCHAT_LAUNCH_DATE, XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
 import {
   GROUP_CATEGORIES,
-  GROUP_DISCOVERY_SIGNALS,
+  GROUP_DIRECTORY_ALTERNATES,
+  GROUP_LISTING_RULES,
   SORTED_GROUP_DIRECTORY,
+  formatVerifiedOn,
   getGroupListingBadge,
   getGroupListingTier,
+  latestVerifiedAt,
 } from '../data/groups';
 import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
 import CategoryIcon from '../components/CategoryIcon.astro';
 
 const groups = SORTED_GROUP_DIRECTORY;
+const lastVerified = latestVerifiedAt(groups);
 
 const groupsJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
   name: 'XChat Groups Directory',
-  description: 'Discover and join public XChat groups and communities once invite links are available.',
+  description: 'Public XChat group invite links checked by hand, each with the date it was last verified.',
   url: 'https://xchat.directory/groups',
 };
 ---
@@ -27,6 +31,7 @@ const groupsJsonLd = {
   description={`Find and join XChat group chats on X: a community-powered directory of XChat group links by topic. Submit your own X chat group in under a minute.`}
   jsonLd={groupsJsonLd}
   canonicalPath="/groups"
+  alternates={[...GROUP_DIRECTORY_ALTERNATES]}
   ogImage="/og-groups.png"
   ogImageAlt="Find and join public XChat groups — directory by xchat.directory"
   breadcrumbs={[
@@ -102,7 +107,7 @@ const groupsJsonLd = {
                   <div class="group-meta">
                     <span class="tag btn-sm group-category">{group.category}</span>
                     {listingBadge && <span class={`group-badge group-badge-${listingTier}`}>{listingBadge}</span>}
-                    {group.verifiedAt && <span class="group-verified">Verified</span>}
+                    <time class="group-verified" datetime={group.verifiedAt}>Verified on {formatVerifiedOn(group.verifiedAt)}</time>
                   </div>
                 </div>
               </div>
@@ -147,12 +152,12 @@ Please confirm by replying within 24h.
               <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
             </svg>
           </div>
-          <h3>Directory Opens When Real Invite Links Exist</h3>
+          <h3>No groups listed right now</h3>
           <p class="text-secondary prose-body">
-            There are no verified public XChat groups listed yet. Once the app launches and invite links can be confirmed, this page will switch from placeholder state to a searchable live directory.
+            XChat is live. This directory stays empty until a person opens a public invite and the topic is a normal community. Nothing is added automatically.
           </p>
           <p class="coming-soon-hint text-muted">
-            Want to help seed it? <a href="/list-your-group">Submit your group</a> or share what you find after launch.
+            Run a group? <a href="/list-your-group">Submit the invite link</a>.
           </p>
         </div>
       )}
@@ -184,15 +189,18 @@ Please confirm by replying within 24h.
   <section class="section-sm">
     <div class="container">
       <div class="card discovery-card">
-        <h2>How We’ll Find Real XChat Groups</h2>
+        <h2>How a group gets listed</h2>
         <p class="text-secondary prose-body">
-          Until XChat is live, the directory is prepared but intentionally empty. We’ll only publish groups after we can verify how invites actually work.
+          XChat launched on <time datetime={XCHAT_LAUNCH_DATE}>{XCHAT_LAUNCH_DISPLAY}</time>. There is no in-app group search, so this page lists public invites only after a manual check.
+          {lastVerified && (
+            <> The newest verified-on date in the directory is <time datetime={lastVerified}>{formatVerifiedOn(lastVerified)}</time>.</>
+          )}
         </p>
         <ul class="discovery-list">
-          {GROUP_DISCOVERY_SIGNALS.map((signal) => <li>{signal}</li>)}
+          {GROUP_LISTING_RULES.map((rule) => <li>{rule}</li>)}
         </ul>
         <p class="text-muted discovery-note">
-          We expect discovery to come first from public posts, owner submissions, screenshots, and manual in-app testing after launch.
+          Dates are the day someone confirmed the link, not a promise the group is still open. Owners and readers can ask us to re-check or remove a listing.
         </p>
       </div>
     </div>
@@ -204,17 +212,17 @@ Please confirm by replying within 24h.
         <div class="submit-header">
           <h2>Want to List Your Group?</h2>
           <p class="text-secondary prose-body">
-            Submit your XChat group for free, or pay once to pin it at the top of its category. Once live data exists, this page is ready to publish it.
+            Submit a public invite for free. We review the link by hand and publish it with the date we verified it.
           </p>
         </div>
         <div class="submit-cta">
           <a href="/list-your-group" class="btn btn-primary btn-lg">
-            See Listing Options
+            List your group
             <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
           </a>
-          <p class="text-muted" style="font-size: 0.8125rem; margin-top: 0.875rem;">Free listing available · $9 featured pin · $29 lifetime</p>
+          <p class="text-muted" style="font-size: 0.8125rem; margin-top: 0.875rem;">Free listing · manual review</p>
         </div>
       </div>
     </div>

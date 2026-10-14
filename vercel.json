@@ -4,9 +4,15 @@
   "trailingSlash": false,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/",
       "has": [{ "type": "host", "value": "www.xchat.directory" }],
-      "destination": "https://xchat.directory/:path*",
+      "destination": "https://xchat.directory/",
+      "permanent": true
+    },
+    {
+      "source": "/:path+",
+      "has": [{ "type": "host", "value": "www.xchat.directory" }],
+      "destination": "https://xchat.directory/:path+",
       "permanent": true
     }
   ],
