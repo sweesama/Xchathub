@@ -46,6 +46,7 @@ const corePages = [
   { path: '/how-to-create-group-link/', priority: 0.85, changefreq: 'weekly' as const },
   { path: '/how-to-join-xchat-group/', priority: 0.85, changefreq: 'weekly' as const },
   { path: '/xchat-group-chat-safety/', priority: 0.8, changefreq: 'monthly' as const },
+  { path: '/messaging-app-encryption-comparison/', priority: 0.8, changefreq: 'monthly' as const },
   { path: '/zh/xchat-groups/', priority: 0.8, changefreq: 'monthly' as const },
   { path: '/what-is-xchat/', priority: 0.85, changefreq: 'weekly' as const },
   { path: '/web/', priority: 0.85, changefreq: 'weekly' as const },
