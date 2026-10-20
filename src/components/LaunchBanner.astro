@@ -2,11 +2,12 @@
 /**
  * LaunchBanner.astro — 顶部通知条。
  * 用户关闭后存 localStorage，下次不再显示。
- * iOS 与 Android 都已上线，文案与首页保持一致。/zh 用中文。
+ * iOS 与 Android 都已上线，文案与首页保持一致。/zh 用中文，/es 用西班牙语。
  */
 import { XCHAT_ANDROID_PLAY_STORE_URL, XCHAT_APP_STORE_URL } from '../data/xchat';
 
 const isZh = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/');
+const isEs = Astro.url.pathname === '/es' || Astro.url.pathname.startsWith('/es/');
 ---
 
 <div id="launch-banner" class="launch-banner" hidden>
@@ -20,6 +21,13 @@ const isZh = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/
           ·
           <a href={XCHAT_ANDROID_PLAY_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">Google Play</a>
         </>
+      ) : isEs ? (
+        <>
+          XChat ya está en <strong>iOS y Android</strong> —
+          <a href={XCHAT_APP_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">App Store</a>
+          ·
+          <a href={XCHAT_ANDROID_PLAY_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">Google Play</a>
+        </>
       ) : (
         <>
           XChat is <strong>live on iOS &amp; Android</strong> —
@@ -29,7 +37,7 @@ const isZh = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/
         </>
       )}
     </span>
-    <button id="launch-banner-close" class="banner-close" aria-label="Dismiss">
+    <button id="launch-banner-close" class="banner-close" aria-label={isEs ? 'Cerrar' : 'Dismiss'}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
         <path d="M18 6L6 18M6 6l12 12" />
       </svg>

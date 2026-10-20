@@ -30,6 +30,8 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 
 - [Home](https://xchat.directory/): XChat groups and guides, with encrypted-messenger comparisons further down the page.
 - [Groups Directory](https://xchat.directory/groups/): Public XChat group invite links checked by hand. Each card has a verified-on date. Browsable by category (Crypto, Tech, AI, News, Sports, Gaming, Business, Entertainment, Education, Local).
+- [Grupos de XChat (español)](https://xchat.directory/es/grupos-xchat): Spanish page for the query "grupos xchat". It lists only groups already stored in the directory data, with the same invite links and verified-on dates.
+- [XChat 群组指南](https://xchat.directory/zh/xchat-groups): Chinese guide to finding, joining, and creating XChat groups.
 - [Groups by category](https://xchat.directory/groups/business/): Category pages exist for every topic, but only categories that currently have groups are in the sitemap. Empty categories are noindex until a group is added. Pattern: \`/groups/{slug}/\` for slugs crypto, tech, ai, news, sports, gaming, business, entertainment, education, local.
 - [What Is XChat? (Complete Guide)](https://xchat.directory/what-is-xchat/): Long-form intro — origin story, full feature list, platforms, comparisons, FAQ. Best entry point for users new to XChat.
 - [How to Join an XChat Group](https://xchat.directory/how-to-join-xchat-group/): Step-by-step guide for joining via a public invite link, including troubleshooting (pending requests, expired links, full groups).

@@ -87,11 +87,12 @@ export function formatVerifiedOn(isoDate: string, locale = 'en-US'): string {
 }
 
 /**
- * hreflang pair for the English directory and the Chinese groups guide.
- * These answer the same "where are the XChat groups" query in two languages.
+ * hreflang set for the English directory and the language guides.
+ * These answer the same "where are the XChat groups" query.
  */
 export const GROUP_DIRECTORY_ALTERNATES = [
   { hreflang: 'en', href: 'https://xchat.directory/groups' },
+  { hreflang: 'es', href: 'https://xchat.directory/es/grupos-xchat' },
   { hreflang: 'zh-CN', href: 'https://xchat.directory/zh/xchat-groups' },
   { hreflang: 'x-default', href: 'https://xchat.directory/groups' },
 ] as const;
