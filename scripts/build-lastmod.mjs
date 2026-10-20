@@ -48,6 +48,8 @@ const coreMap = {
   '/terms/': 'src/pages/terms.astro',
   '/contact/': 'src/pages/contact.astro',
   '/affiliate-disclosure/': 'src/pages/affiliate-disclosure.astro',
+  '/zh/xchat-groups/': 'src/pages/zh/xchat-groups.astro',
+  '/es/grupos-xchat/': 'src/pages/es/grupos-xchat.astro',
 };
 Object.assign(pathToFile, coreMap);
 
