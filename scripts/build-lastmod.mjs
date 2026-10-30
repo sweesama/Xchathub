@@ -50,6 +50,7 @@ const coreMap = {
   '/affiliate-disclosure/': 'src/pages/affiliate-disclosure.astro',
   '/zh/xchat-groups/': 'src/pages/zh/xchat-groups.astro',
   '/es/grupos-xchat/': 'src/pages/es/grupos-xchat.astro',
+  '/pt/grupos-xchat/': 'src/pages/pt/grupos-xchat.astro',
 };
 Object.assign(pathToFile, coreMap);
 

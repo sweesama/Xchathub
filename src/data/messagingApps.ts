@@ -553,8 +553,8 @@ export const MESSAGING_APPS: MessagingApp[] = [
     ownerCountry: 'United States',
     foundedYear: 2026,
     sources: [
-      { label: 'Apple App Store listing', url: 'https://apps.apple.com/us/app/xchat/id6760873038' },
-      { label: 'Google Play Store listing', url: 'https://play.google.com/store/apps/details?id=com.x.chat' },
+      { label: 'chat.x.com', url: 'https://chat.x.com' },
+      { label: 'X', url: 'https://x.com' },
       { label: 'XChat Hub overview', url: 'https://xchat.directory/what-is-xchat/' },
     ],
     pros: [
@@ -576,9 +576,7 @@ export const MESSAGING_APPS: MessagingApp[] = [
       'Casual encrypted conversations inside the X ecosystem',
     ],
     editorScore: 7.9,
-    lastReviewedISO: '2026-07-13',
-    appStoreId: '6760873038',
-    playStorePackage: 'com.x.chat',
+    lastReviewedISO: '2026-10-30',
   },
 ];
 

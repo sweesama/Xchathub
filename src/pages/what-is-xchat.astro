@@ -11,18 +11,15 @@
  */
 import Layout from '../layouts/Layout.astro';
 import {
-  XCHAT_APP_STORE_URL,
+  XCHAT_CHAT_URL,
   XCHAT_GROUP_LIMIT,
   XCHAT_LAUNCH_DISPLAY,
   XCHAT_TELEGRAM_CHANNEL_URL,
-  XCHAT_ANDROID_LAUNCH_DISPLAY,
-  XCHAT_ANDROID_PLAY_STORE_URL,
-  XCHAT_IOS_REQUIREMENT,
-  XCHAT_APP_SIZE,
+  XCHAT_STANDALONE_APP_REMOVED_ON,
 } from '../data/xchat';
 
 const datePublished = '2026-04-25';
-const dateModified = '2026-04-27';
+const dateModified = '2026-10-30';
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
@@ -45,7 +42,7 @@ const articleJsonLd = {
 const faqs = [
   {
     q: 'Is XChat free to use?',
-    a: 'Yes. XChat is a free download on the Apple App Store and there are no per-message fees. Some features such as paid-subscriber badges depend on having an X Premium subscription.',
+    a: 'Yes. Chat inside the X app and at chat.x.com is free to open, and there are no per-message fees. The separate X Chat app is no longer a store download. Some features such as paid-subscriber badges depend on having an X Premium subscription.',
   },
   {
     q: 'Is XChat the same as Twitter DMs?',
@@ -53,7 +50,7 @@ const faqs = [
   },
   {
     q: 'Is XChat available on Android?',
-    a: `Yes. XChat for Android launched on <strong>${XCHAT_ANDROID_LAUNCH_DISPLAY}</strong> and is available on <a href="${XCHAT_ANDROID_PLAY_STORE_URL}" target="_blank" rel="noopener noreferrer">Google Play</a>, published by X Corp (package <code>com.x.chat</code>). Only install from Google Play — any "XChat.apk" from another website is unsafe. <a href="/android">See our Android page</a> for the verified listing.`,
+    a: `Yes. Use chat inside the X app, or open <a href="${XCHAT_CHAT_URL}" target="_blank" rel="noopener noreferrer">chat.x.com</a>. The separate Android listing was removed around <strong>${XCHAT_STANDALONE_APP_REMOVED_ON}</strong>. Any "XChat.apk" from another website is unsafe. <a href="/android">See the Android page</a>.`,
   },
   {
     q: 'Can I use XChat without an X account?',
@@ -95,15 +92,15 @@ const faqJsonLd = {
         <span class="eyebrow">Guide · Updated {dateModified}</span>
         <h1>What Is XChat? The Complete Guide to Elon Musk's Encrypted Messenger</h1>
         <p class="lead text-secondary prose-body">
-          XChat is X Corp's standalone end-to-end encrypted messaging app, built to replace
+          XChat is X Corp's end-to-end encrypted chat, built to replace
           Twitter Direct Messages with private, encrypted, group-friendly chat.
-          It launched on iPhone and iPad on <strong>{XCHAT_LAUNCH_DISPLAY}</strong>.
-          Here is exactly what it does, who can use it, and how it compares to WhatsApp,
-          Signal and Telegram.
+          It launched on <strong>{XCHAT_LAUNCH_DISPLAY}</strong>. The separate store apps
+          were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}. Chat now lives in the X app
+          and at chat.x.com.
         </p>
         <div class="cta-buttons">
-          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-            Download XChat (iOS) →
+          <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            Open chat.x.com →
           </a>
           <a href="/groups" class="btn btn-secondary btn-lg">Browse Public Groups</a>
         </div>
@@ -116,9 +113,9 @@ const faqJsonLd = {
         <div class="tldr-card">
           <h2>TL;DR — XChat in 30 seconds</h2>
           <ul>
-            <li><strong>What:</strong> A standalone, end-to-end encrypted messaging app from X Corp (formerly Twitter).</li>
+            <li><strong>What:</strong> End-to-end encrypted chat from X Corp (formerly Twitter), now inside the X app.</li>
             <li><strong>Who built it:</strong> Engineers at X under Elon Musk's direction; not the same team as WhatsApp or Signal.</li>
-            <li><strong>Platforms:</strong> iPhone &amp; iPad (iOS), plus <a href="/android">Android on Google Play</a> since {XCHAT_ANDROID_LAUNCH_DISPLAY}. A web version lives at <a href="/web">chat.x.com</a>.</li>
+            <li><strong>Where:</strong> The X app on iPhone, iPad, and Android, plus <a href="/web">chat.x.com</a>. The separate store apps were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}.</li>
             <li><strong>Group size:</strong> Up to {XCHAT_GROUP_LIMIT} members at launch, expanding toward 1,000 members per group.</li>
             <li><strong>Account:</strong> Requires an existing X (Twitter) account.</li>
             <li><strong>Cost:</strong> Free. No ads inside the messenger.</li>
@@ -136,7 +133,7 @@ const faqJsonLd = {
           <ol>
             <li><a href="#origins">Where XChat came from</a></li>
             <li><a href="#features">What XChat actually does</a></li>
-            <li><a href="#platforms">Platforms &amp; how to install</a></li>
+            <li><a href="#platforms">Where to open XChat</a></li>
             <li><a href="#groups">Public groups and invite links</a></li>
             <li><a href="#vs">XChat vs WhatsApp, Signal, Telegram</a></li>
             <li><a href="#privacy">Privacy &amp; encryption notes</a></li>
@@ -184,18 +181,18 @@ const faqJsonLd = {
     <!-- PLATFORMS -->
     <section class="section-sm content-section" id="platforms">
       <div class="container">
-        <h2>Platforms &amp; How to Install XChat</h2>
+        <h2>Where to Open XChat</h2>
         <p class="prose-body text-secondary">
-          XChat is currently available on:
+          The separate X Chat app is gone from the App Store and Google Play. Open chat here instead:
         </p>
         <ul class="feature-list">
-          <li><strong>iPhone &amp; iPad</strong> — {XCHAT_IOS_REQUIREMENT} via the <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer">Apple App Store</a>. Free download, {XCHAT_APP_SIZE}.</li>
-          <li><strong>Web (any device)</strong> — <a href="/web">chat.x.com</a> in any modern browser, including Android phones. Sign in with your X account.</li>
-          <li><strong>Android</strong> — <a href="/android">live on Google Play</a> since {XCHAT_ANDROID_LAUNCH_DISPLAY} (com.x.chat, by X Corp). Only install from Google Play; avoid third-party APKs.</li>
-          <li><strong>Desktop</strong> — no native macOS/Windows app. Web version works.</li>
+          <li><strong>X app</strong> — iPhone, iPad, and Android. Chat is inside the main X app. There is no separate download.</li>
+          <li><strong>Web (any device)</strong> — <a href="/web">chat.x.com</a> in any modern browser. Sign in with your X account.</li>
+          <li><strong>Android without a new install</strong> — <a href="/android">use the X app or chat.x.com</a>. Do not install a third-party APK.</li>
+          <li><strong>Desktop</strong> — no native macOS/Windows app. The web version works.</li>
         </ul>
         <div class="callout callout-warning">
-          <strong>Warning:</strong> Any "XChat APK" or "XChat for Android" download outside the official channels is unsafe. There is no legitimate Android build as of {dateModified}.
+          <strong>Warning:</strong> Any "XChat APK" or "XChat for Android" download is unsafe. The old store listings 404 as of {dateModified}.
         </div>
       </div>
     </section>

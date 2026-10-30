@@ -7,17 +7,17 @@
  * 群名、描述和邀请链接只来自 src/data/groups.ts，不手写、不编造。
  */
 import Layout from '../../layouts/Layout.astro';
-import { XCHAT_IOS_REQUIREMENT } from '../../data/xchat';
 import { GROUP_CATEGORY_META } from '../../data/groupCategoryMeta';
 import {
   GROUP_DIRECTORY_ALTERNATES,
   SORTED_GROUP_DIRECTORY,
+  formatGroupCheckLabel,
   formatVerifiedOn,
 } from '../../data/groups';
 
 const groups = SORTED_GROUP_DIRECTORY;
 const listedCount = groups.length;
-const dateModified = '2026-10-20';
+const dateModified = '2026-10-30';
 const updatedLabel = formatVerifiedOn(dateModified, 'es');
 
 const CATEGORY_ES: Record<string, string> = {
@@ -43,7 +43,7 @@ const faqs = [
   },
   {
     q: '¿Estos grupos de XChat están inventados?',
-    a: 'No. Un grupo solo se publica si el enlace es público, alguien lo abrió y el tema es una comunidad normal. «Verificado el» es el día de esa comprobación, no una promesa de que el grupo siga abierto.',
+    a: 'No. Un grupo solo se publica si el enlace es público y el tema es una comunidad normal. «Verificado el» significa que alguien abrió el enlace en XChat ese día. «Fuente revisada el» significa que se revisó la fuente pública y el formato del enlace: no es una verificación dentro de la app, ni una promesa de que el grupo siga abierto. No incluimos contenido NSFW ni grupos de sígueme y te sigo.',
   },
   {
     q: '¿Hace falta X Premium para unirse?',
@@ -55,7 +55,7 @@ const faqs = [
   },
 ];
 
-const pageDescription = 'Grupos de XChat con enlaces públicos ya comprobados. Solo aparecen grupos cuyo enlace alguien abrió y verificó. Mira cómo unirte o envía el tuyo.';
+const pageDescription = 'Grupos de XChat con enlaces públicos. Cada ficha indica si el enlace se abrió en XChat o si solo se revisó la fuente. Mira cómo unirte o envía el tuyo.';
 
 const collectionJsonLd = {
   '@context': 'https://schema.org',
@@ -112,7 +112,7 @@ const faqJsonLd = {
           {listedCount > 0 ? (
             <>
               ¿Buscas grupos XChat? Aquí están los grupos de XChat con un enlace público que ya está en el directorio.
-              Ahora hay {listedCount}. Alguien abrió cada enlace y anotó la fecha.
+              Ahora hay {listedCount}. Cada ficha dice si el enlace se abrió en XChat o si solo se revisó la fuente.
               El listado en inglés está en el <a href="/groups">directorio de grupos</a>.
             </>
           ) : (
@@ -153,7 +153,7 @@ const faqJsonLd = {
                         <span>{categoryLabel}</span>
                       )}
                       <span aria-hidden="true">·</span>
-                      <time datetime={group.verifiedAt}>Verificado el {formatVerifiedOn(group.verifiedAt, 'es')}</time>
+                      <time datetime={group.verifiedAt}>{formatGroupCheckLabel(group, 'es')}</time>
                       {group.members > 0 && (
                         <>
                           <span aria-hidden="true">·</span>
@@ -184,7 +184,7 @@ const faqJsonLd = {
           <h2>Cómo unirse a un grupo de XChat</h2>
           <ol>
             <li>Usa un enlace que empiece por <code>https://x.com/i/chat/group_join/</code>. Otros formatos no son enlaces de grupo de XChat.</li>
-            <li>Ábrelo en un iPhone o iPad con XChat ({XCHAT_IOS_REQUIREMENT}), en la app de Android o en el navegador, en <a href="/web">chat.x.com</a>.</li>
+            <li>Ábrelo dentro de la app principal de X, en el iPhone, en Android o en el navegador en <a href="/web">chat.x.com</a>. La app independiente de X Chat ya no está en la App Store ni en Google Play.</li>
             <li>Pulsa “Request to Join”. XChat muestra el nombre del grupo antes de enviar la solicitud.</li>
             <li>Espera a que un administrador la apruebe. El grupo aparece en la bandeja cuando te aceptan.</li>
           </ol>
@@ -224,6 +224,7 @@ const faqJsonLd = {
           <a href="/groups" class="related-card" hreflang="en"><h3>Directorio en inglés →</h3><p class="text-secondary">Los mismos grupos, con búsqueda y categorías.</p></a>
           <a href="/how-to-join-xchat-group" class="related-card"><h3>Cómo unirse →</h3><p class="text-secondary">Guía detallada, en inglés.</p></a>
           <a href="/zh/xchat-groups" class="related-card" hreflang="zh-CN" lang="zh-CN"><h3>XChat 群组指南 →</h3><p class="text-secondary">La misma explicación, en chino.</p></a>
+          <a href="/pt/grupos-xchat" class="related-card" hreflang="pt-BR" lang="pt-BR"><h3>Grupos XChat em português →</h3><p class="text-secondary">A mesma lista, em português do Brasil.</p></a>
           <a href="/list-your-group" class="related-card"><h3>Enviar tu grupo →</h3><p class="text-secondary">Inclusión gratis, con revisión manual.</p></a>
         </div>
       </div>

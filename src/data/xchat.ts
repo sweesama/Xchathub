@@ -1,6 +1,7 @@
 import data from './xchat.json';
 
-export const XCHAT_APP_STORE_URL = data.appStoreUrl;
+export const XCHAT_CHAT_URL = data.chatUrl;
+export const XCHAT_STANDALONE_APP_REMOVED_ON = data.standaloneAppRemovedOn;
 export const XCHAT_TELEGRAM_CHANNEL_URL = data.telegramChannelUrl;
 export const XCHAT_TELEGRAM_COMMUNITY_URL = data.telegramCommunityUrl;
 export const XCHAT_LAUNCH_ISO = data.launchIso;
@@ -15,11 +16,6 @@ export const XCHAT_ANDROID_STATUS = data.androidStatus;
 export const XCHAT_ANDROID_LAUNCH_ISO = data.androidLaunchIso;
 export const XCHAT_ANDROID_LAUNCH_DATE = data.androidLaunchDate;
 export const XCHAT_ANDROID_LAUNCH_DISPLAY = data.androidLaunchDisplay;
-export const XCHAT_ANDROID_DOWNLOADS = data.androidDownloads;
-export const XCHAT_ANDROID_RATING = data.androidRating;
-export const XCHAT_ANDROID_REVIEWS = data.androidReviews;
-export const XCHAT_ANDROID_LAST_VERIFIED = data.androidLastVerified;
-export const XCHAT_ANDROID_PLAY_STORE_URL = data.androidPlayStoreUrl;
 export const XCHAT_GROUP_LIMIT = data.groupLimit;
 export const XCHAT_HAS_LAUNCHED = data.hasLaunched;
 export const XCHAT_VIDEO_CALLS = data.videoCalls;

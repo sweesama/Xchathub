@@ -29,19 +29,29 @@ const androidScheme = (pkg: string) => buildAffiliateUrl(`https://play.google.co
 
 const hasIos = !!app.appStoreId;
 const hasAndroid = !!app.playStorePackage;
+const hasStoreLinks = hasIos || hasAndroid;
+const isXchat = app.slug === 'xchat';
+const fallbackBlurb = hasStoreLinks
+  ? `Direct download links to ${app.name} on the official app stores — affiliate links, but we don't change the price.`
+  : `Open ${app.name} from the official site.`;
 ---
 
-<aside class="app-cta card" aria-label={`Download ${app.name}`}>
+<aside class="app-cta card" aria-label={hasStoreLinks ? `Download ${app.name}` : `Open ${app.name}`}>
   <div class="cta-head">
     <AppIcon app={app} class="cta-monogram" />
     <div>
       <h3>Try {app.name}</h3>
       <p class="text-secondary">
-        {blurb ?? `Direct download links to ${app.name} on the official app stores — affiliate links, but we don't change the price.`}
+        {blurb ?? fallbackBlurb}
       </p>
     </div>
   </div>
   <div class="cta-buttons">
+    {isXchat && (
+      <a href="https://chat.x.com" class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer">
+        Open chat.x.com
+      </a>
+    )}
     {hasIos && (
       <a href={iosScheme(app.appStoreId!)} class="btn btn-primary btn-sm" target="_blank" rel="nofollow noopener noreferrer sponsored">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -62,9 +72,11 @@ const hasAndroid = !!app.playStorePackage;
       Official site
     </a>
   </div>
-  <p class="cta-foot text-muted">
-    We may earn a commission if you download via these links. We never recommend apps in exchange for revenue.
-  </p>
+  {hasStoreLinks && (
+    <p class="cta-foot text-muted">
+      We may earn a commission if you download via these links. We never recommend apps in exchange for revenue.
+    </p>
+  )}
 </aside>
 
 <style>

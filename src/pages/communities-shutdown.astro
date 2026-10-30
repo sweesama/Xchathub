@@ -12,11 +12,10 @@
  */
 import Layout from '../layouts/Layout.astro';
 import {
-  XCHAT_APP_STORE_URL,
+  XCHAT_CHAT_URL,
   XCHAT_GROUP_LIMIT,
   XCHAT_LAUNCH_DISPLAY,
   XCHAT_TELEGRAM_CHANNEL_URL,
-  XCHAT_IOS_REQUIREMENT,
 } from '../data/xchat';
 
 /* Communities 官方关停时间 */
@@ -43,8 +42,8 @@ const articleJsonLd = {
 const migrationSteps = [
   {
     step: 1,
-    title: 'Download XChat',
-    desc: `Get the app free from the <a href="${XCHAT_APP_STORE_URL}" target="_blank" rel="noopener noreferrer">App Store</a> (${XCHAT_IOS_REQUIREMENT}). Sign in with your existing X account — no new signup needed.`,
+    title: 'Open chat in the X app',
+    desc: `Use chat inside the X app, or open <a href="${XCHAT_CHAT_URL}" target="_blank" rel="noopener noreferrer">chat.x.com</a>. The separate X Chat app is no longer a store download. Sign in with your existing X account.`,
   },
   {
     step: 2,
@@ -109,8 +108,8 @@ const features = [
       )}
 
       <div class="cta-buttons">
-        <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-          Download XChat Free
+        <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          Open chat.x.com
         </a>
         <a href="/how-to-create-group-link" class="btn btn-secondary btn-lg">
           How to Create Group Link
@@ -209,13 +208,13 @@ const features = [
       <div class="final-card">
         <h2>Don't Let Your Community Die</h2>
         <p class="text-secondary prose-body">
-          Thousands of X Communities are looking for a new home. XChat is the only option 
-          built by X Corp, with the same account system your members already have. 
-          Download now and start migrating before your old Community disappears.
+          Thousands of X Communities are looking for a new home. XChat is built by X Corp
+          and uses the same account your members already have. Open chat in the X app
+          or at chat.x.com and start migrating.
         </p>
         <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
-          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-            Download on App Store
+          <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            Open chat.x.com
           </a>
           <a href={XCHAT_TELEGRAM_CHANNEL_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
             Get Migration Tips on Telegram

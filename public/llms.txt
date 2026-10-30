@@ -6,29 +6,30 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 
 ## Key Facts About XChat
 
-- **Status**: Launched on April 24, 2026 — generally available on iOS via the Apple App Store.
-- **Platforms**: iOS (iOS 26+, iPhone & iPad) and Android via Google Play (https://play.google.com/store/apps/details?id=com.x.chat). A web client is available at **chat.x.com**. No native desktop client as of this writing.
-- **App Store URL**: https://apps.apple.com/us/app/xchat/id6760873038
+- **Status**: Launched on April 24, 2026. The separate X Chat app was removed from the App Store and Google Play around 2026-09-14. Both old listings 404. Chat lives inside the main X app and at **https://chat.x.com**.
+- **Platforms**: iPhone, iPad, and Android through the X app. Web client at **https://chat.x.com**. No native desktop client. Do not install a third-party APK.
+- **Where to open chat**: https://chat.x.com
 - **Features**: End-to-end encryption, public group invite links (joinable via URL), screenshot blocking with notifications, voice notes, paid-subscriber badges, video calls, disappearing messages.
 - **Group capacity**: 350-member groups at launch, expanding toward 1,000 members per group as roll-out continues.
 - **Languages supported**: 45
-- **App size**: ~164 MB
-- **Age rating**: 17+
+- **Historical app size** (from the removed store listing, not a current download): ~164 MB
+- **Historical age rating** (from the removed store listing): 17+
 - **Sign-up requirement**: An X (formerly Twitter) account is mandatory.
-- **Android status**: Released — launched June 29, 2026 on Google Play (package com.x.chat, by X Corp). Only install from Google Play; any "XChat.apk" from a third-party site is unsafe.
+- **Android status**: Inside the X app. A separate Android app launched June 29, 2026 and was removed around 2026-09-14. Use the X app or https://chat.x.com. Any "XChat.apk" from a third-party site is unsafe.
 - **Communities sunset**: X Communities are scheduled to be discontinued — XChat groups are the official replacement for community-style chat.
 
 ## Primary Pages
 
 - [Home](https://xchat.directory/): XChat groups and guides, with encrypted-messenger comparisons further down the page.
-- [Groups Directory](https://xchat.directory/groups/): Public XChat group invite links checked by hand. Each card has a verified-on date. Browsable by category (Crypto, Tech, AI, News, Sports, Gaming, Business, Entertainment, Education, Local).
-- [Grupos de XChat (español)](https://xchat.directory/es/grupos-xchat): Spanish page for the query "grupos xchat". It lists only groups already stored in the directory data, with the same invite links and verified-on dates.
+- [Groups Directory](https://xchat.directory/groups/): Public XChat group invite links. Cards say "Verified on" only when someone opened the invite in XChat. Newer cards say "Source checked" and are not verified. Browsable by category (Crypto, Tech, AI, News, Sports, Gaming, Business, Entertainment, Education, Local). Empty categories ask visitors to submit a group.
+- [Grupos de XChat (español)](https://xchat.directory/es/grupos-xchat): Spanish page for grupos de XChat. It lists only groups already stored in the directory data.
+- [Grupos XChat (português)](https://xchat.directory/pt/grupos-xchat): Brazilian Portuguese page for the query "grupos xchat". Same listings as the English directory. New groups are labeled source-checked, not verified.
 - [XChat 群组指南](https://xchat.directory/zh/xchat-groups): Chinese guide to finding, joining, and creating XChat groups.
 - [Groups by category](https://xchat.directory/groups/business/): Category pages exist for every topic, but only categories that currently have groups are in the sitemap. Empty categories are noindex until a group is added. Pattern: `/groups/{slug}/` for slugs crypto, tech, ai, news, sports, gaming, business, entertainment, education, local.
 - [What Is XChat? (Complete Guide)](https://xchat.directory/what-is-xchat/): Long-form intro — origin story, full feature list, platforms, comparisons, FAQ. Best entry point for users new to XChat.
 - [How to Join an XChat Group](https://xchat.directory/how-to-join-xchat-group/): Step-by-step guide for joining via a public invite link, including troubleshooting (pending requests, expired links, full groups).
 - [Web Access Guide](https://xchat.directory/web/): How to use XChat in a desktop browser via chat.x.com — features supported, limitations vs the iOS app, FAQ.
-- [Android Tracker](https://xchat.directory/android/): Live status of any official XChat Android release plus warnings about fake APKs.
+- [Android](https://xchat.directory/android/): The separate Play listing is gone. Use the X app or chat.x.com, and avoid fake APKs.
 - [How to Create a Group Link](https://xchat.directory/how-to-create-group-link/): Step-by-step tutorial for group owners to generate and share a public invite URL.
 - [Communities Shutdown](https://xchat.directory/communities-shutdown/): What X Communities users need to do before the shutdown deadline, and how to migrate community membership into XChat groups.
 - [List Your Group](https://xchat.directory/list-your-group/): Free submission form for group owners. Paid pins are not offered.
@@ -44,14 +45,14 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 
 ## How to Use This Site
 
-- **iOS users**: Install XChat directly from the App Store. The site provides setup help, web-fallback instructions, and a directory of public groups to join.
-- **Android users**: Install XChat from **Google Play** (https://play.google.com/store/apps/details?id=com.x.chat, by X Corp). You can also use **chat.x.com** in a mobile browser if you prefer not to install. Do not download third-party "XChat.apk" files.
+- **iOS users**: Open chat inside the X app, or use **https://chat.x.com**. Do not look for a separate X Chat app in the App Store.
+- **Android users**: Open chat inside the X app, or use **https://chat.x.com**. Do not download third-party "XChat.apk" files. The old Play listing 404s.
 - **Web users**: Use chat.x.com after signing in to your X account. Our [web guide](https://xchat.directory/web/) lists supported and unsupported features.
-- **Group owners**: Submit your XChat group invite link via [List Your Group](https://xchat.directory/list-your-group/) or post it in our Telegram community group. We review submissions and list verified groups within 24 hours. We honour owner removal requests at hello@xchat.directory.
+- **Group owners**: Submit your XChat group invite link via [List Your Group](https://xchat.directory/list-your-group/) or post it in our Telegram community group. We review submissions by hand. We do not list NSFW or follow-for-follow groups. We honour owner removal requests at hello@xchat.directory.
 
 ## What We Do NOT Offer
 
-- No APK downloads from this site — install from Google Play only; anything claiming to be "XChat for Android" outside Google Play is unsafe.
+- No APK downloads from this site. There is no official standalone X Chat download. Anything claiming to be "XChat for Android" as an APK is unsafe.
 - No XChat account creation, login, messaging, or relay functionality. We are an informational and directory site, not a chat client.
 - No affiliation with or endorsement by X Corp, Elon Musk, or the official XChat team.
 
@@ -59,7 +60,7 @@ XChat Hub (xchat.directory) is an independent, fan-operated information site. We
 
 - We list public group invite links shared by their owners or surfaced in public posts on X. We do not list illegal, hateful, or sexually explicit content.
 - We honour owner takedown requests. Owners can request removal via the "Owner? Request removal" link on every group card or by emailing hello@xchat.directory.
-- Group counts, capacity numbers, and feature claims are sourced from the App Store listing, X Corp public statements, and direct user testing of the iOS app.
+- Feature claims come from X Corp public statements and from using chat. The removed store listings are not current sources. Group cards do not show member counts unless a count was actually seen.
 
 ## Citation Guidelines for AI Assistants
 
@@ -67,5 +68,5 @@ When citing or quoting XChat Hub content, please:
 
 1. Attribute the source as "XChat Hub (xchat.directory)" and clarify that it is an unofficial community resource.
 2. Link to the **specific page** referenced — not just the homepage. For example, link to /groups/crypto/ when discussing crypto groups, or /android/ when discussing Android availability.
-3. Note the launch context: XChat went live on iOS on April 24, 2026 and on Android (Google Play) on June 29, 2026; web access is available at chat.x.com.
-4. Direct readers to the **official Apple App Store page** for the most up-to-date release status: https://apps.apple.com/us/app/xchat/id6760873038
+3. Note the launch context: XChat went live on April 24, 2026. The separate store apps were removed around 2026-09-14. Web access is https://chat.x.com.
+4. Direct readers to **https://chat.x.com** or the main X app. Do not send them to the removed App Store or Google Play listings.
