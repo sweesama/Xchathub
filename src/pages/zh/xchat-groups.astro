@@ -8,12 +8,10 @@
  */
 import Layout from '../../layouts/Layout.astro';
 import {
-  XCHAT_APP_STORE_URL,
+  XCHAT_CHAT_URL,
   XCHAT_GROUP_LIMIT,
-  XCHAT_IOS_REQUIREMENT,
   XCHAT_LAUNCH_DISPLAY,
-  XCHAT_ANDROID_LAUNCH_DISPLAY,
-  XCHAT_ANDROID_PLAY_STORE_URL,
+  XCHAT_STANDALONE_APP_REMOVED_ON,
 } from '../../data/xchat';
 import { GROUP_CATEGORY_META } from '../../data/groupCategoryMeta';
 import { GROUP_DIRECTORY_ALTERNATES, SORTED_GROUP_DIRECTORY, formatVerifiedOn, latestVerifiedAt } from '../../data/groups';
@@ -22,7 +20,7 @@ const listedCount = SORTED_GROUP_DIRECTORY.length;
 const lastVerified = latestVerifiedAt();
 const lastVerifiedLabel = lastVerified ? formatVerifiedOn(lastVerified, 'zh-CN') : '';
 
-const dateModified = '2026-10-14';
+const dateModified = '2026-10-30';
 const categoryCount = GROUP_CATEGORY_META.length;
 
 const steps = [
@@ -34,7 +32,7 @@ const steps = [
   {
     n: 2,
     title: '在装了 XChat 的设备上打开',
-    body: `iPhone / iPad（需要 ${XCHAT_IOS_REQUIREMENT}）装好 XChat 后直接点链接即可。Android 可以用官方 App，或者在浏览器登录 <a href="/web">chat.x.com</a> 后粘贴链接；电脑同样用 chat.x.com。`,
+    body: `在 iPhone、iPad 或 Android 上打开 X 主 App 里的聊天，或在浏览器打开 <a href="${XCHAT_CHAT_URL}">chat.x.com</a> 后粘贴链接。独立的 X Chat App 已于 ${XCHAT_STANDALONE_APP_REMOVED_ON} 前后从 App Store 和 Google Play 下架，不要再找单独的下载页，也不要装第三方 APK。`,
   },
   {
     n: 3,
@@ -117,12 +115,12 @@ const articleJsonLd = {
         <span class="eyebrow">中文指南 · 更新于 {dateModified}</span>
         <h1>XChat 群组指南：去哪找群、怎么加入、怎么建群</h1>
         <p class="lead text-secondary prose-body">
-          XChat 是 X 的独立聊天应用，iOS 版于 {XCHAT_LAUNCH_DISPLAY} 上线，Android 版于 {XCHAT_ANDROID_LAUNCH_DISPLAY} 上线。
-          它的群聊通过邀请链接加入，没有官方的公开群列表。这页用中文讲清楚找群、加群、建群的流程和常见问题。
+          XChat 于 {XCHAT_LAUNCH_DISPLAY} 上线。独立的 X Chat App 已从 App Store 和 Google Play 下架，聊天在 X 主 App 里，也可以打开 chat.x.com。
+          群聊通过邀请链接加入，没有官方的公开群列表。这页用中文讲清楚找群、加群、建群的流程和常见问题。
         </p>
         <div class="cta-buttons">
           <a href="/groups" class="btn btn-primary btn-lg">浏览 XChat 群组目录 →</a>
-          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">下载 XChat（iOS）</a>
+          <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">打开 chat.x.com</a>
         </div>
       </div>
     </section>
@@ -133,7 +131,7 @@ const articleJsonLd = {
           <h2>一分钟总结</h2>
           <ol>
             <li>真实群链接以 <code>https://x.com/i/chat/group_join/</code> 开头。</li>
-            <li>去哪找：<a href="/groups">XChat Hub 目录</a>（目前 {listedCount} 个已核实的群，{categoryCount} 个分类）、群主的推文、熟人分享。</li>
+            <li>去哪找：<a href="/groups">XChat Hub 目录</a>（目前 {listedCount} 个群，{categoryCount} 个分类）、群主的推文、熟人分享。新群标注「来源核对」，不是「已核实」。</li>
             <li>怎么加：点链接 → Request to Join → 等管理员批准。</li>
             <li>每个群最多 {XCHAT_GROUP_LIMIT} 人。</li>
           </ol>
@@ -170,9 +168,9 @@ const articleJsonLd = {
           ))}
         </ul>
         <p class="prose-body text-secondary">
-          目录里的每一条都会标上核实日期（Verified on），也就是有人打开邀请链接、确认群还在的那一天。
-          {lastVerified && <>目前最新的核实日期是 {lastVerifiedLabel}。</>}
-          没有群的分类页不会放进站点地图，等该分类有群之后会自动加回去。
+          「Verified on / 核实于」表示有人在那天打开了邀请链接。「Source checked / 来源核对」只表示公开来源和链接格式在那天核对过，不是站内打开，也不保证群现在还开着。
+          {lastVerified && <>目录里较新的核对日期是 {lastVerifiedLabel}。</>}
+          没有群的分类页会给出提交入口，也不会放进站点地图，等该分类有群之后会自动加回去。
         </p>
         <div class="callout callout-warning">
           <strong>注意：</strong>匿名机器人账号发的“XChat 邀请”、经过不明短链跳转的链接，或者要求你输入 X 密码“验证”的页面，都不是真正的 XChat 群。加群从来不需要密码。
@@ -210,8 +208,9 @@ const articleJsonLd = {
         <div class="related-grid">
           <a href="/groups" class="related-card"><h3>XChat 群组目录 →</h3><p class="text-secondary">按主题浏览公开群链接。</p></a>
           <a href="/es/grupos-xchat" class="related-card" hreflang="es" lang="es"><h3>Grupos de XChat →</h3><p class="text-secondary">同一套说明，西班牙语。</p></a>
+          <a href="/pt/grupos-xchat" class="related-card" hreflang="pt-BR" lang="pt-BR"><h3>Grupos XChat →</h3><p class="text-secondary">同一套列表，巴西葡萄牙语。</p></a>
           <a href="/what-is-xchat" class="related-card"><h3>XChat 是什么 →</h3><p class="text-secondary">功能、加密和与 X 私信的区别（英文）。</p></a>
-          <a href={XCHAT_ANDROID_PLAY_STORE_URL} target="_blank" rel="noopener noreferrer" class="related-card"><h3>XChat Android 版 →</h3><p class="text-secondary">Google Play 下载。</p></a>
+          <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="related-card"><h3>打开 chat.x.com →</h3><p class="text-secondary">在浏览器里用 X 账号聊天。不要下载已经下架的独立 App。</p></a>
           <a href="/xchat-group-chat-safety" class="related-card"><h3>群聊防骗清单 →</h3><p class="text-secondary">识别假群链接和常见骗局（英文）。</p></a>
         </div>
       </div>

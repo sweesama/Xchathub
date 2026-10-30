@@ -10,9 +10,10 @@
  */
 import Layout from '../layouts/Layout.astro';
 import {
-  XCHAT_APP_STORE_URL,
+  XCHAT_CHAT_URL,
   XCHAT_LAUNCH_DISPLAY,
   XCHAT_LAUNCH_ISO,
+  XCHAT_STANDALONE_APP_REMOVED_ON,
 } from '../data/xchat';
 
 /** 发布目标时刻：2026-04-25 00:00:00 UTC（按当前 App Store 列表显示） */
@@ -34,9 +35,9 @@ const eventJsonLd = {
   eventAttendanceMode: 'https://schema.org/OnlineEventAttendanceMode',
   location: {
     '@type': 'VirtualLocation',
-    url: XCHAT_APP_STORE_URL,
+    url: XCHAT_CHAT_URL,
   },
-  description: `XChat, X Corp's standalone end-to-end encrypted messenger, launched publicly on the iOS App Store on ${XCHAT_LAUNCH_DISPLAY}. iPhone and iPad only on day one; Android timing unannounced.`,
+  description: `XChat, X Corp's end-to-end encrypted chat, launched on ${XCHAT_LAUNCH_DISPLAY}. The separate store apps were later removed. Chat now lives in the X app and at chat.x.com.`,
   organizer: {
     '@type': 'Organization',
     name: 'X Corp',
@@ -48,7 +49,7 @@ const eventJsonLd = {
 
 <Layout
   title="XChat Launch Recap — Released April 24, 2026 | XChat Hub"
-  description="XChat officially launched April 24, 2026 on iOS. Read the launch day recap, see what features shipped, and download the app now. Android tracker still active."
+  description="XChat launched April 24, 2026. The separate App Store and Google Play apps were removed around September 14, 2026. Use chat inside the X app or open chat.x.com."
   jsonLd={eventJsonLd}
   canonicalPath="/launch-countdown"
   breadcrumbs={[
@@ -71,7 +72,7 @@ const eventJsonLd = {
         )}
       </h1>
       <p class="lead text-secondary prose-body">
-        XChat launched on April 24, 2026 — X Corp's standalone end-to-end encrypted messenger hit the iOS App Store with E2EE messaging, group chats, and video calls. iPhone and iPad only on day one.
+        XChat launched on April 24, 2026 with E2EE messaging, group chats, and video calls. The separate store apps were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}. Chat now lives in the X app and at chat.x.com.
       </p>
 
       <!-- 倒计时盘 -->
@@ -96,11 +97,8 @@ const eventJsonLd = {
 
       <!-- CTA 按钮 -->
       <div class="cta-buttons">
-        <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-          </svg>
-          Download on App Store
+        <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          Open chat.x.com
         </a>
         <a href="/groups" class="btn btn-secondary btn-lg">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
@@ -123,7 +121,7 @@ const eventJsonLd = {
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
             </div>
             <h3>iPhone, iPad &amp; Android</h3>
-            <p class="text-secondary">Apple App Store and Google Play worldwide. Free download. Android arrived June 29, 2026.</p>
+            <p class="text-secondary">Those separate store listings were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}. Use the X app or chat.x.com.</p>
           </article>
           <article class="expect-card">
             <div class="expect-icon" aria-hidden="true">
@@ -157,11 +155,11 @@ const eventJsonLd = {
       <div class="final-card">
         <h2>Get Started with XChat</h2>
         <p class="text-secondary prose-body">
-          Download XChat free on the App Store, then check out our Groups Directory to find active communities — crypto, tech, AI, gaming, and more. Or join our Telegram for Android release alerts.
+          Open chat.x.com or the X app, then use the groups directory for public invites.
         </p>
         <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
-          <a href="https://apps.apple.com/us/app/xchat/id6760873038" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-            Download on App Store
+          <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+            Open chat.x.com
           </a>
           <a href="/groups" class="btn btn-secondary btn-lg">
             Browse Groups

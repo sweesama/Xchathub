@@ -8,7 +8,7 @@
 import Layout from '../../layouts/Layout.astro';
 import {
   SORTED_GROUP_DIRECTORY,
-  formatVerifiedOn,
+  formatGroupCheckLabel,
   getGroupListingBadge,
   getGroupListingTier,
   indefiniteArticle,
@@ -119,8 +119,8 @@ const collectionJsonLd = categoryIsEmpty
                     {group.tags.map((tag) => <span class="group-tag">#{tag}</span>)}
                   </div>
                   <div class="group-meta">
-                    <span>{group.members.toLocaleString()} members</span>
-                    <time datetime={group.verifiedAt}>Verified on {formatVerifiedOn(group.verifiedAt)}</time>
+                    {group.members > 0 && <span>{group.members.toLocaleString()} members</span>}
+                    <time datetime={group.verifiedAt}>{formatGroupCheckLabel(group)}</time>
                   </div>
                   <a
                     href={group.inviteUrl}
@@ -151,12 +151,12 @@ Please confirm by replying within 24h.
           <h2>No {meta.label} groups listed yet.</h2>
           <p class="text-secondary prose-body">
             We're tracking <strong>{meta.label.toLowerCase()}</strong> communities as XChat group invite links surface on X.
-            Once owners share public links, this page will fill with verified groups.
+            Once a public invite is checked and the topic is a normal community, it will show up here.
           </p>
           <p class="text-secondary prose-body">
-            Run {article} {meta.label} group? <a href="/list-your-group">Submit your invite link</a> —
-            it's free, and we typically review within 24 hours.
+            Run {article} {meta.label} group? Listing is free. We review the link by hand.
           </p>
+          <a href="/list-your-group" class="btn btn-primary">Submit a group</a>
 
           <div class="example-types">
             <h3>Examples of {meta.label} groups we'll list here:</h3>
@@ -385,6 +385,10 @@ Please confirm by replying within 24h.
 
   .empty-card p {
     margin-bottom: 1rem;
+  }
+
+  .empty-card .btn {
+    margin-top: 0.5rem;
   }
 
   .example-types {

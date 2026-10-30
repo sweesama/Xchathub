@@ -14,10 +14,9 @@
  */
 import Layout from '../layouts/Layout.astro';
 import {
-  XCHAT_APP_STORE_URL,
+  XCHAT_CHAT_URL,
   XCHAT_GROUP_LIMIT,
   XCHAT_TELEGRAM_CHANNEL_URL,
-  XCHAT_IOS_REQUIREMENT,
 } from '../data/xchat';
 
 /* JSON-LD: HowTo schema — 让 Google 把步骤显示为 Featured Snippet */
@@ -75,8 +74,8 @@ const steps = [
   {
     n: 1,
     title: 'Open XChat & start a new group',
-    body: 'Launch the XChat app on your iPhone or iPad. Tap the <strong>compose button</strong> (top-right pencil icon). When the New Message dialog appears, tap <strong>"Create a group"</strong>.',
-    tip: `Make sure your iPhone or iPad is on ${XCHAT_IOS_REQUIREMENT}. You can also create and manage groups in the Android app.`,
+    body: 'Open chat in the X app, or sign in at chat.x.com. Tap the <strong>compose button</strong> (top-right pencil icon). When the New Message dialog appears, tap <strong>"Create a group"</strong>.',
+    tip: 'The separate X Chat app is no longer on the App Store or Google Play. Use the X app or chat.x.com.',
   },
   {
     n: 2,
@@ -129,7 +128,7 @@ const faqs = [
   },
   {
     q: 'Can people on Android join my XChat group?',
-    a: 'Yes. XChat for Android is live on Google Play (com.x.chat, by X Corp), so Android users can join and fully participate in your group. They can also use <strong>chat.x.com</strong> in a browser if they prefer not to install the app.',
+    a: 'Yes. Android users open chat inside the X app, or use <strong>chat.x.com</strong> in a browser. The separate X Chat app is no longer on Google Play, so do not send them an APK.',
   },
 ];
 
@@ -174,8 +173,8 @@ const combinedJsonLd = [howToJsonLd, faqJsonLd];
         the official replacement for X Communities. Follow these 6 steps to spin up a public group and share the link in 3 minutes.
       </p>
       <div class="cta-buttons">
-        <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-          Download XChat Free
+        <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
+          Open chat.x.com
         </a>
         <a href="#steps" class="btn btn-secondary btn-lg">
           Jump to Steps

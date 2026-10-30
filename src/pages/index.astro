@@ -9,9 +9,8 @@ import Layout from '../layouts/Layout.astro';
 import AppIcon from '../components/AppIcon.astro';
 import {
   XCHAT_ANDROID_STATUS,
-  XCHAT_ANDROID_DOWNLOADS,
-  XCHAT_IOS_REQUIREMENT,
   XCHAT_LAUNCH_DISPLAY,
+  XCHAT_STANDALONE_APP_REMOVED_ON,
 } from '../data/xchat';
 import {
   getAppsRanked,
@@ -19,7 +18,7 @@ import {
   formatEncryption,
 } from '../data/messagingApps';
 import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
-import { SORTED_GROUP_DIRECTORY } from '../data/groups';
+import { DIRECTORY_LAST_UPDATED, SORTED_GROUP_DIRECTORY } from '../data/groups';
 
 const listedGroupCount = SORTED_GROUP_DIRECTORY.length;
 const categoryCount = GROUP_CATEGORY_META.length;
@@ -36,7 +35,7 @@ const faqs = [
   {
     question: 'Where can I find XChat groups?',
     answer:
-      'XChat has no built-in group search. The <a href="/groups">XChat groups directory</a> lists public invite links after a manual check, and each card shows the date that link was last verified. There is also a <a href="/zh/xchat-groups">Chinese guide</a> and a <a href="/es/grupos-xchat">Spanish page for grupos de XChat</a>.',
+      'XChat has no built-in group search. The <a href="/groups">XChat groups directory</a> lists public invite links after a manual check. New listings say “Source checked”, not “Verified”. There is a <a href="/zh/xchat-groups">Chinese guide</a>, a <a href="/es/grupos-xchat">Spanish page</a>, and a <a href="/pt/grupos-xchat">Brazilian Portuguese page for grupos xchat</a>.',
   },
   {
     question: 'How do I join an XChat group?',
@@ -56,7 +55,7 @@ const faqs = [
   {
     question: 'What about XChat?',
     answer:
-      `XChat is the newest encrypted messenger from X Corp, launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong> on iOS. By July 2026 it had also shipped an Android client (com.x.chat on the Play Store). It runs end-to-end encryption by default with no phone number required, but the protocol is proprietary and not yet independently audited. See our full <a href="/reviews/xchat/">XChat review</a> for the trade-offs.`,
+      `XChat is encrypted chat from X Corp, launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong>. The separate store apps were removed around <strong>${XCHAT_STANDALONE_APP_REMOVED_ON}</strong>. Chat now lives inside the X app and at chat.x.com. It runs end-to-end encryption by default with no phone number required, but the protocol is proprietary and not yet independently audited. See our full <a href="/reviews/xchat/">XChat review</a> for the trade-offs.`,
   },
   {
     question: 'Which messenger does not require a phone number?',
@@ -132,7 +131,7 @@ const pageJsonLd = {
       <div class="status-bar">
         <span class="badge badge-live">
           <span class="pulse-dot pulse-dot-live"></span>
-          Live on iOS &amp; Android
+          Inside the X app
         </span>
         <span class="badge badge-pending">
           <span class="pulse-dot pulse-dot-pending"></span>
@@ -170,8 +169,8 @@ const pageJsonLd = {
         </div>
         <div class="stat-divider"></div>
         <div class="stat-item">
-          <span class="stat-number">Manual</span>
-          <span class="stat-label text-muted">Verified by hand</span>
+          <span class="stat-number">{DIRECTORY_LAST_UPDATED.slice(0, 7)}</span>
+          <span class="stat-label text-muted">Last updated {DIRECTORY_LAST_UPDATED}</span>
         </div>
       </div>
     </div>
@@ -182,7 +181,7 @@ const pageJsonLd = {
     <div class="container">
       <div class="section-header">
         <h2>Groups, then the guides</h2>
-        <p class="text-secondary">Start with the directory. The short guides cover joining, creating a link, and what to watch for in a group chat. <a href="/zh/xchat-groups" hreflang="zh-CN" lang="zh-CN">中文指南</a> covers the same questions in Chinese, and <a href="/es/grupos-xchat" hreflang="es" lang="es">grupos de XChat</a> does the same in Spanish.</p>
+        <p class="text-secondary">Start with the directory. The short guides cover joining, creating a link, and what to watch for in a group chat. <a href="/zh/xchat-groups" hreflang="zh-CN" lang="zh-CN">中文指南</a> covers the same questions in Chinese, <a href="/es/grupos-xchat" hreflang="es" lang="es">grupos de XChat</a> does the same in Spanish, and <a href="/pt/grupos-xchat" hreflang="pt-BR" lang="pt-BR">grupos xchat</a> does it in Brazilian Portuguese.</p>
       </div>
       <div class="compare-grid">
         <a href="/groups" class="compare-card compare-card-xchat">
@@ -225,6 +224,12 @@ const pageJsonLd = {
           <div class="compare-vs">Español</div>
           <h3>Grupos de XChat</h3>
           <p class="text-secondary">Dónde están los grupos XChat ya comprobados, en español.</p>
+          <span class="card-arrow">→</span>
+        </a>
+        <a href="/pt/grupos-xchat" class="compare-card" hreflang="pt-BR" lang="pt-BR">
+          <div class="compare-vs">Português</div>
+          <h3>Grupos XChat</h3>
+          <p class="text-secondary">Grupos xchat com links públicos, em português do Brasil.</p>
           <span class="card-arrow">→</span>
         </a>
       </div>
@@ -319,12 +324,12 @@ const pageJsonLd = {
           <div class="xchat-content">
             <span class="badge badge-live">
               <span class="pulse-dot pulse-dot-live"></span>
-              Live on iOS & Android
+              Inside the X app
             </span>
-            <h2>XChat group chat is live on iOS and Android</h2>
+            <h2>XChat group chat lives in the X app</h2>
             <p class="text-secondary">
-              The app launched {XCHAT_LAUNCH_DISPLAY}. Use the directory for public invites,
-              the Android page for the Play Store build, and the web guide for chat.x.com.
+              The product launched {XCHAT_LAUNCH_DISPLAY}. The separate store apps were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}.
+              Use the directory for public invites, the Android page for what to do instead of a dead Play listing, and the web guide for chat.x.com.
             </p>
             <div class="cta-buttons">
               <a href="/groups" class="btn btn-primary btn-sm">
@@ -345,12 +350,12 @@ const pageJsonLd = {
             <span class="fact-val">{XCHAT_LAUNCH_DISPLAY}</span>
           </div>
           <div class="fact">
-            <span class="fact-label">iOS</span>
-            <span class="fact-val">{XCHAT_IOS_REQUIREMENT}</span>
+            <span class="fact-label">Where</span>
+            <span class="fact-val">X app or chat.x.com</span>
           </div>
           <div class="fact">
             <span class="fact-label">Android</span>
-            <span class="fact-val">{XCHAT_ANDROID_STATUS} ({XCHAT_ANDROID_DOWNLOADS})</span>
+            <span class="fact-val">{XCHAT_ANDROID_STATUS}</span>
           </div>
           <div class="fact">
             <span class="fact-label">Group Size</span>

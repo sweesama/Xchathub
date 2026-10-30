@@ -4,10 +4,11 @@
  * 用户关闭后存 localStorage，下次不再显示。
  * iOS 与 Android 都已上线，文案与首页保持一致。/zh 用中文，/es 用西班牙语。
  */
-import { XCHAT_ANDROID_PLAY_STORE_URL, XCHAT_APP_STORE_URL } from '../data/xchat';
+import { XCHAT_CHAT_URL } from '../data/xchat';
 
 const isZh = Astro.url.pathname === '/zh' || Astro.url.pathname.startsWith('/zh/');
 const isEs = Astro.url.pathname === '/es' || Astro.url.pathname.startsWith('/es/');
+const isPt = Astro.url.pathname === '/pt' || Astro.url.pathname.startsWith('/pt/');
 ---
 
 <div id="launch-banner" class="launch-banner" hidden>
@@ -16,28 +17,27 @@ const isEs = Astro.url.pathname === '/es' || Astro.url.pathname.startsWith('/es/
     <span class="banner-text">
       {isZh ? (
         <>
-          XChat 已在 <strong>iOS 和 Android</strong> 上线 —
-          <a href={XCHAT_APP_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">App Store</a>
-          ·
-          <a href={XCHAT_ANDROID_PLAY_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">Google Play</a>
+          聊天在 <strong>X 主 App</strong> 里 —
+          <a href={XCHAT_CHAT_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">打开 chat.x.com</a>
         </>
       ) : isEs ? (
         <>
-          XChat ya está en <strong>iOS y Android</strong> —
-          <a href={XCHAT_APP_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">App Store</a>
-          ·
-          <a href={XCHAT_ANDROID_PLAY_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">Google Play</a>
+          El chat está en la <strong>app de X</strong> —
+          <a href={XCHAT_CHAT_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">abrir chat.x.com</a>
+        </>
+      ) : isPt ? (
+        <>
+          O chat fica no <strong>app do X</strong> —
+          <a href={XCHAT_CHAT_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">abrir chat.x.com</a>
         </>
       ) : (
         <>
-          XChat is <strong>live on iOS &amp; Android</strong> —
-          <a href={XCHAT_APP_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">App Store</a>
-          ·
-          <a href={XCHAT_ANDROID_PLAY_STORE_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">Google Play</a>
+          Chat lives in the <strong>X app</strong> —
+          <a href={XCHAT_CHAT_URL} class="banner-cta" target="_blank" rel="noopener noreferrer">Open chat.x.com</a>
         </>
       )}
     </span>
-    <button id="launch-banner-close" class="banner-close" aria-label={isEs ? 'Cerrar' : 'Dismiss'}>
+    <button id="launch-banner-close" class="banner-close" aria-label={isEs ? 'Cerrar' : isPt ? 'Fechar' : 'Dismiss'}>
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
         <path d="M18 6L6 18M6 6l12 12" />
       </svg>

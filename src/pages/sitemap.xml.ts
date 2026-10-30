@@ -50,6 +50,7 @@ const corePages = [
   { path: '/messaging-app-encryption-comparison/', priority: 0.8, changefreq: 'monthly' as const },
   { path: '/zh/xchat-groups/', priority: 0.8, changefreq: 'monthly' as const },
   { path: '/es/grupos-xchat/', priority: 0.8, changefreq: 'monthly' as const },
+  { path: '/pt/grupos-xchat/', priority: 0.8, changefreq: 'monthly' as const },
   { path: '/what-is-xchat/', priority: 0.85, changefreq: 'weekly' as const },
   { path: '/web/', priority: 0.85, changefreq: 'weekly' as const },
   { path: '/android/', priority: 0.9, changefreq: 'weekly' as const },

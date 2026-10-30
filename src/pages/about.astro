@@ -4,7 +4,7 @@
  * 建立信任感、满足 E-E-A-T、为 AdSense 审核加分
  */
 import Layout from '../layouts/Layout.astro';
-import { XCHAT_APP_STORE_URL, XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
+import { XCHAT_CHAT_URL, XCHAT_TELEGRAM_CHANNEL_URL, XCHAT_TELEGRAM_COMMUNITY_URL } from '../data/xchat';
 
 const aboutJsonLd = {
   '@context': 'https://schema.org',
@@ -42,7 +42,7 @@ const aboutJsonLd = {
         <li><strong>No comparison data.</strong> How does XChat actually stack up against WhatsApp, Signal, and Telegram? Nobody had done the homework.</li>
       </ul>
       <p>
-        XChat Hub fills those gaps. We track release status, maintain a community-submitted group directory, and publish verified comparisons grounded in official sources — the App Store listing, @chat posts on X, and app metadata.
+        XChat Hub fills those gaps. We track release status, maintain a community-submitted group directory, and publish comparisons grounded in public sources — chat.x.com, @chat posts on X, and what the product actually does.
       </p>
 
       <h2>What We Are Not</h2>
@@ -55,7 +55,7 @@ const aboutJsonLd = {
       <h2>Editorial Standards</h2>
       <p>Every fact on this site is traceable to one of:</p>
       <ul>
-        <li>The official <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer">XChat App Store listing</a></li>
+        <li><a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer">chat.x.com</a> and chat inside the X app. The separate store listings were removed and are not a source anymore.</li>
         <li>Public posts from Elon Musk or the official @chat account on X</li>
         <li>Direct inspection of the app's public metadata (size, language count, iOS requirements, etc.)</li>
       </ul>

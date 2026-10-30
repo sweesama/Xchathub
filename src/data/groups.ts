@@ -28,11 +28,16 @@ export interface GroupDirectoryEntry {
   sourceType: 'official' | 'community-submitted' | 'public-post' | 'manual-review';
   sourceUrl?: string;
   /**
-   * Verified-on date for manual curation. ISO calendar date (YYYY-MM-DD) a person
-   * last confirmed this invite still opens the group. Set it by hand — do not
-   * invent a date for a link nobody checked. Shown on cards as "Verified on".
+   * Date of the last check. ISO calendar date (YYYY-MM-DD).
+   * What that date means depends on checkKind. Do not invent a date.
    */
   verifiedAt: string;
+  /**
+   * verified: someone opened the invite inside XChat on verifiedAt.
+   * source-checked: a public source and the invite URL format were checked on verifiedAt.
+   * Source-checked listings must never be labeled "verified".
+   */
+  checkKind?: 'verified' | 'source-checked';
   listingTier?: GroupListingTier;
   pinnedUntil?: string;
   paidAt?: string;
@@ -86,6 +91,24 @@ export function formatVerifiedOn(isoDate: string, locale = 'en-US'): string {
   }).format(date);
 }
 
+/** Card label. Source-checked groups must never use the word "verified". */
+export function formatGroupCheckLabel(
+  group: Pick<GroupDirectoryEntry, 'verifiedAt' | 'checkKind'>,
+  locale = 'en',
+): string {
+  if (group.checkKind === 'source-checked') {
+    if (locale.startsWith('pt')) return `Fonte conferida em ${group.verifiedAt}`;
+    if (locale.startsWith('es')) return `Fuente revisada el ${group.verifiedAt}`;
+    if (locale.startsWith('zh')) return `来源核对 ${group.verifiedAt}`;
+    return `Source checked ${group.verifiedAt}`;
+  }
+  const formatted = formatVerifiedOn(group.verifiedAt, locale);
+  if (locale.startsWith('pt')) return `Verificado em ${formatted}`;
+  if (locale.startsWith('es')) return `Verificado el ${formatted}`;
+  if (locale.startsWith('zh')) return `核实于 ${formatted}`;
+  return `Verified on ${formatted}`;
+}
+
 /**
  * hreflang set for the English directory and the language guides.
  * These answer the same "where are the XChat groups" query.
@@ -93,9 +116,14 @@ export function formatVerifiedOn(isoDate: string, locale = 'en-US'): string {
 export const GROUP_DIRECTORY_ALTERNATES = [
   { hreflang: 'en', href: 'https://xchat.directory/groups' },
   { hreflang: 'es', href: 'https://xchat.directory/es/grupos-xchat' },
+  { hreflang: 'pt', href: 'https://xchat.directory/pt/grupos-xchat' },
+  { hreflang: 'pt-BR', href: 'https://xchat.directory/pt/grupos-xchat' },
   { hreflang: 'zh-CN', href: 'https://xchat.directory/zh/xchat-groups' },
   { hreflang: 'x-default', href: 'https://xchat.directory/groups' },
 ] as const;
+
+/** Directory content refresh date shown on /groups. Not a per-group verification. */
+export const DIRECTORY_LAST_UPDATED = '2026-10-30';
 
 // Add a group only after a person has opened the invite and checked the topic.
 // Set verifiedAt to the day of that check. Do not invent groups or dates.
@@ -112,6 +140,7 @@ export const GROUP_DIRECTORY: GroupDirectoryEntry[] = [
     sourceType: 'community-submitted',
     sourceUrl: 'https://x.com/GRIIIMGAMER/status/2036560531176259984',
     verifiedAt: '2026-04-27',
+    checkKind: 'verified',
     listingTier: 'free',
   },
   {
@@ -126,6 +155,217 @@ export const GROUP_DIRECTORY: GroupDirectoryEntry[] = [
     sourceType: 'community-submitted',
     sourceUrl: 'https://x.com/Zeezahgraphix/status/1949837669757800743',
     verifiedAt: '2026-04-27',
+    checkKind: 'verified',
+    listingTier: 'free',
+  },
+  {
+    slug: 'jason-ai-builders-community-chat',
+    name: 'Jason AI Builders Community Chat',
+    description: 'Tech and AI builders community chat.',
+    category: 'AI',
+    tags: ['ai', 'tech', 'builders'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2055339858965544969/2L07KWVT1B',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'inspire-to-thrive-blogging-chat',
+    name: 'Inspire To Thrive Blogging Chat',
+    description: 'Blogging and marketing chat.',
+    category: 'Business',
+    tags: ['blogging', 'marketing'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2047717533050896518/DmrGpR1EVz',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'team-anthony-official-fan-community',
+    name: 'Team Anthony Official Fan Community',
+    description: 'Fan community.',
+    category: 'Entertainment',
+    tags: ['fans'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2052393199319359543/8t6Z0jRxPC',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'pondphuwin-philippine-fans',
+    name: 'PondPhuwin Philippine Fans',
+    description: 'Philippine fan chat for the Thai drama pairing PondPhuwin.',
+    category: 'Entertainment',
+    tags: ['fans', 'thai-drama', 'philippines'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2059892735688274147/S9xB8gO7nX',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'cbx-unite-exo-cbx',
+    name: 'CBX UNITE (EXO-CBX)',
+    description: 'K-pop fan chat for EXO-CBX.',
+    category: 'Entertainment',
+    tags: ['k-pop', 'exo-cbx'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2072564066032459780/98KnZ1GXjS',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'wan21-causvid',
+    name: 'Wan2.1 CausVid',
+    description: 'Chat about the Wan2.1 CausVid AI video model.',
+    category: 'AI',
+    tags: ['ai', 'video'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2048238451565453522/EZoBYHLubg',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'muslim-investors-xchat',
+    name: 'Muslim Investors XChat',
+    description: 'Investment-focused chat covering business and crypto topics.',
+    category: 'Business',
+    tags: ['investing', 'crypto'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2053972002634174767/FXjj9y2QQj',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'okbuddyhololive-xchat',
+    name: 'okbuddyhololive XChat',
+    description: 'VTuber meme chat.',
+    category: 'Entertainment',
+    tags: ['vtuber', 'meme'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2029878376899432633/0Cnx189BN6',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'lune-bound-for-bangkok-2026',
+    name: 'Luné bound for Bangkok 2026',
+    description: 'Entertainment group. The public listing gives this name and no further topic detail.',
+    category: 'Entertainment',
+    tags: ['entertainment'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2024785927642681658/p02W3thXjt',
+    sourceType: 'manual-review',
+    sourceUrl: 'https://xchatgroups.chat',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'prayer-christian-encouragement',
+    name: 'Prayer / Christian encouragement',
+    description: 'Christian encouragement and prayer chat. Shared in a public post by @Temmy_omoileri on 2026-10-03.',
+    category: 'Other',
+    tags: ['prayer', 'christian'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2048928406184886712/MWaAS02565',
+    sourceType: 'public-post',
+    sourceUrl: 'https://x.com/Temmy_omoileri',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'warriors-for-christ-ministries',
+    name: 'Warriors For Christ Ministries',
+    description: 'Christian ministry chat. Shared in a public post by @DarlPattison on 2026-10-24.',
+    category: 'Other',
+    tags: ['christian', 'ministry'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g1979154263764013140/yoqR5fvZdY',
+    sourceType: 'public-post',
+    sourceUrl: 'https://x.com/DarlPattison',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'cortis-fan-gc',
+    name: 'CORTIS fan GC',
+    description: 'K-pop fan chat for CORTIS, covering voting and streaming. Shared in a public post by @CortisTrophy1 on 2026-10-24.',
+    category: 'Entertainment',
+    tags: ['k-pop', 'cortis', 'streaming'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2108068522349723872/zhoOwO12lK',
+    sourceType: 'public-post',
+    sourceUrl: 'https://x.com/CortisTrophy1',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'stray-kids-streaming-gc',
+    name: 'Stray Kids streaming GC',
+    description: 'Stray Kids fan chat for streaming. Shared in a public post by @SKZ_GOALS on 2026-10-25.',
+    category: 'Entertainment',
+    tags: ['k-pop', 'stray-kids', 'streaming'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2114359262264578438/l46445om2t',
+    sourceType: 'public-post',
+    sourceUrl: 'https://x.com/SKZ_GOALS',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
+    listingTier: 'free',
+  },
+  {
+    slug: 'ramayana-fans-gc',
+    name: 'Ramayana Fans GC',
+    description: 'Ramayana fan chat in English and Hindi. Shared in a public post by @SidhuBeer81159 on 2026-10-30.',
+    category: 'Entertainment',
+    tags: ['ramayana', 'fans'],
+    members: 0,
+    icon: '#',
+    inviteUrl: 'https://x.com/i/chat/group_join/g2107465555842384175/lUqmrxLNFB',
+    sourceType: 'public-post',
+    sourceUrl: 'https://x.com/SidhuBeer81159',
+    verifiedAt: '2026-10-30',
+    checkKind: 'source-checked',
     listingTier: 'free',
   },
 ];
@@ -168,9 +408,9 @@ export const GROUP_ENTRY_TEMPLATE: GroupDirectoryEntry = {
 };
 
 export const GROUP_LISTING_RULES = [
-  'The invite is a public https://x.com/i/chat/group_join/ link, and someone has opened it.',
-  'The topic is a normal community. Adult, follow-for-follow, and engagement-bait groups stay out.',
-  'Each listing stores a verified-on date (verifiedAt). Update that date only when you re-check the link.',
+  'The invite is a public https://x.com/i/chat/group_join/ link.',
+  'No NSFW. No follow-for-follow. Engagement-bait groups stay out.',
+  '“Verified on” means someone opened the invite in XChat that day. “Source checked” means the public source and invite format were checked — it is not an in-app verification.',
   'Owners can ask for removal from the card on the group, or by emailing hello@xchat.directory.',
 ];
 

@@ -1,21 +1,20 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { XCHAT_GROUP_LIMIT, XCHAT_LAUNCH_DATE, XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
+import { XCHAT_LAUNCH_DATE, XCHAT_LAUNCH_DISPLAY } from '../data/xchat';
 import {
+  DIRECTORY_LAST_UPDATED,
   GROUP_CATEGORIES,
   GROUP_DIRECTORY_ALTERNATES,
   GROUP_LISTING_RULES,
   SORTED_GROUP_DIRECTORY,
-  formatVerifiedOn,
+  formatGroupCheckLabel,
   getGroupListingBadge,
   getGroupListingTier,
-  latestVerifiedAt,
 } from '../data/groups';
 import { GROUP_CATEGORY_META } from '../data/groupCategoryMeta';
 import CategoryIcon from '../components/CategoryIcon.astro';
 
 const groups = SORTED_GROUP_DIRECTORY;
-const lastVerified = latestVerifiedAt(groups);
 
 const groupsJsonLd = {
   '@context': 'https://schema.org',
@@ -49,7 +48,15 @@ const groupsJsonLd = {
         XChat launched on <strong><time datetime={XCHAT_LAUNCH_DATE}>{XCHAT_LAUNCH_DISPLAY}</time></strong> with <strong>joinable group links</strong> — but no built-in group search. This directory fills that gap: discover and share public XChat groups before anyone else. <a href="https://t.me/xchathubdirectory" target="_blank" rel="noopener noreferrer">Get new groups via Telegram</a>.
       </p>
       <p class="groups-subtitle text-secondary prose-body">
-        New to XChat group chats? See <a href="/how-to-join-xchat-group">how to join a group</a>, run through the <a href="/xchat-group-chat-safety">group chat safety checklist</a>, or read the <a href="/zh/xchat-groups" hreflang="zh-CN" lang="zh-CN">XChat 群组中文指南</a> and the <a href="/es/grupos-xchat" hreflang="es" lang="es">guía de grupos de XChat</a>.
+        New to XChat group chats? See <a href="/how-to-join-xchat-group">how to join a group</a>, run through the <a href="/xchat-group-chat-safety">group chat safety checklist</a>, or read the <a href="/zh/xchat-groups" hreflang="zh-CN" lang="zh-CN">XChat 群组中文指南</a>, the <a href="/es/grupos-xchat" hreflang="es" lang="es">guía de grupos de XChat</a>, and the <a href="/pt/grupos-xchat" hreflang="pt-BR" lang="pt-BR">página de grupos xchat</a>.
+      </p>
+      <p class="directory-status">
+        <strong>{groups.length} groups listed</strong>
+        <span aria-hidden="true"> · </span>
+        last updated <time datetime={DIRECTORY_LAST_UPDATED}>{DIRECTORY_LAST_UPDATED}</time>
+      </p>
+      <p class="directory-rules text-secondary">
+        Rules: no NSFW, no follow-for-follow.
       </p>
 
       <div class="search-box">
@@ -107,7 +114,7 @@ const groupsJsonLd = {
                   <div class="group-meta">
                     <span class="tag btn-sm group-category">{group.category}</span>
                     {listingBadge && <span class={`group-badge group-badge-${listingTier}`}>{listingBadge}</span>}
-                    <time class="group-verified" datetime={group.verifiedAt}>Verified on {formatVerifiedOn(group.verifiedAt)}</time>
+                    <time class={group.checkKind === 'source-checked' ? 'group-source-checked' : 'group-verified'} datetime={group.verifiedAt}>{formatGroupCheckLabel(group)}</time>
                   </div>
                 </div>
               </div>
@@ -116,12 +123,9 @@ const groupsJsonLd = {
                 {group.tags.map((tag) => <span class="mini-tag">{tag}</span>)}
               </div>
               <div class="group-card-footer">
-                <div class="members-info">
-                  <div class="members-bar">
-                    <div class="members-fill" style={`width: ${(group.members / XCHAT_GROUP_LIMIT) * 100}%`}></div>
-                  </div>
-                  <span class="members-count text-muted">{group.members} / {XCHAT_GROUP_LIMIT}</span>
-                </div>
+                {group.members > 0 && (
+                  <span class="members-count text-muted">{group.members.toLocaleString()} members</span>
+                )}
                 <a href={group.inviteUrl} class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer nofollow">
                   Join
                   <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -163,7 +167,8 @@ Please confirm by replying within 24h.
       )}
 
       <div class="empty-state" id="empty-state" style="display: none;">
-        <p class="text-muted">No groups found. Try a different search or category.</p>
+        <p class="text-muted">No groups listed in this view.</p>
+        <a href="/list-your-group" class="btn btn-primary">Submit a group</a>
       </div>
     </div>
   </section>
@@ -192,9 +197,7 @@ Please confirm by replying within 24h.
         <h2>How a group gets listed</h2>
         <p class="text-secondary prose-body">
           XChat launched on <time datetime={XCHAT_LAUNCH_DATE}>{XCHAT_LAUNCH_DISPLAY}</time>. There is no in-app group search, so this page lists public invites only after a manual check.
-          {lastVerified && (
-            <> The newest verified-on date in the directory is <time datetime={lastVerified}>{formatVerifiedOn(lastVerified)}</time>.</>
-          )}
+          The directory was last updated <time datetime={DIRECTORY_LAST_UPDATED}>{DIRECTORY_LAST_UPDATED}</time>.
         </p>
         <ul class="discovery-list">
           {GROUP_LISTING_RULES.map((rule) => <li>{rule}</li>)}
@@ -255,6 +258,17 @@ Please confirm by replying within 24h.
   .groups-subtitle strong {
     color: var(--text-primary);
     font-weight: 600;
+  }
+
+  .directory-status,
+  .directory-rules {
+    max-width: 600px;
+    margin: 0 auto 0.75rem;
+    font-size: 0.9375rem;
+  }
+
+  .directory-rules {
+    margin-bottom: 2rem;
   }
 
   .search-box {
@@ -361,6 +375,17 @@ Please confirm by replying within 24h.
     color: #4ade80;
   }
 
+  .group-source-checked {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius-full);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    background: rgba(148, 163, 184, 0.16);
+    color: #cbd5e1;
+  }
+
   .group-desc {
     font-size: 0.875rem;
     line-height: 1.6;
@@ -386,32 +411,13 @@ Please confirm by replying within 24h.
   .group-card-footer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     gap: 1rem;
     margin-top: auto;
   }
 
-  .members-info {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .members-bar {
-    height: 4px;
-    background: var(--bg-secondary);
-    border-radius: 2px;
-    overflow: hidden;
-    margin-bottom: 0.25rem;
-  }
-
-  .members-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent), var(--accent-light));
-    border-radius: 2px;
-    transition: width 0.3s ease;
-  }
-
   .members-count {
+    margin-right: auto;
     font-size: 0.6875rem;
     font-family: var(--font-mono);
   }
@@ -612,7 +618,15 @@ Please confirm by replying within 24h.
 
   .empty-state {
     text-align: center;
-    padding: 3rem 0;
+    padding: 3rem 1.25rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-xl);
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .empty-state .btn {
+    margin-top: 1rem;
   }
 
   @media (max-width: 640px) {

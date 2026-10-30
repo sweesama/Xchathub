@@ -1,0 +1,427 @@
+---
+/**
+ * pt/grupos-xchat.astro — grupos xchat em português do Brasil
+ *
+ * SEO: a consulta "grupos xchat" tem muita impressão e zero clique no /groups em inglês.
+ * Esta página responde o mesmo pedido em pt-BR. Nomes, descrições e links saem só de
+ * src/data/groups.ts. Grupos novos são "fonte conferida", nunca "verificados".
+ */
+import Layout from '../../layouts/Layout.astro';
+import { XCHAT_CHAT_URL } from '../../data/xchat';
+import { GROUP_CATEGORY_META } from '../../data/groupCategoryMeta';
+import {
+  GROUP_DIRECTORY_ALTERNATES,
+  SORTED_GROUP_DIRECTORY,
+  formatGroupCheckLabel,
+  formatVerifiedOn,
+} from '../../data/groups';
+
+const groups = SORTED_GROUP_DIRECTORY;
+const listedCount = groups.length;
+const dateModified = '2026-10-30';
+const updatedLabel = formatVerifiedOn(dateModified, 'pt-BR');
+
+const CATEGORY_PT: Record<string, string> = {
+  Crypto: 'Cripto',
+  Tech: 'Tecnologia',
+  AI: 'IA',
+  News: 'Notícias',
+  Sports: 'Esportes',
+  Gaming: 'Jogos',
+  Business: 'Negócios',
+  Entertainment: 'Entretenimento',
+  Education: 'Educação',
+  Local: 'Local',
+  Other: 'Outros',
+};
+
+const categoryByLabel = new Map(GROUP_CATEGORY_META.map((category) => [category.label, category]));
+
+const faqs = [
+  {
+    q: 'Onde acho grupos xchat?',
+    a: `O XChat não tem busca de grupos dentro do app. Os grupos com link público estão nesta página e no <a href="/groups">diretório</a>. Agora são ${listedCount}.`,
+  },
+  {
+    q: 'Esses grupos de XChat são inventados?',
+    a: 'Não. Um grupo só entra se o link for público e o tema for uma comunidade comum. «Verificado em» significa que alguém abriu o convite no XChat naquele dia. «Fonte conferida em» significa que a fonte pública e o formato do link foram checados — não é verificação dentro do app, nem promessa de que o grupo ainda esteja aberto. Não publicamos NSFW nem grupos de siga-me-que-eu-sigo.',
+  },
+  {
+    q: 'Preciso do X Premium para entrar?',
+    a: 'Não. O XChat é grátis, e entrar num grupo público não exige assinatura.',
+  },
+  {
+    q: 'Posso adicionar o meu grupo?',
+    a: 'Pode. Crie o link público com o <a href="/how-to-create-group-link">guia de links</a> e envie pela <a href="/list-your-group">página de envio</a>. A inclusão é grátis. Não há vaga paga, e grupos NSFW ou de follow-for-follow ficam de fora.',
+  },
+];
+
+const pageDescription = 'Grupos xchat com links públicos. Veja os grupos listados, como entrar pelo app do X ou em chat.x.com, e envie o seu. Sem NSFW e sem siga-me-que-eu-sigo.';
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Grupos XChat',
+  description: pageDescription,
+  inLanguage: 'pt-BR',
+  dateModified,
+  url: 'https://xchat.directory/pt/grupos-xchat',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: listedCount,
+    itemListElement: groups.map((group, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: group.name,
+      url: group.inviteUrl,
+    })),
+  },
+};
+
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: 'pt-BR',
+  mainEntity: faqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.q,
+    acceptedAnswer: { '@type': 'Answer', text: faq.a.replace(/<[^>]+>/g, '') },
+  })),
+};
+---
+
+<Layout
+  title="Grupos XChat — grupos xchat com links públicos"
+  description={pageDescription}
+  jsonLd={collectionJsonLd}
+  canonicalPath="/pt/grupos-xchat"
+  ogImage="/og-groups.png"
+  ogImageAlt="Grupos XChat com links públicos — xchat.directory"
+  lang="pt-BR"
+  alternates={[...GROUP_DIRECTORY_ALTERNATES]}
+  breadcrumbs={[
+    { name: 'Home', url: 'https://xchat.directory/' },
+    { name: 'Grupos XChat', url: 'https://xchat.directory/pt/grupos-xchat' },
+  ]}
+>
+  <article>
+    <section class="section hero">
+      <div class="container">
+        <span class="eyebrow">Português (Brasil) · {updatedLabel}</span>
+        <h1>Grupos XChat</h1>
+        <p class="lead text-secondary prose-body">
+          {listedCount > 0 ? (
+            <>
+              Procurando grupos xchat? Aqui estão os grupos de XChat com link público que já estão no diretório.
+              Agora são {listedCount}. Cada ficha traz a data da checagem. Os grupos novos desta atualização estão como fonte conferida em {dateModified}, e não como verificados.
+              A lista em inglês fica no <a href="/groups">diretório de grupos</a>.
+            </>
+          ) : (
+            <>
+              Procurando grupos xchat? O diretório ainda não tem grupos com link conferido.
+              Esta página não publica nome nem link que não esteja nos dados do site.
+              Quando um grupo passar na checagem, ele aparece aqui e no <a href="/groups">diretório</a>.
+            </>
+          )}
+        </p>
+        {listedCount > 0 && (
+          <div class="cta-buttons">
+            <a href="#listados" class="btn btn-primary btn-lg">Ver grupos listados</a>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <section class="section-sm" id="listados">
+      <div class="container">
+        <h2 class="section-title">Grupos xchat listados</h2>
+        {listedCount > 0 ? (
+          <>
+            <p class="section-intro text-secondary prose-body">
+              Só estes grupos estão publicados. O nome, a descrição e o link vêm dos dados do site.
+              Regras: sem NSFW e sem follow-for-follow.
+            </p>
+            <div class="group-list">
+              {groups.map((group) => {
+                const category = categoryByLabel.get(group.category);
+                const categoryLabel = CATEGORY_PT[group.category] ?? group.category;
+                return (
+                  <article class="group-card">
+                    <h3>{group.name}</h3>
+                    <p class="group-meta text-muted">
+                      {category ? (
+                        <a href={`/groups/${category.slug}/`}>{categoryLabel}</a>
+                      ) : (
+                        <span>{categoryLabel}</span>
+                      )}
+                      <span aria-hidden="true">·</span>
+                      <time datetime={group.verifiedAt}>{formatGroupCheckLabel(group, 'pt-BR')}</time>
+                      {group.members > 0 && (
+                        <>
+                          <span aria-hidden="true">·</span>
+                          <span>{group.members} membros</span>
+                        </>
+                      )}
+                    </p>
+                    <p class="group-desc text-secondary">{group.description}</p>
+                    <a href={group.inviteUrl} class="btn btn-primary btn-sm" target="_blank" rel="noopener noreferrer nofollow">
+                      Entrar
+                    </a>
+                  </article>
+                );
+              })}
+            </div>
+          </>
+        ) : (
+          <p class="section-intro text-secondary prose-body">
+            Nenhum grupo listado. <a href="/list-your-group">Envie um link público</a> se você administra um.
+          </p>
+        )}
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="tldr-card">
+          <h2>Como entrar num grupo de XChat</h2>
+          <ol>
+            <li>Use um link que comece com <code>https://x.com/i/chat/group_join/</code>. Outros formatos não são convite de grupo do XChat.</li>
+            <li>Abra o chat dentro do app principal do X, no iPhone ou no Android, ou no navegador em <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer">chat.x.com</a>. O app separado da X Chat saiu da App Store e da Google Play.</li>
+            <li>Toque em “Request to Join”. O XChat mostra o nome do grupo antes de enviar o pedido.</li>
+            <li>Espere um administrador aprovar. O grupo aparece na caixa de entrada quando aceitam.</li>
+          </ol>
+          <p class="text-secondary">
+            Se o link não abrir, o <a href="/how-to-join-xchat-group">guia em inglês</a> junta os erros mais comuns.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-sm">
+      <div class="container">
+        <div class="callout callout-warning">
+          <strong>Cuidado:</strong> um grupo real de XChat não passa por encurtador e não pede a senha do X. Entrar nunca exige a senha.
+        </div>
+      </div>
+    </section>
+
+    <section class="section faq-section" id="faq">
+      <div class="container">
+        <h2 class="section-title">Perguntas frequentes</h2>
+        <div class="faq-list">
+          {faqs.map((faq) => (
+            <details class="faq-item">
+              <summary>{faq.q}</summary>
+              <p class="text-secondary" set:html={faq.a} />
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section related-section">
+      <div class="container">
+        <h2 class="section-title">Próximo passo</h2>
+        <div class="related-grid">
+          <a href="/groups" class="related-card" hreflang="en"><h3>Diretório em inglês →</h3><p class="text-secondary">Os mesmos grupos, com busca e categorias.</p></a>
+          <a href="/es/grupos-xchat" class="related-card" hreflang="es" lang="es"><h3>Grupos de XChat →</h3><p class="text-secondary">A mesma lista, em espanhol.</p></a>
+          <a href="/zh/xchat-groups" class="related-card" hreflang="zh-CN" lang="zh-CN"><h3>XChat 群组指南 →</h3><p class="text-secondary">A mesma explicação, em chinês.</p></a>
+          <a href="/how-to-join-xchat-group" class="related-card"><h3>Como entrar →</h3><p class="text-secondary">Guia detalhado, em inglês.</p></a>
+          <a href="/list-your-group" class="related-card"><h3>Enviar seu grupo →</h3><p class="text-secondary">Inclusão grátis, com revisão manual.</p></a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-light);
+    margin-bottom: 1rem;
+    padding: 0.3125rem 0.875rem;
+    border: 1px solid rgba(29, 155, 240, 0.25);
+    border-radius: var(--radius-full);
+    background: rgba(29, 155, 240, 0.05);
+  }
+
+  .hero h1 {
+    max-width: 820px;
+    margin: 0 auto 1.25rem;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .lead,
+  .section-intro {
+    font-size: 1.0625rem;
+    max-width: 720px;
+    margin: 0 auto 1.5rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.875rem;
+  }
+
+  .section-title {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+
+  .group-list {
+    max-width: 760px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .group-card {
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .group-card h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.375rem;
+  }
+
+  .group-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .group-meta a {
+    color: var(--accent-light);
+  }
+
+  .group-desc {
+    margin-bottom: 1rem;
+    line-height: 1.7;
+  }
+
+  .tldr-card {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1.75rem 2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    background: var(--bg-card);
+  }
+
+  .tldr-card h2 {
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+  }
+
+  .tldr-card ol {
+    margin: 0 0 1rem;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+    line-height: 1.85;
+  }
+
+  .tldr-card li + li {
+    margin-top: 0.375rem;
+  }
+
+  .tldr-card code {
+    background: rgba(29, 155, 240, 0.08);
+    color: var(--accent-light);
+    padding: 0.1em 0.4em;
+    border-radius: 0.25rem;
+    font-size: 0.875em;
+  }
+
+  .callout {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+  }
+
+  .callout-warning {
+    background: rgba(245, 197, 24, 0.06);
+    border-color: rgba(245, 197, 24, 0.25);
+    color: #f5c518;
+  }
+
+  .faq-section {
+    border-top: 1px solid var(--border);
+  }
+
+  .faq-list {
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    padding: 1rem 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .faq-item p {
+    margin-top: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .related-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .related-card {
+    display: block;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+    text-decoration: none;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .related-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+
+  .related-card h3 {
+    color: var(--text-primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .related-card p {
+    font-size: 0.875rem;
+    margin: 0;
+  }
+</style>

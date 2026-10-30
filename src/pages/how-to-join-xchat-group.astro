@@ -10,7 +10,7 @@
  */
 import Layout from '../layouts/Layout.astro';
 import {
-  XCHAT_APP_STORE_URL,
+  XCHAT_CHAT_URL,
   XCHAT_GROUP_LIMIT,
   XCHAT_TELEGRAM_CHANNEL_URL,
 } from '../data/xchat';
@@ -67,9 +67,9 @@ const steps = [
   },
   {
     n: 2,
-    title: 'Open the link on a device that has XChat',
-    body: 'On iPhone or iPad with XChat installed, tap the link — iOS opens it inside XChat automatically. On Android, Windows, macOS or Linux, sign in to <a href="/web">chat.x.com</a> first, then paste the link into your browser address bar.',
-    tip: 'If the link opens in your X feed instead of XChat, force-quit X, open XChat, and try again. The link can also be pasted directly into the XChat search bar.',
+    title: 'Open the link in the X app or at chat.x.com',
+    body: 'On a phone, open the link in the X app — chat lives there. The separate X Chat app is no longer a store download. On a computer, sign in at <a href="/web">chat.x.com</a> and paste the link.',
+    tip: 'If the link opens a normal X post instead of chat, open chat.x.com and paste the invite there.',
   },
   {
     n: 3,
@@ -92,7 +92,7 @@ const troubles = [
   },
   {
     q: 'The link opens X.com instead of XChat.',
-    a: 'Either XChat is not installed, or X is intercepting the URL. On iOS, install XChat and try again. On Android/desktop, sign in to chat.x.com and paste the URL there.',
+    a: 'X sometimes opens the link as a normal page. Sign in at chat.x.com and paste the URL there. Do not look for a separate X Chat app in the App Store or Google Play — those listings were removed.',
   },
   {
     q: 'My join request stays "Pending" forever.',
@@ -162,14 +162,13 @@ const faqJsonLd = {
         <h1>How to Join an XChat Group: Public Invite Links Explained</h1>
         <p class="lead text-secondary prose-body">
           Joining an XChat group is a 4-step flow: find a real invite link, open it on a
-          device with XChat, request to join, and wait for the admin to approve.
-          This guide covers the link format, iOS, Android web fallback, and the most common
-          errors people hit.
+          the X app or chat.x.com, request to join, and wait for the admin to approve.
+          This guide covers the link format and the most common errors people hit.
         </p>
         <div class="cta-buttons">
           <a href="/groups" class="btn btn-primary btn-lg">Browse the Groups Directory →</a>
-          <a href={XCHAT_APP_STORE_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
-            Install XChat (iOS)
+          <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary btn-lg">
+            Open chat.x.com
           </a>
         </div>
       </div>
@@ -182,7 +181,7 @@ const faqJsonLd = {
           <h2>Quick Summary</h2>
           <ol>
             <li>Get a real XChat invite link starting with <code>https://x.com/i/chat/group_join/</code>.</li>
-            <li>Tap the link on iPhone/iPad with XChat installed, or paste it into <a href="/web">chat.x.com</a> on Android/desktop.</li>
+            <li>Open it in the X app, or paste it into <a href="/web">chat.x.com</a>.</li>
             <li>Tap <strong>Request to Join</strong>.</li>
             <li>Wait for the admin to approve — minutes for active groups.</li>
           </ol>
