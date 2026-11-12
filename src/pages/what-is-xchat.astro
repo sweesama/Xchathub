@@ -19,14 +19,14 @@ import {
 } from '../data/xchat';
 
 const datePublished = '2026-04-25';
-const dateModified = '2026-10-30';
+const dateModified = '2026-11-12';
 
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
   headline: 'What Is XChat? The Complete Guide to Elon Musk\'s Encrypted Messenger',
   description:
-    'XChat is X Corp\'s end-to-end encrypted messaging app, launched April 24, 2026. Learn what it does, how it differs from WhatsApp and Signal, who can use it, and how to join groups.',
+    'What XChat is, what X has said about encryption, and which claims are not confirmed. Launched inside X in 2025, with an iOS app reported in April 2026.',
   author: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
   publisher: {
     '@type': 'Organization',
@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     q: 'Is XChat the same as Twitter DMs?',
-    a: 'No. XChat is a separate, dedicated app that replaces and extends the old Twitter/X Direct Messages experience with end-to-end encryption, voice notes, and public group invite links. Existing X DMs are accessible inside XChat after sign-in.',
+    a: 'X’s @chat account and The Verge describe Chat as the newer messaging experience inside X, with voice notes and, from April 2026, public group links. X says messages and files are end-to-end encrypted. The Verge reports that metadata is not encrypted. It is not confirmed that every former DM is encrypted by default.',
   },
   {
     q: 'Is XChat available on Android?',
@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: 'How is XChat encrypted?',
-    a: 'XChat uses end-to-end encryption (E2E) for one-on-one and group messages, meaning the messages are encrypted on your device and only the intended recipients can decrypt them. The exact protocol has not been publicly audited yet.',
+    a: 'X says Chat supports end-to-end encryption for messages and files. The Verge, citing X’s support page, reports that metadata is not encrypted and that users would not know if X or a malicious insider compromised a conversation. It is not confirmed that every one-to-one chat, group, and call is encrypted by default. No independent audit has been published.',
   },
 ];
 
@@ -75,7 +75,7 @@ const faqJsonLd = {
 
 <Layout
   title="What Is XChat? Musk's Encrypted Messenger"
-  description="XChat is X Corp's E2E encrypted messenger, launched April 2026. What it does, who can use it, and how it compares to WhatsApp, Signal, and Telegram."
+  description="What XChat is, what X has said about encryption and screenshot controls, and which claims are not confirmed. Compared with WhatsApp, Signal, and Telegram."
   jsonLd={articleJsonLd}
   canonicalPath="/what-is-xchat"
   ogImage="/og-guide.png"
@@ -92,8 +92,8 @@ const faqJsonLd = {
         <span class="eyebrow">Guide · Updated {dateModified}</span>
         <h1>What Is XChat? The Complete Guide to Elon Musk's Encrypted Messenger</h1>
         <p class="lead text-secondary prose-body">
-          XChat is X Corp's end-to-end encrypted chat, built to replace
-          Twitter Direct Messages with private, encrypted, group-friendly chat.
+          XChat is X Corp's chat. X says messages and files are end-to-end encrypted.
+          The Verge reports limits on that claim, including unencrypted metadata.
           It launched on <strong>{XCHAT_LAUNCH_DISPLAY}</strong>. The separate store apps
           were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}. Chat now lives in the X app
           and at chat.x.com.
@@ -113,13 +113,13 @@ const faqJsonLd = {
         <div class="tldr-card">
           <h2>TL;DR — XChat in 30 seconds</h2>
           <ul>
-            <li><strong>What:</strong> End-to-end encrypted chat from X Corp (formerly Twitter), now inside the X app.</li>
+            <li><strong>What:</strong> Chat from X Corp, inside the X app. X says it is end-to-end encrypted; that is not confirmed for every chat.</li>
             <li><strong>Who built it:</strong> Engineers at X under Elon Musk's direction; not the same team as WhatsApp or Signal.</li>
             <li><strong>Where:</strong> The X app on iPhone, iPad, and Android, plus <a href="/web">chat.x.com</a>. The separate store apps were removed around {XCHAT_STANDALONE_APP_REMOVED_ON}.</li>
-            <li><strong>Group size:</strong> Up to {XCHAT_GROUP_LIMIT} members at launch, expanding toward 1,000 members per group.</li>
+            <li><strong>Group size:</strong> Bier said {XCHAT_GROUP_LIMIT} members and growing, then a plan for 500 and a goal of 1,000. A shipped 1,000 cap is not confirmed.</li>
             <li><strong>Account:</strong> Requires an existing X (Twitter) account.</li>
             <li><strong>Cost:</strong> Free. No ads inside the messenger.</li>
-            <li><strong>Headline features:</strong> E2E encryption, public group invite links, voice notes, screenshot blocking with notifications, paid-subscriber badges.</li>
+            <li><strong>Headline features X has described:</strong> encryption for messages and files, public group invite links, voice notes, and an option to block screenshots or be notified. Paid-subscriber badges are not covered by those sources.</li>
           </ul>
         </div>
       </div>
@@ -154,9 +154,9 @@ const faqJsonLd = {
           generally available on <strong>{XCHAT_LAUNCH_DISPLAY}</strong>.
         </p>
         <p class="prose-body text-secondary">
-          XChat replaces the legacy Twitter/X DM experience. After sign-in, all of your
-          existing direct-message threads carry over and gain encryption, while new
-          features like voice notes and public group links sit on top.
+          The Verge reported that Chat replaces X’s existing messaging and that older messages
+          are carried across. It did not say those older messages are encrypted by default.
+          Voice notes and, from April 2026, public group links are separate features X has announced.
         </p>
       </div>
     </section>
@@ -166,13 +166,13 @@ const faqJsonLd = {
       <div class="container">
         <h2>What XChat Actually Does</h2>
         <ul class="feature-list">
-          <li><strong>End-to-end encrypted DMs &amp; group chats</strong> — messages are encrypted on your device; not even X can read them in transit.</li>
+          <li><strong>Encryption X has described</strong> — X says messages and files are end-to-end encrypted. The Verge reports metadata is not, and that a compromise by X would not be detectable. “Not even X can read them” is not confirmed.</li>
           <li><strong>Public group invite links</strong> — group admins can flip a toggle to generate a sharable URL. <a href="/how-to-create-group-link">Step-by-step tutorial</a>.</li>
-          <li><strong>Group capacity {XCHAT_GROUP_LIMIT} → 1,000 members</strong> — currently ramped to {XCHAT_GROUP_LIMIT}, with X publicly committing to expand.</li>
+          <li><strong>Group capacity</strong> — Bier said {XCHAT_GROUP_LIMIT} and growing, then a plan for 500 and a goal of 1,000. The 1,000 figure is a goal, not a confirmed cap.</li>
           <li><strong>Voice notes</strong> — record and send short audio clips inside any chat.</li>
-          <li><strong>Screenshot blocking with notifications</strong> — when someone screenshots a sensitive thread, the other side is informed.</li>
+          <li><strong>Screenshot controls</strong> — X says a chat can block screenshots or notify you of an attempt. The Verge describes that as an option, not as something on for every thread.</li>
           <li><strong>Paid-subscriber badges</strong> — X Premium users carry their badge into XChat groups, useful for verifying admins.</li>
-          <li><strong>Disappearing messages and video calls</strong> — both supported in 1:1 and group threads.</li>
+          <li><strong>Disappearing messages and calls</strong> — The Verge reports disappearing messages and voice and video calls. It does not describe persistent voice channels, and it does not confirm that calls are encrypted by default.</li>
           <li><strong>Bring your X identity</strong> — your handle, profile photo, blocks and mutes carry over automatically.</li>
         </ul>
       </div>
@@ -211,7 +211,7 @@ const faqJsonLd = {
           <li><a href="/how-to-create-group-link">How to create an XChat group invite link</a> — full 6-step tutorial for group owners.</li>
           <li><a href="/groups">Browse the public XChat groups directory</a> — community-curated, sorted by category and activity.</li>
           <li><a href="/list-your-group">List your group for free</a> — submission is reviewed within 24 hours.</li>
-          <li><a href="/communities-shutdown">Migrating from X Communities</a> — Communities are being deprecated; XChat groups are the replacement path.</li>
+          <li><a href="/communities-shutdown">What X announced about Communities</a> — a May 30, 2026 transition deadline was announced. Removal is not confirmed. Bier pointed admins to XChat group links.</li>
         </ul>
       </div>
     </section>
@@ -228,7 +228,7 @@ const faqJsonLd = {
         <div class="vs-grid">
           <a href="/vs/whatsapp" class="vs-card">
             <h3>XChat vs WhatsApp →</h3>
-            <p class="text-secondary">Encryption parity, but XChat skips phone numbers and Meta entirely.</p>
+            <p class="text-secondary">WhatsApp documents default encryption. X’s encryption claim has the limits The Verge reported.</p>
           </a>
           <a href="/vs/signal" class="vs-card">
             <h3>XChat vs Signal →</h3>
@@ -236,7 +236,7 @@ const faqJsonLd = {
           </a>
           <a href="/vs/telegram" class="vs-card">
             <h3>XChat vs Telegram →</h3>
-            <p class="text-secondary">XChat is encrypted by default; Telegram keeps cloud chats unencrypted.</p>
+            <p class="text-secondary">X says chats are encrypted, with limits The Verge reported. Telegram’s default cloud chats are not end-to-end encrypted.</p>
           </a>
         </div>
       </div>
@@ -247,9 +247,10 @@ const faqJsonLd = {
       <div class="container">
         <h2>Privacy and Encryption Notes</h2>
         <p class="prose-body text-secondary">
-          XChat applies end-to-end encryption to one-on-one and group messages. The
-          encryption protocol has not yet been independently audited. If your threat
-          model requires a peer-reviewed protocol, Signal remains the gold standard.
+          X says Chat supports end-to-end encryption for messages and files. The Verge
+          reports that metadata is excluded and that users would not detect a compromise
+          by X itself. No independent audit has been published. If your threat
+          model requires a peer-reviewed protocol, Signal remains the documented choice.
         </p>
         <p class="prose-body text-secondary">
           XChat ties identity to your X account. That account itself is governed by

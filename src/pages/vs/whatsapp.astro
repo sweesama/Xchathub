@@ -18,14 +18,14 @@ const rows = [
   { label: 'Owner',                    xchat: 'X Corp (Elon Musk)',            other: 'Meta Platforms' },
   { label: 'Launched',                 xchat: 'April 24, 2026',                  other: '2009' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '2+ billion' },
-  { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default' },
+  { label: 'End-to-end encryption',    xchat: 'X says so; metadata excluded (The Verge)', other: 'Yes, by default' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
   { label: 'iOS',                      xchat: 'Yes (April 24, 2026)',          other: 'Yes' },
   { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
   { label: 'Desktop / Web',            xchat: 'Via x.com web only',            other: 'Native + Web' },
   { label: 'Independent security audit', xchat: 'Not published yet',           other: 'Signal Protocol (audited)' },
   { label: 'Open source',              xchat: 'No',                            other: 'Partial (Signal Protocol)' },
-  { label: 'Max group size',           xchat: '350 members (growing to 1,000)', other: '1,024 members' },
+  { label: 'Max group size',           xchat: '500 reported; 1,000 was a goal', other: '1,024 members' },
   { label: 'Disappearing messages',    xchat: 'Yes',                           other: 'Yes (24h / 7d / 90d)' },
   { label: 'Voice / video calls',      xchat: 'Yes',                           other: 'Yes' },
   { label: 'Metadata collected',       xchat: 'Tied to X profile',             other: 'Phone number + contacts' },
@@ -35,7 +35,7 @@ const rows = [
 const vwFaqs = [
   {
     question: 'Is XChat more private than WhatsApp?',
-    answer: 'XChat and WhatsApp are both end-to-end encrypted by default on every chat, but the metadata and ownership differ. WhatsApp is owned by Meta and shares metadata (phone number, contacts, who you talk to, when, how often) with the broader Meta advertising system. XChat ties your identity to your X (Twitter) account rather than your phone number and is owned by X Corp, a for-profit subsidiary. Neither option is fully metadata-private; the right choice depends on which corporate data flow you are more comfortable with. For maximum privacy, neither is as strong as Signal or Threema.',
+    answer: 'WhatsApp documents end-to-end encryption by default on personal chats. X says Chat supports end-to-end encryption for messages and files. The Verge, citing X’s support page, reports that XChat metadata is not encrypted and that users would not know if X itself compromised a conversation. It is not confirmed that every XChat chat is encrypted by default. WhatsApp is owned by Meta and collects metadata such as phone number and who you talk to. XChat uses an X account instead of a phone number and is owned by X Corp. For maximum documented privacy, neither matches Signal or Threema.',
   },
   {
     question: 'Can WhatsApp and XChat message each other?',

@@ -80,7 +80,7 @@ const jsonLd = {
           name: 'Is XChat actually end-to-end encrypted?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes. XChat turns on end-to-end encryption by default for every chat, group chat, voice call, and video call. However, the encryption protocol is proprietary and not yet published, so unlike Signal and Threema the cryptography cannot be independently verified by outside researchers.',
+            text: 'X says Chat supports end-to-end encryption for messages and files. The Verge, citing X’s support page, reports that metadata such as recipient and time is not encrypted, and that users would not know if X or a malicious insider compromised a conversation. TechCrunch notes security experts have disputed the strength of that claim. It is not confirmed that every chat, group, and call is encrypted by default, and the protocol has not been published for outside review.',
           },
         },
         {
@@ -104,7 +104,7 @@ const jsonLd = {
           name: 'Has XChat been audited?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'No public, independent third-party security audit has been published for XChat as of July 2026. X Corp has stated that encryption is on by default, but the protocol spec is closed and the implementation cannot be independently verified.',
+            text: 'No public, independent third-party security audit of XChat had been reported by TechCrunch or The Verge as of November 2026. X has said chats are end-to-end encrypted. The Verge reports that X’s support page also says metadata is not encrypted and that a compromise by X itself would not be detectable. The protocol spec is closed.',
           },
         },
         {
@@ -112,7 +112,7 @@ const jsonLd = {
           name: 'Who actually owns XChat?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'XChat is operated by X Corp — the same company that runs X (formerly Twitter). X Corp is a U.S. company and is subject to U.S. jurisdiction, including lawful-access requests. XChat stores encrypted message contents, but metadata about who is messaging whom can be made available to authorities in response to valid legal process.',
+            text: 'XChat is operated by X Corp — the same company that runs X (formerly Twitter). X Corp is a U.S. company and is subject to U.S. jurisdiction, including lawful-access requests. X says message content is end-to-end encrypted. The Verge reports that metadata is not, and that a compromise by X itself would not be detectable.',
           },
         },
         {
@@ -120,7 +120,7 @@ const jsonLd = {
           name: 'Is XChat safe to use?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Yes for casual encrypted conversations, with real caveats for high-risk use. XChat turns on end-to-end encryption by default, supports screenshot blocking and disappearing messages, and is integrated into the X app most people already have. The honest concerns: the protocol is closed and unaudited, identity is locked to your X account, X Corp retains metadata, and U.S. lawful-access requests can reach that metadata. Pick XChat for daily DMs with people you already know on X. For journalists, activists, or anyone whose threat model involves a determined adversary, Signal and Threema remain the provably safer choices.',
+            text: 'Reasonable for everyday chats with people you already know on X, with real caveats for high-risk use. X says messages and files are end-to-end encrypted, and says chats can block screenshots or notify you of an attempt. The Verge reports those screenshot controls as options, and reports that metadata is not encrypted. The protocol is closed and unaudited, and identity is locked to an X account. For journalists, activists, or anyone whose threat model involves a determined adversary, Signal and Threema remain the stronger documented choices.',
           },
         },
         {
@@ -128,7 +128,7 @@ const jsonLd = {
           name: 'Can police recover XChat messages?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'They cannot read message content: XChat stores only ciphertext on its servers. They can, with a valid legal order served on X Corp in the United States, obtain the metadata X Corp already retains — who you messaged, when, how often, your account identifiers, and your device and IP information. If a recipient or your own device is seized, message history is also recoverable from device-local storage depending on your settings. E2EE protects content; X Corp\'s jurisdiction and metadata retention shape the rest.',
+            text: 'X says message content is end-to-end encrypted. The Verge, citing X’s support page, reports that metadata is not encrypted and that users would not know if X itself compromised a conversation, so it is not established that a legal order could never reach content. Metadata such as who was messaged, and when, is the part X has said is outside encryption. A seized device can also expose whatever is stored on it.',
           },
         },
         {
@@ -144,7 +144,7 @@ const jsonLd = {
           name: 'Is XChat better than WhatsApp?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Different, not clearly better. Both end-to-end encrypt by default, both require no phone number for XChat / already-trusted phone number for WhatsApp, and both retain substantial metadata on a U.S.-jurisdiction server (Meta vs X Corp). XChat wins if you live inside X and want encrypted chat without installing a new app; WhatsApp wins if your contacts are already there and you want a larger group, status, and a richer feature set. For activism or threat-model-grade privacy neither beats Signal or Threema.',
+            text: 'Different, not clearly better. WhatsApp documents end-to-end encryption by default. X says its messages and files are end-to-end encrypted, with the limits The Verge reported, including unencrypted metadata. XChat does not require a phone number; WhatsApp does. XChat fits if your contacts are already on X. WhatsApp fits if they are already there. For activism or a high threat model, neither has the public record of Signal or Threema.',
           },
         },
         {
@@ -152,7 +152,7 @@ const jsonLd = {
           name: 'Does XChat hide your IP address?',
           acceptedAnswer: {
             '@type': 'Answer',
-            text: 'Not by default. XChat uses your normal internet connection to deliver messages, so X Corp can see your IP address when you connect, along with standard headers from the X app. E2EE protects message content in transit, but it does not hide who is talking from the operator the way Tor or onion routing does. If hiding your IP from a network observer matters, you need a separate transport (VPN or Tor) on top of XChat — and most high-risk users will prefer a messenger built with metadata stripping in the first place.',
+            text: 'No. XChat uses your normal internet connection, so a network observer can see that you are connecting to X. The Verge reports that message metadata is not encrypted. Hiding an IP takes a separate transport such as a VPN or Tor, and most high-risk users will prefer a messenger with a published, audited design.',
           },
         },
         {
@@ -212,12 +212,11 @@ const breadcrumbs = [
           </div>
           <div class="score-summary">
             <p>
-              XChat is the newest encrypted messenger on the market, launched inside the
-              X (formerly Twitter) ecosystem on April 24, 2026. We score it <strong>7.9 / 10</strong>:
-              E2EE is on by default and there is no phone-number requirement, but the protocol is
-              closed, no independent audit exists yet, and your identity is locked to your X account.
-              For X users it's the easiest encrypted option in 2026; for high-threat-model users,
-              Signal and Threema remain the safer choices.
+              XChat is X’s messenger. The Verge reported it inside the X app in November 2025, and
+              TechCrunch reported a standalone iOS app on April 24, 2026. We score it <strong>7.9 / 10</strong>:
+              X says messages and files are end-to-end encrypted, there is no phone-number requirement,
+              and the protocol is closed with no independent audit yet. Identity is locked to an X account.
+              For high-threat-model users, Signal and Threema remain the safer documented choices.
             </p>
             <p class="text-muted small">
               Reviewed by the xchat.directory editorial team · Last reviewed <time datetime={reviewDate}>{reviewDateDisplay}</time>
@@ -274,11 +273,12 @@ const breadcrumbs = [
         <div class="prose">
           <h2>What Is XChat?</h2>
           <p>
-            <strong>XChat</strong> is the newest end-to-end encrypted messenger on the mainstream
-            market, launched by X Corp on April 24, 2026 inside the X (formerly Twitter) app.
-            It replaces the long-running legacy direct-message system with a fully E2EE experience
-            and ships with group chats of up to 1,000 members (350 at launch, growing),
-            voice and video calls, screenshot blocking, and disappearing messages.
+            <strong>XChat</strong> is X’s messaging product. The Verge reported Chat on iOS and the web
+            in November 2025; TechCrunch reported a standalone iOS app on April 24, 2026.
+            X says it replaces the older direct-message system and that messages and files are
+            end-to-end encrypted. Nikita Bier said group chats held 350 people, then described a
+            rise to 500 and a goal of 1,000. The Verge reports voice and video calls.
+            X has said chats can block screenshots or notify you of an attempt, and can make messages disappear.
           </p>
           <p>
             Unlike Signal, Threema, or WhatsApp, XChat does not require a phone number or an email
@@ -290,10 +290,14 @@ const breadcrumbs = [
 
           <h2>Privacy &amp; Security — What We Know and What We Don't</h2>
           <p>
-            XChat turns on <strong>end-to-end encryption by default</strong> for every chat, group,
-            voice call, and video call. Screenshot blocking and disappearing messages are
-            first-class features. So far, so good — and meaningfully better than the legacy X DMs
-            which were not E2EE at all.
+            X says Chat supports <strong>end-to-end encryption for messages and files</strong>.
+            <a href="https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls">The Verge</a>,
+            citing X’s support page, reports that this does not cover metadata and that users would
+            not know if X or a malicious insider compromised a conversation.
+            <a href="https://techcrunch.com/2026/04/24/x-launches-xchat-app-ios-messaging-iphone/">TechCrunch</a>
+            notes that security experts have disputed the claim. Screenshot blocking is something X has
+            described as an option (block, or notify), not a setting confirmed as on for every chat.
+            It is not confirmed that every chat, group, and call is encrypted by default.
           </p>
           <p>
             The catch is transparency. There is <strong>no published protocol specification</strong>
@@ -312,17 +316,17 @@ const breadcrumbs = [
 
           <h3>What XCorp can still see</h3>
           <ul>
-            <li>The body of messages is encrypted and unreadable to X.</li>
-            <li>The metadata — who is messaging whom, when, how often — is held by X and is subject to lawful-access requests and to X's standard account policies.</li>
+            <li>X says message content is end-to-end encrypted. The Verge reports that a compromise by X itself would not be detectable, so “unreadable to X” is X’s claim, not a verified property.</li>
+            <li>The Verge reports that metadata — such as who received a message, and when — is not encrypted.</li>
             <li>Your identity is your X handle, which is pseudonymous by default but not anonymous. Anything tied to your X profile (avatar, bio, followers) leaks through to XChat.</li>
           </ul>
 
           <h2>Features — What's Actually in the App</h2>
           <ul>
-            <li><strong>One-to-one and group chats</strong> (up to 1,000 members) — E2EE by default</li>
-            <li><strong>Voice and video calls</strong> with E2EE on the same protocol</li>
-            <li><strong>Screenshot blocking</strong> for sensitive messages</li>
-            <li><strong>Disappearing messages</strong> with multiple timers</li>
+            <li><strong>One-to-one and group chats</strong> — Bier said 350, then a plan for 500 and a goal of 1,000. Encryption of every group is not confirmed.</li>
+            <li><strong>Voice and video calls</strong> — reported by The Verge. Call encryption by default is not confirmed. Voice channels are not described.</li>
+            <li><strong>Screenshot controls</strong> — X says a chat can block screenshots or notify you. The Verge describes that as an option.</li>
+            <li><strong>Disappearing messages</strong> — X and The Verge say messages can be set to disappear.</li>
             <li><strong>X social-graph integration</strong> — start a chat with anyone who has opened DMs, no add-by-handle friction</li>
             <li><strong>Cross-device</strong> on iOS, Android, and the web; no native iPad or desktop app at launch</li>
           </ul>
@@ -427,7 +431,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Is XChat actually end-to-end encrypted?</h3>
             </summary>
             <div class="faq-body">
-              Yes. XChat turns on end-to-end encryption by default for every chat, group chat, voice call, and video call. However, the encryption protocol is proprietary and not yet published, so unlike Signal and Threema the cryptography cannot be independently verified by outside researchers.
+              X says Chat supports end-to-end encryption for messages and files. The Verge, citing X’s support page, reports that metadata such as recipient and time is not encrypted, and that users would not know if X or a malicious insider compromised a conversation. TechCrunch notes security experts have disputed the strength of that claim. It is not confirmed that every chat, group, and call is encrypted by default, and the protocol has not been published for outside review.
             </div>
           </details>
           <details>
@@ -451,7 +455,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Has XChat been audited?</h3>
             </summary>
             <div class="faq-body">
-              No public, independent third-party security audit has been published for XChat as of July 2026. X Corp has stated that encryption is on by default, but the protocol spec is closed and the implementation cannot be independently verified.
+              No public, independent third-party security audit of XChat had been reported by TechCrunch or The Verge as of November 2026. X has said chats are end-to-end encrypted. The Verge reports that X’s support page also says metadata is not encrypted and that a compromise by X itself would not be detectable. The protocol spec is closed.
             </div>
           </details>
           <details>
@@ -459,7 +463,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Who actually owns XChat?</h3>
             </summary>
             <div class="faq-body">
-              XChat is operated by X Corp — the same company that runs X (formerly Twitter). X Corp is a U.S. company and is subject to U.S. jurisdiction, including lawful-access requests. XChat stores encrypted message contents, but metadata about who is messaging whom can be made available to authorities in response to valid legal process.
+              XChat is operated by X Corp — the same company that runs X (formerly Twitter). X Corp is a U.S. company and is subject to U.S. jurisdiction, including lawful-access requests. X says message content is end-to-end encrypted. The Verge reports that metadata is not, and that a compromise by X itself would not be detectable.
             </div>
           </details>
           <details>
@@ -467,7 +471,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Is XChat safe to use?</h3>
             </summary>
             <div class="faq-body">
-              Yes for casual encrypted conversations, with real caveats for high-risk use. XChat turns on end-to-end encryption by default, supports screenshot blocking and disappearing messages, and is integrated into the X app most people already have. The honest concerns: the protocol is closed and unaudited, identity is locked to your X account, X Corp retains metadata, and U.S. lawful-access requests can reach that metadata. Pick XChat for daily DMs with people you already know on X. For journalists, activists, or anyone whose threat model involves a determined adversary, Signal and Threema remain the provably safer choices.
+              Reasonable for everyday chats with people you already know on X, with real caveats for high-risk use. X says messages and files are end-to-end encrypted, and says chats can block screenshots or notify you of an attempt. The Verge reports those screenshot controls as options, and reports that metadata is not encrypted. The protocol is closed and unaudited, and identity is locked to an X account. For journalists, activists, or anyone whose threat model involves a determined adversary, Signal and Threema remain the stronger documented choices.
             </div>
           </details>
           <details>
@@ -475,7 +479,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Can police recover XChat messages?</h3>
             </summary>
             <div class="faq-body">
-              They cannot read message content: XChat stores only ciphertext on its servers. They can, with a valid legal order served on X Corp in the United States, obtain the metadata X Corp already retains — who you messaged, when, how often, your account identifiers, and your device and IP information. If a recipient or your own device is seized, message history is also recoverable from device-local storage depending on your settings. E2EE protects content; X Corp's jurisdiction and metadata retention shape the rest.
+              X says message content is end-to-end encrypted. The Verge, citing X’s support page, reports that metadata is not encrypted and that users would not know if X itself compromised a conversation, so it is not established that a legal order could never reach content. Metadata such as who was messaged, and when, is the part X has said is outside encryption. A seized device can also expose whatever is stored on it.
             </div>
           </details>
           <details>
@@ -491,7 +495,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Is XChat better than WhatsApp?</h3>
             </summary>
             <div class="faq-body">
-              Different, not clearly better. Both end-to-end encrypt by default, both require no phone number for XChat / already-trusted phone number for WhatsApp, and both retain substantial metadata on a U.S.-jurisdiction server (Meta vs X Corp). XChat wins if you live inside X and want encrypted chat without installing a new app; WhatsApp wins if your contacts are already there and you want a larger group, status, and a richer feature set. For activism or threat-model-grade privacy neither beats Signal or Threema.
+              Different, not clearly better. WhatsApp documents end-to-end encryption by default. X says its messages and files are end-to-end encrypted, with the limits The Verge reported, including unencrypted metadata. XChat does not require a phone number; WhatsApp does. XChat fits if your contacts are already on X. WhatsApp fits if they are already there. For activism or a high threat model, neither has the public record of Signal or Threema.
             </div>
           </details>
           <details>
@@ -499,7 +503,7 @@ const breadcrumbs = [
               <h3 class="faq-q-title">Does XChat hide your IP address?</h3>
             </summary>
             <div class="faq-body">
-              Not by default. XChat uses your normal internet connection to deliver messages, so X Corp can see your IP address when you connect, along with standard headers from the X app. E2EE protects message content in transit, but it does not hide who is talking from the operator the way Tor or onion routing does. If hiding your IP from a network observer matters, you need a separate transport (VPN or Tor) on top of XChat — and most high-risk users will prefer a messenger built with metadata stripping in the first place.
+              No. XChat uses your normal internet connection, so a network observer can see that you are connecting to X. The Verge reports that message metadata is not encrypted. Hiding an IP takes a separate transport such as a VPN or Tor, and most high-risk users will prefer a messenger with a published, audited design.
             </div>
           </details>
           <details>

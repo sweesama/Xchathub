@@ -17,8 +17,8 @@ const rows = [
   { label: 'Headquartered',            xchat: 'United States',                 other: 'Dubai, UAE' },
   { label: 'Launched',                 xchat: 'April 24, 2026',                  other: '2013' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '~950 million' },
-  { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Only in Secret Chats (opt-in)' },
-  { label: 'Cloud chat encryption',    xchat: 'N/A (always E2EE)',             other: 'Server-side only' },
+  { label: 'End-to-end encryption',    xchat: 'X says so; not confirmed for every chat', other: 'Only in Secret Chats (opt-in)' },
+  { label: 'Cloud chat encryption',    xchat: 'X’s claim, with reported limits', other: 'Server-side only' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
   { label: 'iOS',                      xchat: 'Yes (April 24, 2026)',          other: 'Yes' },
   { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
@@ -33,7 +33,7 @@ const rows = [
 const vtFaqs = [
   {
     question: 'Is XChat more private than Telegram?',
-    answer: 'Yes, in the encryption sense. XChat is end-to-end encrypted on every chat and group by default. Telegram is NOT end-to-end encrypted by default — only opt-in "Secret Chats" (1:1 only, no groups) are E2EE. If you want a private conversation by default, XChat is materially more private than Telegram in its default configuration. Telegram wins on scale (200K-member groups, public channels, bots) and on being cross-platform with full cloud sync.',
+    answer: 'Telegram is not end-to-end encrypted by default: only opt-in Secret Chats (1:1, not groups) are. X says Chat supports end-to-end encryption for messages and files. The Verge, citing X’s support page, reports that metadata is not encrypted and that users would not know if X itself compromised a conversation. It is not confirmed that every XChat chat and group is encrypted by default, so “more private than Telegram by default” is not a settled comparison. Telegram still leads on scale (large groups, public channels, bots) and on cross-platform cloud sync.',
   },
   {
     question: 'Does Telegram have end-to-end encryption?',
@@ -63,7 +63,7 @@ const comparisonJsonLd = graphJsonLd(
 
 <Layout
   title="XChat vs Telegram (2026) — Privacy & Groups"
-  description="XChat vs Telegram: default encryption vs. opt-in, 481 vs. 200,000 group members, X social graph vs. Telegram bots and channels. Full breakdown."
+  description="XChat vs Telegram: X says chats are encrypted, with limits The Verge reported. Telegram’s default chats are not end-to-end encrypted. Groups, bots, and channels compared."
   jsonLd={comparisonJsonLd}
   canonicalPath="/vs/telegram"
   breadcrumbs={[
@@ -80,7 +80,7 @@ const comparisonJsonLd = graphJsonLd(
         <span class="text-gradient">Two Very Different Approaches.</span>
       </h1>
       <p class="lead text-secondary prose-body">
-        Telegram is a 950-million-user media platform with optional encryption. XChat is a brand-new always-encrypted messenger tied to your X identity. They solve different problems — here's which one fits you.
+        Telegram is a large media platform whose default chats are not end-to-end encrypted. X says XChat messages and files are end-to-end encrypted, with limits The Verge reported. They solve different problems.
       </p>
     </div>
   </section>
@@ -119,7 +119,7 @@ const comparisonJsonLd = graphJsonLd(
             <span class="pick-tag">Choose XChat if...</span>
           </header>
           <ul class="pick-list">
-            <li>You want <strong>every</strong> chat encrypted by default — no opt-in fiddling</li>
+            <li>You want a messenger tied to your X account, and you accept that default encryption for every chat is X’s claim, not a confirmed fact</li>
             <li>You don't want to share your phone number</li>
             <li>Your communities live on X rather than Telegram</li>
             <li>You care less about huge public channels and more about private groups</li>
@@ -151,7 +151,7 @@ const comparisonJsonLd = graphJsonLd(
           What Telegram <em>does</em> win at is <strong>scale and ecosystem</strong>. 200,000-member groups, public channels with millions of subscribers, a huge bot ecosystem, and polished native clients on every platform. If you organize a big community, Telegram is hard to beat.
         </p>
         <p>
-          <strong>XChat</strong> goes the opposite direction: always encrypted, no bots (yet), no massive public channels, tied intimately to the X social platform. It's a more intimate, private tool — closer to iMessage or Signal in spirit — with X discovery layered on top.
+          <strong>XChat</strong> is tied to the X account graph. X says its messages and files are end-to-end encrypted; The Verge reports that metadata is not, and that a compromise by X would not be detectable. It does not have Telegram’s public channels. Treat “always encrypted” as unconfirmed.
         </p>
         <p>
           <strong>Verdict:</strong> these aren't really competitors. Most people will end up using both — Telegram for public community stuff, XChat for private conversations inside the X world.

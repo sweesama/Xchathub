@@ -50,12 +50,12 @@ const faqs = [
   {
     question: 'Are all encrypted messengers really private?',
     answer:
-      '<strong>No.</strong> Apps like Telegram, Facebook Messenger, and Discord use server-side encryption but only optional or partial end-to-end encryption. With default settings, your messages sit on their servers readable to the operator. Truly private messengers — Signal, Threema, Wire, Session, SimpleX, Briar, Element, WhatsApp, and XChat — run E2EE by default.',
+      '<strong>No.</strong> Apps like Telegram, Facebook Messenger, and Discord use server-side encryption but only optional or partial end-to-end encryption. With default settings, your messages sit on their servers readable to the operator. Signal, Threema, Wire, Session, SimpleX, Briar, Element, and WhatsApp document end-to-end encryption by default. X says XChat messages and files are end-to-end encrypted; The Verge reports that metadata is not, so XChat does not belong in that “by default” list.',
   },
   {
     question: 'What about XChat?',
     answer:
-      `XChat is encrypted chat from X Corp, launched on <strong>${XCHAT_LAUNCH_DISPLAY}</strong>. The separate store apps were removed around <strong>${XCHAT_STANDALONE_APP_REMOVED_ON}</strong>. Chat now lives inside the X app and at chat.x.com. It runs end-to-end encryption by default with no phone number required, but the protocol is proprietary and not yet independently audited. See our full <a href="/reviews/xchat/">XChat review</a> for the trade-offs.`,
+      `XChat is chat from X Corp. The Verge reported it inside the X app in November 2025; TechCrunch reported an iOS app on <strong>${XCHAT_LAUNCH_DISPLAY}</strong>. X says messages and files are end-to-end encrypted. The Verge reports that metadata is not encrypted and that users would not know if X itself compromised a conversation. It is not confirmed that encryption is on by default for every chat. No phone number is required. See our <a href="/reviews/xchat/">XChat review</a>.`,
   },
   {
     question: 'Which messenger does not require a phone number?',
@@ -359,7 +359,7 @@ const pageJsonLd = {
           </div>
           <div class="fact">
             <span class="fact-label">Group Size</span>
-            <span class="fact-val">Up to 1,000</span>
+            <span class="fact-val">500 reported; 1,000 was a goal</span>
           </div>
         </div>
       </div>
