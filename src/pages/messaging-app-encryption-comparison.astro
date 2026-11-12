@@ -6,7 +6,7 @@
  */
 import Layout from '../layouts/Layout.astro';
 
-const dateModified = '2026-10-14';
+const dateModified = '2026-11-12';
 
 type Cell = { text: string; src: string; srcLabel: string };
 type Row = { app: string; review?: string; e2ee: Cell; metadata: Cell; open: Cell; signup: Cell };
@@ -84,8 +84,8 @@ const rows: Row[] = [
   },
   {
     app: 'XChat (X)', review: '/what-is-xchat/',
-    e2ee: { text: 'X describes XChat as end-to-end encrypted. No protocol specification or independent audit had been published at the time of writing.', src: 'https://help.x.com/en/using-x/encrypted-direct-messages', srcLabel: 'X Help Center' },
-    metadata: { text: 'Tied to your X account, so X’s account and usage data applies.', src: 'https://help.x.com/en/using-x/encrypted-direct-messages', srcLabel: 'X Help Center' },
+    e2ee: { text: 'X says messages and files are end-to-end encrypted. The Verge, citing X’s support page, reports that this is not confirmed for every chat by default, and that a compromise by X would not be detectable. No independent audit was cited.', src: 'https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls', srcLabel: 'The Verge' },
+    metadata: { text: 'The Verge reports that metadata such as recipient and time is not encrypted. The account is an X account.', src: 'https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls', srcLabel: 'The Verge' },
     open: { text: 'Closed source.', src: 'https://x.com', srcLabel: 'X' },
     signup: { text: 'X account; no separate phone number needed.', src: 'https://chat.x.com', srcLabel: 'chat.x.com' },
   },

@@ -48,7 +48,7 @@ const howToJsonLd = {
       '@type': 'HowToStep',
       position: 3,
       name: 'Set your encryption passcode',
-      text: 'On first visit, X prompts you to create a passcode. This unlocks end-to-end encrypted chats and is stored only on your device.',
+      text: 'X may ask for a passcode. X says messages and files can be end-to-end encrypted. The Verge reports that metadata is not encrypted. It is not confirmed that the passcode is stored only on the device or that every chat is encrypted by default.',
     },
     {
       '@type': 'HowToStep',
@@ -74,7 +74,7 @@ const faqs = [
   },
   {
     q: 'Are messages on chat.x.com end-to-end encrypted?',
-    a: 'Yes — when you set a passcode on first login. The passcode is the encryption key for accessing your chats. X claims messages are E2E encrypted, though independent security experts have raised concerns about the implementation. For comparison-grade security, see our <a href="/vs/signal">XChat vs Signal</a> page.',
+    a: 'X says messages and files are end-to-end encrypted. <a href="https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls" target="_blank" rel="noopener noreferrer">The Verge</a>, citing X’s support page, reports that metadata is not encrypted and that users would not know if X itself compromised a conversation. A passcode prompt does not, by itself, confirm that every chat is encrypted by default. See <a href="/vs/signal">XChat vs Signal</a>.',
   },
   {
     q: 'Will chat.x.com sync with chat in the X app?',
@@ -148,7 +148,7 @@ const platforms = [
         </a>
       </div>
       <p class="hero-note text-muted">
-        Works with your existing X account · No download · End-to-end encrypted
+        Works with your existing X account · No download · X says chats can be end-to-end encrypted
       </p>
     </div>
   </section>
@@ -206,9 +206,10 @@ const platforms = [
           <div class="step-body">
             <h3>Set an encryption passcode</h3>
             <p class="text-secondary">
-              On first visit, X prompts you to create a passcode. This unlocks your
-              <strong>end-to-end encrypted chats</strong> and is stored only on your device —
-              not on X's servers. Don't lose it: there is no recovery.
+              X may ask for a passcode on first visit. X says messages and files can be
+              <strong>end-to-end encrypted</strong>. The Verge reports that metadata is not,
+              and that a compromise by X would not be detectable. It is not confirmed that
+              the passcode stays only on your device.
             </p>
           </div>
         </article>
@@ -242,16 +243,16 @@ const platforms = [
           </thead>
           <tbody>
             <tr><td>Text messaging</td><td>✅ Yes</td><td>✅ Yes</td></tr>
-            <tr><td>End-to-end encryption</td><td>✅ Yes</td><td>✅ Yes</td></tr>
+            <tr><td>End-to-end encryption</td><td>X says so; not confirmed for every chat</td><td>X says so; not confirmed for every chat</td></tr>
             <tr><td>Group chats</td><td>✅ Yes</td><td>✅ Yes</td></tr>
             <tr><td>Group invite links</td><td>✅ Yes</td><td>✅ Yes</td></tr>
             <tr><td>File sharing</td><td>✅ Yes</td><td>✅ Yes</td></tr>
             <tr><td>Edit / delete messages</td><td>✅ Yes</td><td>✅ Yes</td></tr>
             <tr><td>Disappearing messages</td><td>✅ Yes</td><td>✅ Yes</td></tr>
-            <tr><td>Voice calls</td><td>❌ No</td><td>✅ Yes</td></tr>
-            <tr><td>Video calls</td><td>❌ No</td><td>✅ Yes</td></tr>
+            <tr><td>Voice calls</td><td>Reported by The Verge; web vs app split not confirmed</td><td>Reported by The Verge; not voice channels</td></tr>
+            <tr><td>Video calls</td><td>Reported by The Verge; web vs app split not confirmed</td><td>Reported by The Verge</td></tr>
             <tr><td>Push notifications</td><td>◐ Browser-dependent</td><td>✅ Native</td></tr>
-            <tr><td>Screenshot blocking</td><td>❌ Not supported</td><td>✅ Yes</td></tr>
+            <tr><td>Screenshot blocking</td><td>X describes an option; not confirmed as a default, or as web-only off</td><td>X describes an option; not confirmed as on by default</td></tr>
             <tr><td>Available platforms</td><td>Win / Mac / Linux / Android / ChromeOS</td><td>iPhone / iPad only</td></tr>
           </tbody>
         </table>

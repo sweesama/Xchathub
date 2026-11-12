@@ -59,17 +59,17 @@ const faqs = [
   },
   {
     q: 'Is XChat safe and secure?',
-    a: 'XChat is marketed as end-to-end encrypted (E2EE), with forward secrecy and local device-only key storage. However, <strong>no independent security audit has been published</strong> as of the April 24, 2026 launch. This is different from Signal, which has been peer-reviewed for years. If you are a journalist, activist, or need maximum assurance, wait for audit results or use <a href="/vs/signal">Signal</a> in the meantime.',
+    a: 'X says Chat supports end-to-end encryption for messages and files. <a href="https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls" target="_blank" rel="noopener noreferrer">The Verge</a>, citing X’s support page, reports that metadata is not encrypted and that users would not know if X or a malicious insider compromised a conversation. Forward secrecy and device-only keys are not established by that report. <strong>No independent security audit</strong> was cited by TechCrunch or The Verge. If you need a published, audited design, use <a href="/vs/signal">Signal</a>.',
     keywords: ['is xchat safe', 'is xchat secure', 'xchat security'],
   },
   {
     q: 'Is XChat end-to-end encrypted?',
-    a: 'Yes, according to X Corp. XChat uses end-to-end encryption (E2EE) for direct messages, meaning only you and the recipient can read them — not X, not governments, not third parties. Keys are stored locally on your device. A PIN protects message history on new devices. Note: this is XChat-specific; regular X Direct Messages (DMs) are <strong>not</strong> E2EE by default.',
+    a: 'X says so for messages and files. <a href="https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls" target="_blank" rel="noopener noreferrer">The Verge</a> reports that X’s support page excludes metadata, and says users would not know if X itself compromised a conversation. It is not confirmed that every chat is encrypted by default, or that X cannot read message content. <a href="https://x.com/chat/status/1989465741444485180" target="_blank" rel="noopener noreferrer">@chat</a> also described the feature as end-to-end encrypted.',
     keywords: ['is xchat encrypted', 'is xchat end to end encrypted', 'xchat e2ee'],
   },
   {
     q: 'What is XChat exactly?',
-    a: 'XChat is encrypted chat from X Corp (the company formerly known as Twitter). It launched as a separate app and now lives inside the main X app, with a web client at chat.x.com. Think of it as X\'s answer to WhatsApp and Signal: private one-on-one and group messages, end-to-end encrypted by default, tied to your X account.',
+    a: 'XChat is chat from X Corp (the company formerly known as Twitter). The Verge reported it inside the X app and on the web in November 2025. TechCrunch reported a separate iOS app on April 24, 2026. It is tied to an X account. X says messages and files are end-to-end encrypted; that is not confirmed for every chat by default.',
     keywords: ['what is xchat', 'what is xchat app', 'xchat meaning'],
   },
   {
@@ -109,17 +109,17 @@ const faqs = [
   },
   {
     q: 'Does XChat replace X Direct Messages (DMs)?',
-    a: 'Not replace — extend. Regular X DMs still exist and are <strong>not</strong> end-to-end encrypted by default. XChat is the encrypted layer on top, for conversations where privacy matters. You can choose whether a given chat is a regular DM or an XChat encrypted thread.',
+    a: 'The Verge reported that Chat replaces X’s existing messaging and that older messages are carried across. It did not say you pick an encrypted thread versus a regular DM, and it did not say every conversation is encrypted by default.',
     keywords: ['xchat vs x dm', 'xchat direct message'],
   },
   {
     q: 'Does XChat have video calls?',
-    a: 'Yes. Video calls were included in the April 24, 2026 launch. Both one-on-one and group video calls are supported, with end-to-end encryption applied to the audio and video streams.',
+    a: 'The Verge reported that Chat supports voice and video calls. It did not say those calls are encrypted by default, and it did not describe persistent voice channels. TechCrunch’s April 24, 2026 app story also lists audio and video calls.',
     keywords: ['xchat video calls', 'xchat video chat', 'does xchat have video'],
   },
   {
     q: 'Does XChat have disappearing messages?',
-    a: 'Yes. Disappearing messages shipped with the launch. You can set messages to auto-delete after a chosen duration in any chat. Screenshots are also blocked with notifications sent if someone tries to capture your messages.',
+    a: 'X and The Verge say messages can be set to disappear. X’s @chat account says you can block screenshots or be notified of an attempt. The Verge describes those screenshot controls as options, not as something on for every chat.',
     keywords: ['xchat disappearing messages', 'xchat self destruct', 'xchat vanish mode'],
   },
   {

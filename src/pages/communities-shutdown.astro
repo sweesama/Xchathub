@@ -2,79 +2,93 @@
 /**
  * communities-shutdown.astro — X Communities 关停专题页
  *
- * 关键事实（源：TechCrunch / Nikita Bier on X / 2026-04-23）：
- * - X 官布 Communities 功能将于 2026-05-30 关停
- * - 原因：使用率 < 0.4%，占 80% 的 spam 举报
- * - 迁移目标：XChat 群聊（当前 350 人，将扩到 500/1000）
- *
- * SEO 战略：捕获 "x communities shutting down", "x communities alternative",
- * "migrate from x communities", "when do x communities close" 等流量。
+ * Fact-checked 2026-11-12 against Nikita Bier's posts, TechCrunch, Engadget,
+ * and The Verge. The May 30, 2026 date is an announced transition deadline.
+ * X has not posted a later confirmation that Communities were removed.
  */
 import Layout from '../layouts/Layout.astro';
 import {
   XCHAT_CHAT_URL,
-  XCHAT_GROUP_LIMIT,
-  XCHAT_LAUNCH_DISPLAY,
   XCHAT_TELEGRAM_CHANNEL_URL,
 } from '../data/xchat';
 
-/* Communities 官方关停时间 */
-const SHUTDOWN_ISO = '2026-05-30T00:00:00Z';
-const SHUTDOWN_DISPLAY = 'May 30, 2026';
-const now = new Date();
-const shutdownDate = new Date(SHUTDOWN_ISO);
-const msLeft = shutdownDate.getTime() - now.getTime();
-const daysLeft = Math.max(0, Math.ceil(msLeft / (1000 * 60 * 60 * 24)));
-const isShutDown = msLeft <= 0;
+const DATE_MODIFIED = '2026-11-12';
+const DEADLINE_ISO = '2026-05-30T00:00:00Z';
+const DEADLINE_DISPLAY = 'May 30, 2026';
+const deadlinePassed = Date.now() >= new Date(DEADLINE_ISO).getTime();
 
-/* JSON-LD: Article schema */
 const articleJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Article',
-  headline: `X Communities Shuts Down ${SHUTDOWN_DISPLAY} — Migrate to XChat`,
-  description: `X Communities will close on ${SHUTDOWN_DISPLAY}. XChat groups are the official replacement: encrypted, invite links, no algorithms, and owned by the same company.`,
+  headline: `X Communities shutdown was announced for ${DEADLINE_DISPLAY}`,
+  description:
+    'X head of product Nikita Bier said in April 2026 that Communities would be deprecated, with a transition deadline of May 30, 2026. Removal has not been confirmed in a later X, TechCrunch, or Verge report.',
   author: { '@type': 'Organization', name: 'XChat Hub' },
   publisher: { '@type': 'Organization', name: 'XChat Hub', url: 'https://xchat.directory' },
   datePublished: '2026-04-24',
-  dateModified: new Date().toISOString().split('T')[0],
+  dateModified: DATE_MODIFIED,
 };
 
 const migrationSteps = [
   {
     step: 1,
     title: 'Open chat in the X app',
-    desc: `Use chat inside the X app, or open <a href="${XCHAT_CHAT_URL}" target="_blank" rel="noopener noreferrer">chat.x.com</a>. The separate X Chat app is no longer a store download. Sign in with your existing X account.`,
+    desc: `Chat launched inside X on iOS and the web in November 2025, with Android described as coming soon (<a href="https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls" target="_blank" rel="noopener noreferrer">The Verge</a>). A separate iOS app followed on April 24, 2026 (<a href="https://techcrunch.com/2026/04/24/x-launches-xchat-app-ios-messaging-iphone/" target="_blank" rel="noopener noreferrer">TechCrunch</a>). You can also try <a href="${XCHAT_CHAT_URL}" target="_blank" rel="noopener noreferrer">chat.x.com</a> and sign in with your X account.`,
   },
   {
     step: 2,
-    title: 'Create Your Group',
-    desc: `Tap "New Group", give it a name (same as your old Community if you want), and set it to "Public" or "Private". Up to ${XCHAT_GROUP_LIMIT} members at launch, growing to 1,000.`,
+    title: 'Create a group and a public link',
+    desc: 'On April 22, 2026, Nikita Bier said XChat group chats supported joinable public links, with 350 members per chat “and growing.” The next day he said the limit would rise to 500 and that X would aim for 1,000. Those higher caps were a plan, not a later confirmation.',
   },
   {
     step: 3,
-    title: 'Share the Invite Link',
-    desc: 'Generate a joinable link or QR code. Post it to your old X Community before it closes, tweet it, or email your members.',
+    title: 'Pin the link where members will see it',
+    desc: 'Bier told Community admins to pin the group-chat link so members could join during the transition window. Post it on your timeline as well. A QR code is not described in those posts.',
   },
   {
     step: 4,
-    title: 'Approve Members',
-    desc: 'Unlike the open-for-all X Communities, XChat groups let you approve each join request. Keep your community quality high.',
+    title: 'Tell people this is a chat, not a feed',
+    desc: 'Engadget noted that a live group chat is a different product from a Community’s separate timeline. Bier also pointed to Custom Timelines for topic feeds. Check in the app whether new members need approval; the April posts do not spell that step out.',
   },
 ];
 
 const features = [
-  { icon: '🔒', title: 'End-to-End Encrypted', desc: 'Unlike X Communities, every message in XChat is encrypted. No data mining, no algorithmic manipulation.' },
-  { icon: '🔗', title: 'Invite Links', desc: 'Share joinable links anywhere — tweets, Discord, email. Members click and request to join.' },
-  { icon: '📱', title: 'Mobile-First', desc: 'Built for iPhone from day one. Fast, native, push notifications that actually work.' },
-  { icon: '👥', title: 'Up to 1,000 Members', desc: `Starting at ${XCHAT_GROUP_LIMIT} and growing. Big enough for most communities, small enough to stay focused.` },
-  { icon: '🚫', title: 'No Algorithm', desc: 'Chronological feed. No "suggested posts", no engagement bait, no shadowbanning.' },
-  { icon: '🎙️', title: 'Voice & Video', desc: 'Group voice channels and video calls built-in. Host AMAs, town halls, or casual hangouts.' },
+  {
+    icon: '🔒',
+    title: 'Encryption X has described',
+    desc: 'X says chats and file sharing are end-to-end encrypted. The Verge, citing X’s support page, reports that metadata is not covered and that users would not know if X itself compromised a conversation. “Encrypted by default” for every chat is not confirmed.',
+  },
+  {
+    icon: '🔗',
+    title: 'Joinable group links',
+    desc: 'Bier said admins can create a public group-chat link and share it on the timeline. That is the migration path he described.',
+  },
+  {
+    icon: '📱',
+    title: 'Inside X, plus the web',
+    desc: 'The Verge reported Chat on iOS and the web in November 2025. TechCrunch reported a standalone iOS app on April 24, 2026. It was not an iPhone-only product from the first day.',
+  },
+  {
+    icon: '👥',
+    title: 'Group size X stated',
+    desc: '350 members “and growing” on April 22. A plan for 500 the next day, and a goal of 1,000 within a couple of weeks. TechCrunch reported the 500 figure and the 1,000 goal. A shipped 1,000 cap is not confirmed.',
+  },
+  {
+    icon: '💬',
+    title: 'A chat, not a ranked feed',
+    desc: 'Engadget contrasted group chat with Communities’ asynchronous feed. X has not said XChat has no ranking, no suggestions, or no shadowbanning.',
+  },
+  {
+    icon: '🎙️',
+    title: 'Calls, not voice channels',
+    desc: 'The Verge and TechCrunch report voice and video calls. TechCrunch also reported voice notes in April 2026. Persistent “voice channels” are not described in those reports.',
+  },
 ];
 ---
 
 <Layout
-  title={`X Communities Shutting Down 2026 — Migrate to XChat`}
-  description={`X officially announced Communities close May 2026. XChat group chats are the replacement — encrypted, invite links, owned by X Corp. Migrate your community now.`}
+  title="X Communities Shutting Down 2026 — What X Announced"
+  description="X said in April 2026 that Communities would be deprecated, with a May 30 transition deadline. Removal is not confirmed. What was sourced about XChat group links."
   jsonLd={articleJsonLd}
   canonicalPath="/communities-shutdown"
   breadcrumbs={[
@@ -85,27 +99,32 @@ const features = [
   <!-- ==================== HERO ==================== -->
   <section class="section hero">
     <div class="container">
-      <span class="eyebrow">{isShutDown ? 'Communities Closed' : `${daysLeft} Days Until Shutdown`}</span>
+      <span class="eyebrow">{deadlinePassed ? 'Deadline passed · removal not confirmed' : 'Shutdown announced'}</span>
       <h1>
-        X Communities Closes<br />
-        <span class="text-gradient">{SHUTDOWN_DISPLAY}.</span>
+        X Communities shutdown<br />
+        <span class="text-gradient">announced for {DEADLINE_DISPLAY}.</span>
       </h1>
       <p class="lead text-secondary prose-body">
-        On April 23, 2026, X head of product Nikita Bier announced Communities will be retired on
-        <strong> <time datetime="2026-05-30">{SHUTDOWN_DISPLAY}</time></strong>.
-        Reason: under 0.4% of users were active, but Communities generated 80% of spam reports.
-        <strong>XChat is the official replacement</strong> — encrypted group chats, invite links,
-        no algorithms. Migrate your members before the deadline.
+        On April 22, 2026, X head of product Nikita Bier
+        <a href="https://x.com/nikitabier/status/2047041338106159484" target="_blank" rel="noopener noreferrer">said X was deprecating Communities on May 6</a>
+        and told admins to pin a joinable XChat group link.
+        The next day he
+        <a href="https://x.com/nikitabier/status/2047147126183137468" target="_blank" rel="noopener noreferrer">moved that transition window to <time datetime="2026-05-30">{DEADLINE_DISPLAY}</time></a>.
+        <a href="https://techcrunch.com/2026/04/23/x-is-shutting-down-communities-because-of-low-usage-and-lots-of-spam/" target="_blank" rel="noopener noreferrer">TechCrunch</a>
+        and
+        <a href="https://www.engadget.com/social-media/x-is-shutting-down-its-communities-feature-182843958.html" target="_blank" rel="noopener noreferrer">Engadget</a>
+        reported the plan. X has not posted a later confirmation that the feature was removed.
+      </p>
+      <p class="text-secondary" style="font-size: 0.875rem; margin-top: -0.5rem;">
+        Last updated <time datetime={DATE_MODIFIED}>November 12, 2026</time>.
       </p>
 
-      {!isShutDown && (
-        <div class="countdown-strip" aria-label="Days until X Communities shutdown">
-          <div class="count-box">
-            <span class="count-num">{daysLeft}</span>
-            <span class="count-label">Day{daysLeft === 1 ? '' : 's'} left to migrate</span>
-          </div>
+      <div class="countdown-strip" aria-label="Announced X Communities transition deadline">
+        <div class="count-box">
+          <span class="count-num">{DEADLINE_DISPLAY}</span>
+          <span class="count-label">{deadlinePassed ? 'Announced deadline has passed' : 'Announced transition deadline'}</span>
         </div>
-      )}
+      </div>
 
       <div class="cta-buttons">
         <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
@@ -123,44 +142,46 @@ const features = [
     <div class="container">
       <div class="two-col">
         <div class="col-text">
-          <h2>Why XChat Replaces X Communities</h2>
+          <h2>What X said would replace Communities</h2>
           <p class="text-secondary prose-body">
-            X Communities (launched 2022) never quite worked. Algorithmic feeds buried posts. 
-            Moderation tools were minimal. Discovery was broken.
+            Twitter launched Communities in 2021, according to
+            <a href="https://techcrunch.com/2026/04/23/x-is-shutting-down-communities-because-of-low-usage-and-lots-of-spam/" target="_blank" rel="noopener noreferrer">TechCrunch</a>.
+            Bier’s reason for deprecating them, in a
+            <a href="https://x.com/nikitabier/status/2047180747690434994" target="_blank" rel="noopener noreferrer">reply on April 23</a>,
+            was that they “were used by less than 0.4% of users—yet contributed to 80% of spam reports, financial scams, and malware on X.”
+            Those figures are his, not an independent audit.
           </p>
           <p class="text-secondary prose-body">
-            XChat fixes all of this. It's a <strong>dedicated messaging app</strong>, not a social feed. 
-            Messages arrive in order. Every member sees every message. And it's encrypted — 
-            so your community discussions stay private.
+            He told admins to move members into XChat group chats, and he also said X was investing in niche communities through Custom Timelines.
+            Engadget described XChat as the proposed chat replacement and Custom Timelines as the path for a topic feed.
+            Calling XChat the only official replacement overstates that.
           </p>
           <ul class="checklist">
-            <li>No algorithm, chronological feed only</li>
-            <li>End-to-end encrypted by default</li>
-            <li>Invite links with admin approval</li>
-            <li>Voice channels and video calls</li>
-            <li>Screenshot blocking for sensitive chats</li>
-            <li>Same login as your X account</li>
+            <li>Joinable group links, which Bier told admins to pin</li>
+            <li>X says chats can be end-to-end encrypted; default encryption for every chat is not confirmed</li>
+            <li>Voice and video calls, as The Verge reported — not voice channels</li>
+            <li>Screenshot blocking is an option X has described, not a setting confirmed as on by default</li>
+            <li>Same X account, because Chat is X’s own messaging</li>
           </ul>
         </div>
         <div class="col-visual">
           <div class="comparison-card">
             <h3>X Communities</h3>
             <ul class="bad-list">
-              <li>❌ Algorithmic feed</li>
-              <li>❌ Not encrypted</li>
-              <li>❌ No voice/video</li>
-              <li>❌ Limited moderation</li>
-              <li>❌ <strong>Shutting down</strong></li>
+              <li>Separate feed of posts, launched 2021</li>
+              <li>Bier: under 0.4% of users, heavy spam reports</li>
+              <li>Deprecation announced for May 6, then May 30</li>
+              <li>Removal after that date: not confirmed</li>
             </ul>
           </div>
           <div class="comparison-card good">
-            <h3>XChat Groups</h3>
+            <h3>XChat group chats</h3>
             <ul class="good-list">
-              <li>✅ Chronological</li>
-              <li>✅ E2E encrypted</li>
-              <li>✅ Voice + video</li>
-              <li>✅ Invite + approval</li>
-              <li>✅ <strong>Live now (since {XCHAT_LAUNCH_DISPLAY})</strong></li>
+              <li>Public join links, per Bier’s April 22 post</li>
+              <li>X says messages and files can be E2EE, with limits The Verge reported</li>
+              <li>Voice and video calls reported; voice channels not described</li>
+              <li>350 members stated; 500 and 1,000 were the next targets</li>
+              <li>Chat in the X app since November 2025; iOS app April 24, 2026</li>
             </ul>
           </div>
         </div>
@@ -202,15 +223,33 @@ const features = [
     </div>
   </section>
 
+  <!-- ==================== SOURCES ==================== -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Sources checked November 12, 2026</h2>
+      <ul class="checklist source-list">
+        <li><a href="https://x.com/nikitabier/status/2047041338106159484" target="_blank" rel="noopener noreferrer">Nikita Bier, April 22, 2026</a> — deprecating Communities on May 6; joinable group links; 350 members and growing; Custom Timelines.</li>
+        <li><a href="https://x.com/nikitabier/status/2047147126183137468" target="_blank" rel="noopener noreferrer">Nikita Bier, April 23, 2026</a> — transition window through May 30; plan to raise the cap to 500, aiming for 1,000.</li>
+        <li><a href="https://x.com/nikitabier/status/2047180747690434994" target="_blank" rel="noopener noreferrer">Nikita Bier, April 23, 2026</a> — under 0.4% of users; 80% of spam reports, financial scams, and malware.</li>
+        <li><a href="https://techcrunch.com/2026/04/23/x-is-shutting-down-communities-because-of-low-usage-and-lots-of-spam/" target="_blank" rel="noopener noreferrer">TechCrunch, April 23, 2026</a> — reported the shutdown plan, the May 30 extension, and the 500 / 1,000 group-size targets.</li>
+        <li><a href="https://www.engadget.com/social-media/x-is-shutting-down-its-communities-feature-182843958.html" target="_blank" rel="noopener noreferrer">Engadget, April 23, 2026</a> — reported the same announcement and the difference between a chat and a Community feed.</li>
+        <li><a href="https://www.theverge.com/news/821950/x-chat-encrypted-dms-video-calls" target="_blank" rel="noopener noreferrer">The Verge, November 17, 2025</a> — X says Chat supports E2EE for messages and files; metadata and insider compromise are not covered; screenshot notify-or-block is an option; voice and video calls.</li>
+        <li><a href="https://x.com/chat/status/1989465741444485180" target="_blank" rel="noopener noreferrer">@chat, November 14, 2025</a> — X’s own claim of encrypted chats, disappearing messages, and screenshot blocking or notifications.</li>
+        <li><a href="https://techcrunch.com/2026/04/24/x-launches-xchat-app-ios-messaging-iphone/" target="_blank" rel="noopener noreferrer">TechCrunch, April 24, 2026</a> — standalone iOS app; X claims encryption and screenshot blocking; experts have disputed the encryption claim.</li>
+        <li><a href="https://techcrunch.com/2026/04/09/x-brings-back-voice-notes-to-x-chat/" target="_blank" rel="noopener noreferrer">TechCrunch, April 9, 2026</a> — voice notes in one-to-one and group chats; calls and screenshot options also described.</li>
+      </ul>
+    </div>
+  </section>
+
   <!-- ==================== FINAL CTA ==================== -->
   <section class="section final-section">
     <div class="container">
       <div class="final-card">
-        <h2>Don't Let Your Community Die</h2>
+        <h2>If you still need to move members</h2>
         <p class="text-secondary prose-body">
-          Thousands of X Communities are looking for a new home. XChat is built by X Corp
-          and uses the same account your members already have. Open chat in the X app
-          or at chat.x.com and start migrating.
+          Bier’s advice to admins was to pin an XChat group link before the May 30 deadline he set.
+          Whether a given Community still opens is not something X, TechCrunch, or The Verge confirmed after that date.
+          Check the app, then use the group link if you want the path X described.
         </p>
         <div class="cta-buttons" style="justify-content: center; margin-top: 1.5rem;">
           <a href={XCHAT_CHAT_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
@@ -283,11 +322,20 @@ const features = [
   }
 
   .count-num {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
     font-weight: 800;
-    line-height: 1;
+    line-height: 1.1;
     color: #ff6347;
     font-variant-numeric: tabular-nums;
+    text-align: center;
+  }
+
+  .source-list li {
+    max-width: 760px;
+  }
+
+  .source-list a {
+    color: var(--accent-light);
   }
 
   .count-label {

@@ -188,7 +188,7 @@ export const GROUP_CATEGORY_META: GroupCategoryMeta[] = [
     h1: 'XChat Local Groups — City, Neighborhood & Regional Communities',
     metaTitle: 'XChat Local Groups — Cities & Neighborhoods',
     metaDescription: 'Find public XChat group chat invite links for cities, neighborhoods, and regional communities. Submit your local group free.',
-    intro: 'Nextdoor is dying. WhatsApp groups don\'t scale. XChat local groups support up to 1,000 members — large enough for an entire neighborhood, small enough to stay relevant.',
+    intro: 'Find city and neighborhood chats. Nikita Bier said XChat groups held 350 people, then described a plan for 500 and a goal of 1,000. A 1,000 cap is not confirmed.',
     exampleTypes: [
       'Major city general chats (NYC, LA, London, Tokyo)',
       'Neighborhood-specific community rooms',

@@ -16,7 +16,7 @@ const rows = [
   { label: 'Owner',                    xchat: 'X Corp (for-profit)',           other: 'Signal Foundation (nonprofit)' },
   { label: 'Launched',                 xchat: 'April 24, 2026',                  other: '2014' },
   { label: 'Monthly Active Users',     xchat: 'New (launch day)',              other: '~40 million' },
-  { label: 'End-to-end encryption',    xchat: 'Yes, by default',               other: 'Yes, by default (Signal Protocol)' },
+  { label: 'End-to-end encryption',    xchat: 'X says so; metadata excluded (The Verge)', other: 'Yes, by default (Signal Protocol)' },
   { label: 'Phone number required',    xchat: 'No — uses X account',           other: 'Yes, mandatory' },
   { label: 'iOS',                      xchat: 'Yes (April 24, 2026)',          other: 'Yes' },
   { label: 'Android',                  xchat: 'Not announced',                 other: 'Yes' },
@@ -33,7 +33,7 @@ const rows = [
 const vsFaqs = [
   {
     question: 'Is XChat as secure as Signal?',
-    answer: 'XChat and Signal are both end-to-end encrypted by default, but their security postures differ. Signal has been audited repeatedly by independent third parties (NCC Group, Quarkslab and others), runs the open-source Signal Protocol (Double Ratchet), and is operated by a 501(c)(3) nonprofit. XChat launched in April 2026 with no published independent audit, no disclosed protocol specification, and a closed-source client. For users who require cryptographically verifiable security today, Signal is the safer pick. XChat may catch up over time as audits become available.',
+    answer: 'Signal is end-to-end encrypted by default. X says Chat supports end-to-end encryption for messages and files, but The Verge, citing X’s support page, reports that metadata is not encrypted and that users would not know if X itself compromised a conversation. It is not confirmed that every XChat chat, group, and call is encrypted by default. Signal has been audited repeatedly by independent third parties, runs the open-source Signal Protocol, and is operated by a nonprofit. XChat has no published independent audit and a closed-source client. For cryptographically verifiable security, Signal is the safer pick.',
   },
   {
     question: 'Do I need a phone number for XChat or Signal?',
@@ -148,7 +148,7 @@ const comparisonJsonLd = graphJsonLd(
           <strong>Signal</strong> is the benchmark. Snowden uses it. Cryptographers recommend it. The <em>Signal Protocol</em> is the backbone of WhatsApp's encryption too — it's that important. Signal is a nonprofit, fully open source, regularly audited, and collects close to zero metadata. If privacy is life-and-death, this is your answer.
         </p>
         <p>
-          <strong>XChat</strong> says it's end-to-end encrypted, and there's no reason to doubt the claim — but until independent researchers publish an audit, "trust us" is not the same as "verify us." XChat is also closed source, which means the community can't check the implementation for bugs or backdoors.
+          <strong>XChat</strong> says messages and files are end-to-end encrypted. The Verge reports that X’s own support page limits that claim: metadata is not covered, and users would not know if X or a malicious insider compromised a conversation. Until independent researchers publish an audit, that remains X’s claim. The client is closed source, so outsiders cannot check the implementation.
         </p>
         <p>
           That said, XChat has one real privacy advantage: <strong>no phone number required</strong>. Your identity is your X handle, which is a pseudonym by default. Signal still needs your real phone number to sign up, and that number is visible to everyone in your chats.
